@@ -16,18 +16,42 @@
   .container { max-width: 860px; margin: 0 auto; }
   h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; color: #1a1a1a; }
   .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+  .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 8px; }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 1.25rem 0; color: #bbb; font-size: 12px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 0.5px; background: #ddd; }
   .form-card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 1rem; }
   @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field label { font-size: 11px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-  .field select { width: 100%; padding: 8px 10px; border: 0.5px solid #ccc; border-radius: 8px; font-size: 14px; background: #fff; color: #1a1a1a; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
+  .field select {
+    width: 100%; padding: 8px 10px; border: 0.5px solid #ccc; border-radius: 8px;
+    font-size: 14px; background: #fff; color: #1a1a1a; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; cursor: pointer;
+  }
   .field select:focus { outline: none; border-color: #378ADD; }
-  .btn-row { display: flex; gap: 10px; }
+  textarea {
+    width: 100%; padding: 10px 12px; border: 0.5px solid #ccc; border-radius: 8px;
+    font-size: 13px; font-family: inherit; color: #1a1a1a; background: #fff;
+    resize: vertical; line-height: 1.6; min-height: 120px;
+  }
+  textarea:focus { outline: none; border-color: #378ADD; }
+  textarea::placeholder { color: #bbb; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
   button { padding: 8px 16px; border: 0.5px solid #ccc; border-radius: 8px; font-size: 13px; background: #fff; color: #1a1a1a; cursor: pointer; transition: background 0.15s; }
   button:hover { background: #f5f4f0; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
   button.primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   button.primary:hover { background: #333; }
+  button.ai-btn { background: #E6F1FB; color: #0C447C; border-color: #B5D4F4; }
+  button.ai-btn:hover { background: #d0e8f8; }
+  .parsing-status { font-size: 12px; color: #378ADD; margin-top: 8px; min-height: 18px; display: flex; align-items: center; gap: 6px; }
+  .spinner { width: 12px; height: 12px; border: 2px solid #B5D4F4; border-top-color: #378ADD; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+  .spinner.active { display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .parsed-banner { background: #E1F5EE; border: 0.5px solid #9FE1CB; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #085041; margin-bottom: 1rem; display: none; }
+  .parsed-banner.visible { display: block; }
   .result-header { font-size: 13px; color: #666; margin-bottom: 12px; }
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -44,13 +68,33 @@
   .empty { text-align: center; padding: 2.5rem; color: #aaa; font-size: 14px; background: #fff; border: 0.5px solid #ddd; border-radius: 12px; }
   .note { font-size: 12px; color: #666; margin-top: 1rem; line-height: 1.7; background: #f5f4f0; padding: 12px 16px; border-radius: 8px; }
   .result-card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .ai-insight { margin-top: 1rem; background: #f9f8f5; border: 0.5px solid #e0ddd6; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #444; line-height: 1.7; display: none; }
+  .ai-insight.visible { display: block; }
+  .ai-insight-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 6px; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Meta PM Leveling Tool</h1>
   <p class="subtitle">Cross-company level mapping for Product Management roles at Meta</p>
+
   <div class="form-card">
+    <div class="section-label">Option 1 — Paste LinkedIn profile summary</div>
+    <div class="field">
+      <textarea id="linkedin-text" placeholder="Paste the candidate's LinkedIn About section, experience, or any profile text here. The AI will extract their company, title, and years of experience automatically..."></textarea>
+    </div>
+    <div class="parsing-status">
+      <div class="spinner" id="spinner"></div>
+      <span id="status-text"></span>
+    </div>
+    <div class="btn-row" style="margin-top: 10px;">
+      <button class="ai-btn" onclick="parseLinkedIn()">Auto-fill from LinkedIn text</button>
+    </div>
+
+    <div class="divider">or fill in manually</div>
+
+    <div class="section-label">Option 2 — Enter details manually</div>
+    <div id="parsed-banner" class="parsed-banner"></div>
     <div class="form-row">
       <div class="field">
         <label>Current Company</label>
@@ -69,7 +113,14 @@
           <option>Twitter / X</option>
           <option>Snap</option>
           <option>ByteDance / TikTok</option>
+          <option>PwC</option>
+          <option>Deloitte</option>
+          <option>McKinsey</option>
+          <option>Accenture</option>
+          <option>JPMorgan</option>
+          <option>Goldman Sachs</option>
           <option>Other (large tech)</option>
+          <option>Other (consulting / finance)</option>
           <option>Other (startup / mid-size)</option>
         </select>
       </div>
@@ -98,10 +149,12 @@
       <button onclick="reset()">Clear</button>
     </div>
   </div>
+
   <div id="results">
-    <div class="empty">Fill in the fields above to see the cross-company level mapping.</div>
+    <div class="empty">Fill in the fields above or paste a LinkedIn summary to see the cross-company level mapping.</div>
   </div>
 </div>
+
 <script>
 const levelMap = {
   "Google": ["APM","PM II","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
@@ -117,9 +170,17 @@ const levelMap = {
   "Twitter / X": ["PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
   "Snap": ["APM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
   "ByteDance / TikTok": ["PM","PM","Senior PM","Senior PM","PM Lead","Director of PM","VP of Product"],
+  "PwC": ["Associate","Senior Associate","Manager","Senior Manager","Director","Managing Director","Partner"],
+  "Deloitte": ["Analyst","Consultant","Senior Consultant","Manager","Senior Manager","Director","Partner"],
+  "McKinsey": ["Business Analyst","Associate","Engagement Manager","Associate Principal","Principal","Partner","Senior Partner"],
+  "Accenture": ["Analyst","Consultant","Senior Consultant","Manager","Senior Manager","Associate Director","Managing Director"],
+  "JPMorgan": ["Analyst","Associate","VP","Executive Director","Managing Director","Partner","Managing Director"],
+  "Goldman Sachs": ["Analyst","Associate","VP","Executive Director","Managing Director","Partner","Partner"],
   "Other (large tech)": ["Junior PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "Other (consulting / finance)": ["Analyst","Associate / Consultant","Manager","Senior Manager","Director","Managing Director","Partner / VP"],
   "Other (startup / mid-size)": ["PM","PM","Senior PM","Senior PM / PM Lead","Head of Product","Director of PM","VP / CPO"],
 };
+
 const metaLevels = ["IC3 (APM)","IC4 (PM)","IC5 (Senior PM)","IC6 (Staff PM)","IC7 (Group PM / Director)","IC8 (Director)","IC9+ (VP)"];
 const metaDescriptions = [
   "Typically entry-level. Works on defined problems with close mentorship.",
@@ -139,28 +200,121 @@ const yoeMap = {"0–1":0,"1–2":1,"2–4":2,"4–6":3,"6–9":4,"9–12":5,"12
 const fitLabels = ["Strong match","Likely match","Possible match","Stretch","Reach"];
 const fitBadge = ["badge-match","badge-match","badge-match","badge-stretch","badge-reach"];
 
-function populateLevels() {
+let aiInsight = null;
+
+function populateLevels(selectedLabel) {
   const co = document.getElementById("company").value;
   const sel = document.getElementById("level");
   sel.innerHTML = '<option value="">— Select level —</option>';
   if (co && levelMap[co]) {
     levelMap[co].forEach((l, i) => {
       const opt = document.createElement("option");
-      opt.value = i; opt.textContent = l; sel.appendChild(opt);
+      opt.value = i;
+      opt.textContent = l;
+      if (selectedLabel && l.toLowerCase().includes(selectedLabel.toLowerCase())) opt.selected = true;
+      sel.appendChild(opt);
     });
   }
 }
+
+async function parseLinkedIn() {
+  const text = document.getElementById("linkedin-text").value.trim();
+  if (!text) { setStatus("Please paste some LinkedIn profile text first.", false); return; }
+
+  setStatus("Analyzing profile...", true);
+  document.querySelector(".ai-btn").disabled = true;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: `You are a recruiting specialist. Analyze this LinkedIn profile text and extract the candidate's current information for PM leveling at Meta.
+
+LinkedIn text:
+${text}
+
+Return ONLY a JSON object with no markdown or backticks:
+{
+  "company": "exact company name matching one of: Google, Apple, Amazon, Microsoft, Salesforce, Uber, Airbnb, Stripe, LinkedIn, Netflix, Twitter / X, Snap, ByteDance / TikTok, PwC, Deloitte, McKinsey, Accenture, JPMorgan, Goldman Sachs, Other (large tech), Other (consulting / finance), Other (startup / mid-size)",
+  "title": "their most recent product or consulting title",
+  "yoe": "estimated years of PM or product-adjacent experience as one of: 0–1, 1–2, 2–4, 4–6, 6–9, 9–12, 12+",
+  "insight": "1-2 sentences on how this background translates to Meta PM leveling, noting any non-traditional PM path",
+  "confidence": "high, medium, or low"
+}`
+        }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.find(b => b.type === "text")?.text || "";
+
+    let parsed;
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, "").trim()); }
+    catch {
+      setStatus("Could not parse the profile. Try adding more detail to the text.", false);
+      document.querySelector(".ai-btn").disabled = false;
+      return;
+    }
+
+    const companySelect = document.getElementById("company");
+    for (let opt of companySelect.options) {
+      if (opt.value && parsed.company && opt.value.toLowerCase() === parsed.company.toLowerCase()) {
+        companySelect.value = opt.value; break;
+      }
+    }
+    if (!companySelect.value && parsed.company) {
+      for (let opt of companySelect.options) {
+        if (opt.value && parsed.company && parsed.company.toLowerCase().includes(opt.value.toLowerCase().split(" ")[0].toLowerCase())) {
+          companySelect.value = opt.value; break;
+        }
+      }
+    }
+
+    populateLevels(parsed.title);
+
+    const yoeSelect = document.getElementById("yoe");
+    for (let opt of yoeSelect.options) {
+      if (opt.value === parsed.yoe) { yoeSelect.value = opt.value; break; }
+    }
+
+    const banner = document.getElementById("parsed-banner");
+    banner.textContent = `Auto-filled: "${parsed.title}" at ${parsed.company} · ${parsed.yoe} yrs experience · Confidence: ${parsed.confidence}`;
+    banner.classList.add("visible");
+
+    aiInsight = parsed.insight || null;
+    setStatus("Profile parsed. Review the fields below, then click Show Meta leveling.", false);
+    document.querySelector(".ai-btn").disabled = false;
+
+  } catch (err) {
+    setStatus("Something went wrong. Check your connection and try again.", false);
+    document.querySelector(".ai-btn").disabled = false;
+  }
+}
+
+function setStatus(msg, loading) {
+  document.getElementById("status-text").textContent = msg;
+  document.getElementById("spinner").classList.toggle("active", loading);
+}
+
 function computeLevel() {
   const co = document.getElementById("company").value;
   const li = document.getElementById("level").value;
   const yoe = document.getElementById("yoe").value;
+
   if (!co || li === "" || !yoe) {
     document.getElementById("results").innerHTML = '<div class="empty">Please fill in all three fields.</div>';
     return;
   }
+
   const srcIdx = parseInt(li);
   const yoeIdx = yoeMap[yoe];
   const srcLabel = levelMap[co][srcIdx];
+
   const scores = metaLevels.map((_, metaIdx) => {
     let score = 0;
     const diff = Math.abs(metaIdx - srcIdx);
@@ -171,6 +325,7 @@ function computeLevel() {
     score += yoeBonus;
     return score;
   });
+
   const maxScore = Math.max(...scores);
   const rows = metaLevels.map((ml, i) => {
     const delta = maxScore - scores[i];
@@ -178,20 +333,48 @@ function computeLevel() {
     return { ml, i, fitIdx, isTop: delta === 0 };
   });
   const topMeta = rows.find(r => r.isTop);
-  let html = `<div class="result-card"><p class="result-header">Showing Meta PM level mapping for <strong>${srcLabel}</strong> at <strong>${co}</strong> &middot; <strong>${yoe} years</strong> of PM experience</p><div class="table-wrap"><table><thead><tr><th style="width:28%">Meta level</th><th style="width:17%">Fit</th><th>What this level means at Meta</th></tr></thead><tbody>`;
+
+  let html = `<div class="result-card">
+    <p class="result-header">Showing Meta PM level mapping for <strong>${srcLabel}</strong> at <strong>${co}</strong> &middot; <strong>${yoe} years</strong> of PM experience</p>
+    <div class="table-wrap"><table>
+      <thead><tr>
+        <th style="width:28%">Meta level</th>
+        <th style="width:17%">Fit</th>
+        <th>What this level means at Meta</th>
+      </tr></thead><tbody>`;
+
   rows.forEach(({ ml, i, fitIdx, isTop }) => {
-    html += `<tr${isTop ? ' class="highlight-row"' : ''}><td><span class="level-pill">${ml}</span></td><td><span class="badge ${fitBadge[fitIdx]}">${fitLabels[fitIdx]}</span></td><td>${metaDescriptions[i]}</td></tr>`;
+    html += `<tr${isTop ? ' class="highlight-row"' : ''}>
+      <td><span class="level-pill">${ml}</span></td>
+      <td><span class="badge ${fitBadge[fitIdx]}">${fitLabels[fitIdx]}</span></td>
+      <td>${metaDescriptions[i]}</td>
+    </tr>`;
   });
-  html += `</tbody></table></div><p class="note"><strong>Recommended target:</strong> ${topMeta.ml} — ${metaDescriptions[topMeta.i]}<br><br>Leveling at Meta is highly dependent on interview performance and scope signal. This tool reflects general market norms; final level decisions are made by the hiring committee.</p></div>`;
+
+  html += `</tbody></table></div>
+    <p class="note"><strong>Recommended target:</strong> ${topMeta.ml} — ${metaDescriptions[topMeta.i]}<br><br>
+    Leveling at Meta is highly dependent on interview performance and scope signal. This tool reflects general market norms; final level decisions are made by the hiring committee.</p>`;
+
+  if (aiInsight) {
+    html += `<div class="ai-insight visible"><div class="ai-insight-label">AI leveling insight</div>${aiInsight}</div>`;
+  }
+
+  html += `</div>`;
   document.getElementById("results").innerHTML = html;
 }
+
 function reset() {
   document.getElementById("company").value = "";
   document.getElementById("level").innerHTML = '<option value="">— Select level —</option>';
   document.getElementById("yoe").value = "";
-  document.getElementById("results").innerHTML = '<div class="empty">Fill in the fields above to see the cross-company level mapping.</div>';
+  document.getElementById("linkedin-text").value = "";
+  document.getElementById("parsed-banner").classList.remove("visible");
+  document.getElementById("results").innerHTML = '<div class="empty">Fill in the fields above or paste a LinkedIn summary to see the cross-company level mapping.</div>';
+  setStatus("", false);
+  aiInsight = null;
 }
-document.getElementById("company").addEventListener("change", populateLevels);
+
+document.getElementById("company").addEventListener("change", () => populateLevels());
 </script>
 </body>
 </html>
