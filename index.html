@@ -13,31 +13,28 @@
     line-height: 1.5;
     padding: 2rem 1rem;
   }
-  .container { max-width: 1100px; margin: 0 auto; }
+  .container { max-width: 1200px; margin: 0 auto; }
   
-  /* Layout Headers */
   header { margin-bottom: 2rem; border-left: 5px solid #0668E1; padding-left: 1.5rem; }
   h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
   .subtitle { font-size: 14px; color: #606770; }
 
-  /* Card Styling */
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
+  /* Layout Grid */
+  .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .full-width { grid-column: span 2; }
+  @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
   
-  .tool-card { background: #fff; border: 1px solid #dddfe2; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .tool-card { background: #fff; border: 1px solid #dddfe2; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); height: 100%; }
   .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #8d949e; margin-bottom: 16px; display: block; letter-spacing: 1px; }
 
-  /* Form Elements */
   .field { margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 6px; }
   label { font-size: 12px; font-weight: 600; color: #4b4f56; }
   select, textarea, input {
     width: 100%; padding: 12px; border: 1px solid #ccd0d5; border-radius: 8px;
     font-size: 14px; transition: all 0.2s;
   }
-  textarea { min-height: 100px; resize: vertical; font-family: inherit; }
-  select:focus, textarea:focus { outline: none; border-color: #0668E1; box-shadow: 0 0 0 2px rgba(6,104,225,0.1); }
+  textarea { min-height: 80px; resize: vertical; font-family: inherit; }
 
-  /* Buttons */
   .btn-row { display: flex; gap: 10px; margin-top: 10px; }
   button { 
     flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; 
@@ -45,23 +42,23 @@
   }
   .btn-primary { background: #0668E1; color: white; border: none; }
   .btn-primary:hover { background: #0556b8; }
-  .btn-secondary { background: #f0f2f5; color: #4b4f56; }
-
-  /* Results Display */
-  .result-area { margin-top: 24px; animation: fadeIn 0.4s ease; }
+  .btn-success { background: #42b72a; color: white; border: none; }
+  
+  .result-area { margin-top: 20px; animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   
-  .alert-box { padding: 16px; border-radius: 8px; margin-top: 15px; font-size: 13px; border-left: 4px solid #0668E1; background: #f0f7ff; }
-  .alert-green { border-left-color: #42b72a; background: #f6ffed; }
+  /* Table & Comparison Logic */
+  .comparison-container { display: flex; align-items: center; justify-content: space-between; gap: 20px; background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
+  .comp-box { flex: 1; text-align: center; }
+  .comp-box h3 { font-size: 11px; text-transform: uppercase; color: #888; margin-bottom: 5px; }
+  .comp-level { font-size: 20px; font-weight: 800; color: #1c1e21; }
+  .comp-arrow { font-size: 24px; color: #ccd0d5; }
 
-  /* Table Styling */
   table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
   th { text-align: left; padding: 10px; color: #8d949e; border-bottom: 1px solid #ebedf0; font-size: 11px; }
   td { padding: 12px 10px; border-bottom: 1px solid #f0f2f5; }
   .match-row { background: #f0f7ff; font-weight: 600; }
-  
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-right: 4px; background: #e7f3ff; color: #0668E1; }
-  .copy-btn { margin-top: 10px; background: none; border: 1px solid #0668E1; color: #0668E1; padding: 5px 10px; width: auto; font-size: 11px; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; background: #e7f3ff; color: #0668E1; }
 </style>
 </head>
 <body>
@@ -69,70 +66,80 @@
 <div class="container">
   <header>
     <h1>Talent Researcher's Dream Toolkit</h1>
-    <p class="subtitle">Leveling Calibration • Sourcing Strategy • Outreach Intelligence</p>
+    <p class="subtitle">v2.0 • Leveling Comparison • Sourcing Strategy • Outreach Intelligence</p>
   </header>
 
-  <div class="grid">
-    <!-- COLUMN 1: CANDIDATE ANALYSIS -->
-    <div class="tool-card">
-      <span class="section-title">Module 1: Candidate Calibration</span>
-      
-      <div class="field">
-        <label>LinkedIn / Bio Paste</label>
-        <textarea id="profile-text" placeholder="Paste profile text to detect signals like 'Managed a team', '0 to 1', or 'Machine Learning'..."></textarea>
-      </div>
-
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+  <div class="main-grid">
+    
+    <!-- 1:1 LEVELING COMPARISON (FULL WIDTH) -->
+    <div class="tool-card full-width" style="border-left: 5px solid #673ab7;">
+      <span class="section-title">Module 1: 1:1 Leveling Comparison (Cross-Mapping)</span>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
         <div class="field">
-          <label>Source Company</label>
-          <select id="company" onchange="populateLevels()">
+          <label>Compare Company A</label>
+          <select id="compA" onchange="populateLevelList('compA', 'levelA')">
             <option value="">Select—</option>
             <option value="Google">Google</option>
             <option value="Amazon">Amazon</option>
             <option value="Stripe">Stripe</option>
             <option value="Uber">Uber</option>
-            <option value="ByteDance">ByteDance</option>
-            <option value="Netflix">Netflix</option>
-            <option value="Airbnb">Airbnb</option>
+            <option value="Meta">Meta</option>
           </select>
         </div>
         <div class="field">
-          <label>Current Level</label>
-          <select id="level"><option value="">Select Co—</option></select>
+          <label>At Level</label>
+          <select id="levelA" onchange="runComparison()"><option value="">—</option></select>
+        </div>
+        <div class="field">
+          <label>Against Company B</label>
+          <select id="compB" onchange="populateLevelList('compB', 'levelB')">
+            <option value="">Select—</option>
+            <option value="Google">Google</option>
+            <option value="Amazon">Amazon</option>
+            <option value="Stripe">Stripe</option>
+            <option value="Uber">Uber</option>
+            <option value="Meta">Meta</option>
+          </select>
         </div>
       </div>
 
-      <div class="btn-row">
-        <button class="btn-primary" onclick="analyzeCandidate()">Analyze Candidate</button>
+      <div id="comparison-display" class="result-area">
+        <div class="comparison-container">
+            <div class="comp-box"><h3 id="labelA">Comp A</h3><div id="valA" class="comp-level">-</div></div>
+            <div class="comp-arrow">⇄</div>
+            <div class="comp-box"><h3 id="labelB">Comp B</h3><div id="valB" class="comp-level">-</div></div>
+            <div class="comp-arrow">→</div>
+            <div class="comp-box"><h3>Meta Equivalent</h3><div id="valMeta" class="comp-level" style="color:#0668E1">-</div></div>
+        </div>
       </div>
+    </div>
 
+    <!-- CANDIDATE ANALYSIS -->
+    <div class="tool-card">
+      <span class="section-title">Module 2: Profile Intelligence</span>
+      <div class="field">
+        <label>LinkedIn / Bio Paste</label>
+        <textarea id="profile-text" placeholder="Paste bio for signals..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="analyzeCandidate()">Analyze Profile Signals</button>
+      </div>
       <div id="candidate-results" class="result-area"></div>
     </div>
 
-    <!-- COLUMN 2: SOURCING STRATEGY -->
+    <!-- SOURCING STRATEGY -->
     <div class="tool-card" style="border-top: 4px solid #42b72a;">
-      <span class="section-title">Module 2: Sourcing & Outreach</span>
-      
+      <span class="section-title">Module 3: Sourcing & Outreach</span>
       <div class="field">
-        <label>Job Description / Role Requirements</label>
-        <textarea id="jd-text" placeholder="Paste the JD here. E.g., 'Looking for a Senior PM to lead our Ranking team for Ads...'"></textarea>
+        <label>Job Description Requirements</label>
+        <textarea id="jd-text" placeholder="Paste JD..."></textarea>
       </div>
-
-      <div class="field">
-        <label>Outreach Tone</label>
-        <select id="tone">
-          <option value="professional">Professional & Direct</option>
-          <option value="casual">Casual (Coffee Chat)</option>
-          <option value="technical">Technical Rigor (Manager-to-PM)</option>
-        </select>
-      </div>
-
       <div class="btn-row">
-        <button class="btn-primary" style="background:#42b72a;" onclick="analyzeStrategy()">Generate Sourcing Plan</button>
+        <button class="btn-success" onclick="analyzeStrategy()">Generate Sourcing Plan</button>
       </div>
-
       <div id="strategy-results" class="result-area"></div>
     </div>
+
   </div>
 </div>
 
@@ -142,16 +149,13 @@ const levelMap = {
   "Amazon": ["L4 PM","L5 PM","L6 (Sr)","L7 (Prin)","L8 (Dir)","L10"],
   "Stripe": ["L1 PM","L2 PM","L3 (Sr)","L4 (Staff)","L5 (Prin)","Head of"],
   "Uber": ["APM","PM II","Senior PM","Staff PM","Group PM","Director"],
-  "ByteDance": ["1-1 PM","1-2 PM","2-1 (Sr)","2-2 (Lead)","3-1 (Dir)","3-2"],
-  "Netflix": ["L4 PM","L5 (Sr)","L5 (Sr)","L6 (Dir)","L6 (Dir)","VP"],
-  "Airbnb": ["L1 PM","L2 PM","Senior PM","Staff PM","Director","VP"]
+  "Meta": ["IC3", "IC4", "IC5", "IC6", "IC7", "IC8"]
 };
 
-const metaLevels = ["IC3", "IC4", "IC5", "IC6", "IC7", "IC8"];
-
-function populateLevels() {
-  const co = document.getElementById("company").value;
-  const sel = document.getElementById("level");
+// Populate dropdowns based on levelMap
+function populateLevelList(companyId, levelId) {
+  const co = document.getElementById(companyId).value;
+  const sel = document.getElementById(levelId);
   sel.innerHTML = '';
   if (levelMap[co]) {
     levelMap[co].forEach((l, i) => {
@@ -160,80 +164,55 @@ function populateLevels() {
       sel.appendChild(opt);
     });
   }
+  runComparison();
+}
+
+function runComparison() {
+    const compA = document.getElementById("compA").value;
+    const idxA = parseInt(document.getElementById("levelA").value);
+    const compB = document.getElementById("compB").value;
+    
+    if (!compA || isNaN(idxA) || !compB) return;
+
+    // Display values
+    document.getElementById("labelA").innerText = compA;
+    document.getElementById("valA").innerText = levelMap[compA][idxA];
+    
+    document.getElementById("labelB").innerText = compB;
+    // Map same index to Company B
+    document.getElementById("valB").innerText = levelMap[compB][idxA] || "Beyond Scope";
+    
+    // Map to Meta (Index)
+    document.getElementById("valMeta").innerText = levelMap["Meta"][idxA] || "L8+";
 }
 
 function analyzeCandidate() {
-  const co = document.getElementById("company").value;
-  const idx = parseInt(document.getElementById("level").value);
   const text = document.getElementById("profile-text").value.toLowerCase();
-  
-  if (!co) return;
-
   let insights = [];
-  if (text.includes("managed") || text.includes("reports")) insights.push("People Leadership detected (M1/M2 track possible)");
-  if (text.includes("0 to 1") || text.includes("founder")) insights.push("High Ambiguity / 0-to-1 DNA");
-  if (text.includes("sql") || text.includes("python") || text.includes("ml")) insights.push("Technical Signal: Strong Infra/AI fit");
+  if (text.includes("managed") || text.includes("reports")) insights.push("People Leadership detected (M1/M2 track)");
+  if (text.includes("0 to 1") || text.includes("founder")) insights.push("High Ambiguity DNA");
+  if (text.includes("sql") || text.includes("python") || text.includes("ml")) insights.push("Technical Signal: Infra/AI fit");
 
-  let html = `<table><tr><th>Meta Level</th><th>Fit</th></tr>`;
-  metaLevels.forEach((m, i) => {
-    let rowClass = (i === idx) ? 'class="match-row"' : '';
-    let badge = (i === idx) ? '<span class="tag">Primary</span>' : '';
-    html += `<tr ${rowClass}><td>${m}</td><td>${badge} ${i === idx ? 'Recommended' : ''}</td></tr>`;
-  });
-  html += `</table>`;
-  
-  if (insights.length > 0) {
-    html += `<div class="alert-box"><strong>Researcher Notes:</strong><ul>${insights.map(i => `<li>${i}</li>`).join('')}</ul></div>`;
-  }
-
-  document.getElementById("candidate-results").innerHTML = html;
+  document.getElementById("candidate-results").innerHTML = insights.length > 0 ? 
+    `<div style="background:#f0f7ff; padding:15px; border-radius:8px;"><strong>Researcher Notes:</strong><ul>${insights.map(i => `<li>${i}</li>`).join('')}</ul></div>` : 
+    `<p style="color:#888;">No specific signals detected. Leveling defaults to company norm.</p>`;
 }
 
 function analyzeStrategy() {
   const jd = document.getElementById("jd-text").value.toLowerCase();
-  const tone = document.getElementById("tone").value;
-  
   let targets = ["Stripe", "Google", "Airbnb"];
-  let metaTeams = ["Product Org"];
-  let hook = "your background in product scaling";
+  let outreach = "I noticed your impressive background...";
 
-  if (jd.includes("ranking") || jd.includes("relevance") || jd.includes("ai") || jd.includes("ml")) {
-    targets = ["Google (Search/YouTube)", "Netflix (Content AI)", "ByteDance (TikTok Ads)"];
-    metaTeams = ["GenAI", "Ads Core AI", "Ranking & Relevance"];
-    hook = "your expertise in high-scale ranking and ML systems";
-  } else if (jd.includes("growth") || jd.includes("monetization") || jd.includes("funnel")) {
-    targets = ["Uber (Growth)", "DoorDash", "Instagram", "Snap"];
-    metaTeams = ["Growth Org", "Commerce & Shops", "Monetization"];
-    hook = "your success in driving conversion and top-line growth metrics";
+  if (jd.includes("ranking") || jd.includes("ai")) {
+    targets = ["Google (Search)", "Netflix (Content AI)", "ByteDance"];
+    outreach = "Given your work on complex ranking systems, I thought you'd be a great fit for Meta's GenAI teams.";
   }
 
-  let outreach = "";
-  if (tone === "casual") {
-    outreach = `Hey [Name], I'm doing some research on folks in the ${targets[0]} space. I saw ${hook} and wanted to see if you'd be open to a casual coffee about what we're building at Meta.`;
-  } else if (tone === "technical") {
-    outreach = `Hi [Name], I'm the hiring researcher for Meta ${metaTeams[0]}. Your work on complex systems at ${targets[0]} aligns perfectly with the technical scope of our current IC6/7 needs.`;
-  } else {
-    outreach = `Hi [Name], I noticed your impressive career trajectory at ${targets[0]}. Given ${hook}, I'd love to discuss how your experience maps to leadership roles within Meta's ${metaTeams[0]}.`;
-  }
-
-  const html = `
-    <div class="alert-box alert-green">
-      <strong>Target Companies:</strong><br>${targets.join(", ")}<br><br>
-      <strong>Internal Teams:</strong><br>${metaTeams.join(", ")}
-    </div>
-    <div class="alert-box">
-      <strong>Generated Outreach:</strong><br>
-      <p id="outreach-p" style="margin-top:8px; font-style:italic;">"${outreach}"</p>
-      <button class="copy-btn" onclick="copyOutreach()">Copy to Clipboard</button>
-    </div>
-  `;
-  document.getElementById("strategy-results").innerHTML = html;
-}
-
-function copyOutreach() {
-  const txt = document.getElementById("outreach-p").innerText;
-  navigator.clipboard.writeText(txt);
-  alert("Outreach copied!");
+  document.getElementById("strategy-results").innerHTML = `
+    <div style="background:#f6ffed; padding:15px; border-radius:8px; border-left:4px solid #42b72a;">
+      <strong>Target Companies:</strong> ${targets.join(", ")}<br><br>
+      <strong>Draft Outreach:</strong><br><em style="font-size:12px;">"${outreach}"</em>
+    </div>`;
 }
 </script>
 
