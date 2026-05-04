@@ -2,237 +2,173 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Researcher Intelligence Hub</title>
 <style>
-  :root {
-    --bg: #f8f7ff;
-    --surface: #ffffff;
-    --surface-2: #f0effe;
-    --primary: #6c47ff;
-    --primary-dark: #4f29e8;
-    --primary-light: #ede9ff;
-    --primary-muted: #a78bfa;
-    --accent: #06b6d4;
-    --accent-light: #e0f9ff;
-    --success: #10b981;
-    --success-light: #d1fae5;
-    --warning: #f59e0b;
-    --warning-light: #fef3c7;
-    --danger: #ef4444;
-    --danger-light: #fee2e2;
-    --text: #1e1b4b;
-    --text-2: #6b7280;
-    --text-3: #9ca3af;
-    --border: #e5e3ff;
-    --border-2: #d1ceff;
-    --shadow: 0 1px 3px rgba(108,71,255,0.08), 0 4px 16px rgba(108,71,255,0.06);
-    --shadow-lg: 0 4px 24px rgba(108,71,255,0.12), 0 1px 4px rgba(108,71,255,0.08);
-  }
+:root {
+  --bg: #f8f7ff;
+  --surface: #ffffff;
+  --primary: #6c47ff;
+  --primary-dark: #4f29e8;
+  --primary-light: #ede9ff;
+  --primary-muted: #a78bfa;
+  --accent-light: #e0f9ff;
+  --success-light: #d1fae5;
+  --warning-light: #fef3c7;
+  --danger-light: #fee2e2;
+  --text: #1e1b4b;
+  --text-2: #6b7280;
+  --text-3: #9ca3af;
+  --border: #e5e3ff;
+  --border-2: #d1ceff;
+  --shadow: 0 1px 3px rgba(108,71,255,0.08), 0 4px 16px rgba(108,71,255,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; padding: 1rem 0.875rem 5rem;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+.container { max-width: 880px; margin: 0 auto; width: 100%; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+header { margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+.logo-mark {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: linear-gradient(135deg, #6c47ff 0%, #9333ea 100%);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 20px; height: 20px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-text h1 { font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.header-text p { font-size: 11px; color: var(--text-2); margin-top: 2px; }
 
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 1.5rem 1rem 3rem;
-    -webkit-font-smoothing: antialiased;
-  }
+.tabs {
+  display: flex; gap: 4px; margin-bottom: 1rem; padding: 4px;
+  background: var(--surface); border-radius: 12px; border: 1px solid var(--border);
+  box-shadow: var(--shadow); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1; min-width: 76px; padding: 11px 6px;
+  background: transparent; border: none; border-radius: 8px;
+  cursor: pointer; font-size: 12px; font-weight: 600;
+  color: var(--text-2); transition: all 0.2s; white-space: nowrap;
+  font-family: inherit; touch-action: manipulation;
+}
+.tab-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(108,71,255,0.35); }
 
-  .container { max-width: 880px; margin: 0 auto; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-  header {
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .logo-mark {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, #6c47ff 0%, #9333ea 100%);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .logo-mark svg { width: 22px; height: 22px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .header-text h1 { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
-  .header-text p { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.125rem; margin-bottom: 0.875rem; box-shadow: var(--shadow);
+}
 
-  .tabs {
-    display: flex; gap: 4px; margin-bottom: 1.5rem; padding: 5px;
-    background: var(--surface); border-radius: 14px; border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-  }
-  .tab-btn {
-    flex: 1; padding: 10px 8px; background: transparent; border: none;
-    border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: 600;
-    color: var(--text-2); transition: all 0.2s; white-space: nowrap; font-family: inherit;
-  }
-  .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
-  .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(108,71,255,0.35); }
+.field { margin-bottom: 1rem; }
+label {
+  font-size: 11px; font-weight: 700; color: var(--text-2);
+  margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.06em;
+}
 
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
+select, textarea {
+  width: 100%; padding: 13px 14px;
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 16px; color: var(--text);
+  font-family: inherit; transition: border-color 0.15s;
+  appearance: none; -webkit-appearance: none;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; cursor: pointer;
+}
+select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,71,255,0.12); background: var(--surface); }
+textarea { resize: vertical; min-height: 100px; line-height: 1.6; font-size: 15px; }
+textarea::placeholder { color: var(--text-3); font-size: 14px; }
 
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;
-    box-shadow: var(--shadow);
-  }
+.form-row { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 640px) { .form-row { grid-template-columns: 1fr 1fr 1fr; gap: 12px; } }
 
-  .field { margin-bottom: 1.1rem; }
-  .field:last-child { margin-bottom: 0; }
-  label {
-    font-size: 11px; font-weight: 700; color: var(--text-2);
-    margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.07em;
-  }
+.btn-row { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; }
+@media (min-width: 480px) { .btn-row { flex-direction: row; flex-wrap: wrap; } }
 
-  select, textarea {
-    width: 100%; padding: 11px 13px;
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 10px; font-size: 14px; color: var(--text);
-    font-family: inherit; transition: all 0.15s; appearance: none;
-  }
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 12px center; cursor: pointer;
-  }
-  select:focus, textarea:focus {
-    outline: none; border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(108,71,255,0.12); background: var(--surface);
-  }
-  textarea { resize: vertical; min-height: 110px; line-height: 1.65; font-size: 13px; }
-  textarea::placeholder { color: var(--text-3); }
+button {
+  width: 100%; padding: 14px 20px; border-radius: 10px;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s;
+  font-family: inherit; border: 1.5px solid transparent; touch-action: manipulation;
+}
+@media (min-width: 480px) { button { width: auto; } }
+.btn-primary { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 8px rgba(108,71,255,0.3); }
+.btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn-ghost { background: var(--surface); color: var(--text-2); border-color: var(--border-2); }
+.btn-ghost:active { background: var(--primary-light); color: var(--primary); }
+.btn-ai { background: var(--accent-light); color: #0e7490; border-color: #a5f3fc; }
+.btn-ai:active { background: #cffafe; transform: scale(0.98); }
+.btn-ai:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-  @media (max-width: 620px) { .form-row { grid-template-columns: 1fr; } }
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 1rem 0; color: var(--text-3); font-size: 11px;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1rem; }
-  button {
-    padding: 10px 18px; border-radius: 10px; font-size: 12px; font-weight: 700;
-    cursor: pointer; transition: all 0.15s; font-family: inherit;
-    letter-spacing: 0.02em; border: 1.5px solid transparent;
-  }
-  .btn-primary { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 8px rgba(108,71,255,0.3); }
-  .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108,71,255,0.4); }
-  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-  .btn-ghost { background: var(--surface); color: var(--text-2); border-color: var(--border-2); }
-  .btn-ghost:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary-muted); }
-  .btn-ai { background: var(--accent-light); color: #0e7490; border-color: #a5f3fc; }
-  .btn-ai:hover { background: #cffafe; transform: translateY(-1px); }
-  .btn-ai:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--primary); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.section-label::before { content: ''; width: 3px; height: 13px; background: var(--primary); border-radius: 2px; display: inline-block; }
 
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 1.25rem 0; color: var(--text-3); font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.parsing-status { font-size: 13px; color: var(--primary); margin-top: 8px; min-height: 20px; display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--primary-light); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; flex-shrink: 0; }
+.spinner.active { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  .section-label {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.07em; color: var(--primary); margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .section-label::before {
-    content: ''; width: 3px; height: 14px;
-    background: var(--primary); border-radius: 2px; display: inline-block;
-  }
+.banner { border-radius: 10px; padding: 11px 14px; font-size: 13px; margin-bottom: 1rem; display: none; line-height: 1.5; font-weight: 500; }
+.banner.visible { display: block; }
+.banner-green { background: var(--success-light); border: 1px solid #6ee7b7; color: #065f46; }
+.banner-yellow { background: var(--warning-light); border: 1px solid #fcd34d; color: #92400e; }
 
-  .parsing-status {
-    font-size: 12px; color: var(--primary); margin-top: 8px;
-    min-height: 18px; display: flex; align-items: center; gap: 6px; font-weight: 500;
-  }
-  .spinner {
-    width: 13px; height: 13px; border: 2px solid var(--primary-light);
-    border-top-color: var(--primary); border-radius: 50%;
-    animation: spin 0.7s linear infinite; display: none;
-  }
-  .spinner.active { display: inline-block; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+.result-wrap { margin-top: 0.875rem; }
+.result-header { font-size: 13px; color: var(--text-2); margin-bottom: 10px; font-weight: 500; line-height: 1.5; }
+.result-header strong { color: var(--text); }
+.table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 340px; }
+th { background: var(--primary-light); padding: 10px 12px; text-align: left; font-weight: 700; font-size: 10px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; line-height: 1.4; }
+tr:last-child td { border-bottom: none; }
+.highlight-row { background: var(--primary-light); }
+.highlight-row td { color: var(--primary-dark); font-weight: 600; }
 
-  .banner {
-    border-radius: 10px; padding: 10px 14px;
-    font-size: 12px; margin-bottom: 1rem; display: none; line-height: 1.5; font-weight: 500;
-  }
-  .banner.visible { display: flex; align-items: flex-start; gap: 8px; }
-  .banner-green { background: var(--success-light); border: 1px solid #6ee7b7; color: #065f46; }
-  .banner-yellow { background: var(--warning-light); border: 1px solid #fcd34d; color: #92400e; }
+.badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.badge-match { background: var(--success-light); color: #065f46; }
+.badge-stretch { background: var(--warning-light); color: #92400e; }
+.badge-reach { background: var(--danger-light); color: #991b1b; }
 
-  .result-wrap { margin-top: 1rem; }
-  .result-header { font-size: 12px; color: var(--text-2); margin-bottom: 12px; font-weight: 500; }
-  .result-header strong { color: var(--text); }
-  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th {
-    background: var(--primary-light); padding: 10px 14px; text-align: left;
-    font-weight: 700; font-size: 10px; color: var(--primary);
-    text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid var(--border);
-  }
-  td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
-  .highlight-row { background: var(--primary-light); }
-  .highlight-row td { color: var(--primary-dark); font-weight: 600; }
+.level-pill { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--primary-light); color: var(--primary); border: 1px solid var(--border-2); display: inline-block; white-space: nowrap; }
 
-  .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
-  .badge-match { background: var(--success-light); color: #065f46; }
-  .badge-stretch { background: var(--warning-light); color: #92400e; }
-  .badge-reach { background: var(--danger-light); color: #991b1b; }
+.note { font-size: 13px; color: var(--text-2); margin-top: 1rem; line-height: 1.7; background: var(--bg); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); }
+.note strong { color: var(--primary); }
 
-  .level-pill {
-    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
-    background: var(--primary-light); color: var(--primary);
-    border: 1px solid var(--border-2); display: inline-block; white-space: nowrap;
-  }
+.ai-insight { margin-top: 0.875rem; background: var(--primary-light); border: 1px solid var(--border-2); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.7; display: none; }
+.ai-insight.visible { display: block; }
+.ai-insight-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--primary); margin-bottom: 6px; }
 
-  .note {
-    font-size: 12px; color: var(--text-2); margin-top: 1rem; line-height: 1.7;
-    background: var(--bg); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border);
-  }
-  .note strong { color: var(--primary); }
+.empty { text-align: center; padding: 2rem 1rem; color: var(--text-3); font-size: 13px; border: 1.5px dashed var(--border-2); border-radius: 12px; background: var(--surface); line-height: 1.5; }
 
-  .ai-insight {
-    margin-top: 1rem; background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
-    border: 1px solid var(--border-2); border-radius: 10px;
-    padding: 12px 16px; font-size: 13px; color: var(--text); line-height: 1.7; display: none;
-  }
-  .ai-insight.visible { display: block; }
-  .ai-insight-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--primary); margin-bottom: 6px; }
+.insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.875rem; }
+.stat-card { background: var(--bg); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--primary); }
+.stat-val { font-size: 16px; font-weight: 700; color: var(--text); display: block; margin-top: 4px; line-height: 1.3; }
+.stat-label { font-size: 10px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
 
-  .empty {
-    text-align: center; padding: 2.5rem; color: var(--text-3); font-size: 13px;
-    border: 1.5px dashed var(--border-2); border-radius: 12px; background: var(--surface);
-  }
-
-  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1rem; }
-  .stat-card {
-    background: var(--bg); padding: 14px 16px; border-radius: 12px;
-    border: 1px solid var(--border); position: relative; overflow: hidden;
-  }
-  .stat-card::before {
-    content: ''; position: absolute; top: 0; left: 0;
-    width: 3px; height: 100%; background: var(--primary);
-  }
-  .stat-val { font-size: 18px; font-weight: 700; color: var(--text); display: block; margin-top: 4px; letter-spacing: -0.02em; }
-  .stat-label { font-size: 10px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
-
-  .ai-output {
-    margin-top: 1rem; padding: 16px; border-radius: 12px;
-    background: var(--bg); border: 1px solid var(--border);
-    font-size: 13px; color: var(--text); line-height: 1.8; display: none; white-space: pre-wrap;
-  }
-  .ai-output.visible { display: block; }
-  .ai-output-label {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.07em; color: var(--primary); margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .ai-output-label::before {
-    content: ''; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--primary); display: inline-block; box-shadow: 0 0 0 3px var(--primary-light);
-  }
+.ai-output { margin-top: 0.875rem; padding: 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); font-size: 14px; color: var(--text); line-height: 1.8; display: none; white-space: pre-wrap; word-break: break-word; }
+.ai-output.visible { display: block; }
+.ai-output-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.ai-output-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); display: inline-block; box-shadow: 0 0 0 3px var(--primary-light); flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -240,13 +176,11 @@
 
   <header>
     <div class="logo-mark">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     </div>
     <div class="header-text">
       <h1>Researcher Intelligence Hub</h1>
-      <p>Market Intelligence · PM Calibration · Sourcing Strategy</p>
+      <p>Market Intel · PM Calibration · Sourcing Strategy</p>
     </div>
   </header>
 
@@ -275,10 +209,10 @@
         <div class="insight-grid">
           <div class="stat-card"><span class="stat-label">Talent Scarcity</span><span class="stat-val" id="scarcity-val">—</span></div>
           <div class="stat-card"><span class="stat-label">Avg Tenure</span><span class="stat-val" id="tenure-val">—</span></div>
-          <div class="stat-card"><span class="stat-label">Top Donor Companies</span><span class="stat-val" id="donor-val" style="font-size:13px;line-height:1.5;margin-top:6px;font-weight:600;">—</span></div>
-          <div class="stat-card"><span class="stat-label">Market Trend</span><span class="stat-val" id="trend-val" style="font-size:13px;line-height:1.5;margin-top:6px;font-weight:600;">—</span></div>
+          <div class="stat-card"><span class="stat-label">Top Donors</span><span class="stat-val" id="donor-val" style="font-size:13px;line-height:1.4;margin-top:4px;">—</span></div>
+          <div class="stat-card"><span class="stat-label">Market Trend</span><span class="stat-val" id="trend-val" style="font-size:13px;line-height:1.4;margin-top:4px;">—</span></div>
         </div>
-        <div class="banner banner-yellow" style="margin-top:1rem;margin-bottom:0;" id="market-alert"></div>
+        <div class="banner banner-yellow" style="margin-top:0.875rem;margin-bottom:0;" id="market-alert"></div>
       </div>
     </div>
   </div>
@@ -288,7 +222,7 @@
     <div class="card">
       <div class="section-label">Option 1 — Paste LinkedIn profile</div>
       <div class="field">
-        <textarea id="linkedin-text" placeholder="Paste the candidate's LinkedIn About section, experience, or any profile text. The AI will extract company, title, and years of experience automatically..."></textarea>
+        <textarea id="linkedin-text" placeholder="Paste the candidate's LinkedIn About section or experience. AI will extract company, title, and years of experience automatically..."></textarea>
       </div>
       <div class="parsing-status">
         <div class="spinner" id="spinner"></div>
@@ -297,9 +231,12 @@
       <div class="btn-row">
         <button class="btn-ai" onclick="parseLinkedIn()">Auto-fill from LinkedIn text</button>
       </div>
+
       <div class="divider">or fill in manually</div>
+
       <div class="section-label">Option 2 — Enter details manually</div>
       <div id="parsed-banner" class="banner banner-green"></div>
+
       <div class="form-row">
         <div class="field">
           <label>Current Company</label>
@@ -343,7 +280,7 @@
     <div class="card">
       <div class="field">
         <label>Job Description or Role Brief</label>
-        <textarea id="jd-input" rows="6" placeholder="Paste the job description or a brief description of the role you're sourcing for. The AI will identify target talent clusters, competitor companies to source from, and recommended search strategies..."></textarea>
+        <textarea id="jd-input" placeholder="Paste the job description or a brief role description. AI will identify talent clusters, donor companies, and search strategies..."></textarea>
       </div>
       <div class="parsing-status">
         <div class="spinner" id="sourcing-spinner"></div>
@@ -364,7 +301,7 @@
     <div class="card">
       <div class="field">
         <label>Candidate Profile Summary</label>
-        <textarea id="profile-snippet" rows="6" placeholder="Paste a candidate's profile summary, LinkedIn bio, or resume snippet. The AI will synthesize a personalized outreach and engagement strategy based on their background..."></textarea>
+        <textarea id="profile-snippet" placeholder="Paste a candidate's profile summary, LinkedIn bio, or resume snippet. AI will synthesize a personalized outreach and engagement strategy..."></textarea>
       </div>
       <div class="parsing-status">
         <div class="spinner" id="strategy-spinner"></div>
@@ -381,9 +318,9 @@
   </div>
 
 </div>
-
 <script>
-const levelMap = {
+/* DATA */
+var levelMap = {
   "Google": ["APM","PM II","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
   "Apple": ["New Grad PM","PM","Senior PM","Lead PM","Principal PM","Director of PM","VP of Product"],
   "Amazon": ["PM I","PM II","Senior PM","Principal PM","Sr. Principal PM","Director of PM","VP of Product"],
@@ -405,81 +342,290 @@ const levelMap = {
   "Goldman Sachs": ["Analyst","Associate","VP","Executive Director","Managing Director","Partner","Partner"],
   "Other (large tech)": ["Junior PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
   "Other (consulting / finance)": ["Analyst","Associate / Consultant","Manager","Senior Manager","Director","Managing Director","Partner / VP"],
-  "Other (startup / mid-size)": ["PM","PM","Senior PM","Senior PM / PM Lead","Head of Product","Director of PM","VP / CPO"],
+  "Other (startup / mid-size)": ["PM","PM","Senior PM","Senior PM / PM Lead","Head of Product","Director of PM","VP / CPO"]
 };
 
-const metaLevels = ["IC3 (APM)","IC4 (PM)","IC5 (Senior PM)","IC6 (Staff PM)","IC7 (Group PM / Director)","IC8 (Director)","IC9+ (VP)"];
-const metaDescriptions = [
-  "Typically entry-level. Works on defined problems with close mentorship.",
+var metaLevels = ["IC3 (APM)","IC4 (PM)","IC5 (Senior PM)","IC6 (Staff PM)","IC7 (Group PM / Director)","IC8 (Director)","IC9+ (VP)"];
+var metaDescriptions = [
+  "Entry-level. Works on defined problems with close mentorship.",
   "Executes independently on a product area. Drives scoped roadmaps.",
-  "Owns a product surface area. Influences cross-functional teams and strategy.",
-  "Drives complex, ambiguous product bets. Strong org-wide influence.",
-  "Manages PMs or leads a large product domain. Sets team-level strategy.",
+  "Owns a product surface area. Influences cross-functional teams.",
+  "Drives complex, ambiguous bets. Strong org-wide influence.",
+  "Manages PMs or leads a large product domain. Sets team strategy.",
   "Owns a major product pillar. Significant business and org impact.",
-  "Executive-level. Defines company-level product vision and strategy.",
+  "Executive-level. Defines company-level product vision."
 ];
-const yoeGrid = [
+var yoeGrid = [
   [0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,1,1,0,0,0,0],[0,1,1,2,1,0,0],
   [0,0,2,2,2,1,0],[0,0,1,3,3,2,0],[0,0,0,2,4,4,2],[0,0,0,1,3,5,3],
-  [0,0,0,0,2,4,5],[0,0,0,0,1,3,5],
+  [0,0,0,0,2,4,5],[0,0,0,0,1,3,5]
 ];
-const yoeMap = {"0–1":0,"1–2":1,"2–4":2,"4–6":3,"6–9":4,"9–12":5,"12+":6};
-const fitLabels = ["Strong match","Likely match","Possible match","Stretch","Reach"];
-const fitBadge = ["badge-match","badge-match","badge-match","badge-stretch","badge-reach"];
-
-const marketData = {
-  "ai":      { scarcity: "Extreme", tenure: "1.8 yrs", donors: "OpenAI, DeepMind, Anthropic", trend: "Heating up. $500K+ TC common.", alert: "⚠ Intense counter-offer risk from OpenAI & Anthropic. Move fast — top candidates have 2–3 competing offers." },
-  "product": { scarcity: "High",    tenure: "2.6 yrs", donors: "Google, Amazon, Microsoft",   trend: "Stable. Technical PM bar rising.", alert: "⚠ Meta leveling is conservative vs Google. Candidates often expect IC5+ — set expectations early in the process." },
-  "infra":   { scarcity: "Moderate",tenure: "3.2 yrs", donors: "Google Cloud, AWS, Cloudflare", trend: "Growing with AI infra demand.", alert: "⚠ Strong retention at Google Cloud and AWS due to RSU refresh cycles. Flag tenure cliffs." },
-  "data":    { scarcity: "High",    tenure: "2.1 yrs", donors: "Snowflake, Databricks, Palantir", trend: "AI/ML overlap increasing demand.", alert: "⚠ Candidates often pivot to AI PM roles. Validate PM vs analyst background carefully." },
-  "design":  { scarcity: "Moderate",tenure: "2.9 yrs", donors: "Apple, Figma, Airbnb",        trend: "Stable. Research talent tight.", alert: "⚠ Design bar at Meta skews toward systems thinking. Portfolio review is critical — filter for scale experience." },
+var yoeMap = {"0–1":0,"1–2":1,"2–4":2,"4–6":3,"6–9":4,"9–12":5,"12+":6};
+var fitLabels = ["Strong match","Likely match","Possible","Stretch","Reach"];
+var fitBadge = ["badge-match","badge-match","badge-match","badge-stretch","badge-reach"];
+var marketData = {
+  "ai":      {scarcity:"Extreme",tenure:"1.8 yrs",donors:"OpenAI, DeepMind, Anthropic",trend:"Heating up. $500K+ TC common.",alert:"Intense counter-offer risk from OpenAI & Anthropic. Move fast — top candidates have 2-3 competing offers."},
+  "product": {scarcity:"High",tenure:"2.6 yrs",donors:"Google, Amazon, Microsoft",trend:"Stable. Technical PM bar rising.",alert:"Meta leveling is conservative vs Google. Candidates often expect IC5+ — set expectations early."},
+  "infra":   {scarcity:"Moderate",tenure:"3.2 yrs",donors:"Google Cloud, AWS, Cloudflare",trend:"Growing with AI infra demand.",alert:"Strong retention at Google Cloud and AWS due to RSU refresh cycles. Flag tenure cliffs."},
+  "data":    {scarcity:"High",tenure:"2.1 yrs",donors:"Snowflake, Databricks, Palantir",trend:"AI/ML overlap increasing demand.",alert:"Candidates often pivot to AI PM roles. Validate PM vs analyst background carefully."},
+  "design":  {scarcity:"Moderate",tenure:"2.9 yrs",donors:"Apple, Figma, Airbnb",trend:"Stable. Research talent tight.",alert:"Design bar at Meta skews toward systems thinking. Portfolio review is critical."}
 };
+var aiInsight = null;
 
-let aiInsight = null;
-
+/* TABS */
 function openTab(evt, tabId) {
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  var tabs = document.querySelectorAll(".tab-content");
+  var btns = document.querySelectorAll(".tab-btn");
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
   document.getElementById(tabId).classList.add("active");
   evt.currentTarget.classList.add("active");
+  window.scrollTo(0, 0);
 }
 
+/* MARKET INTEL */
 function updateIntel() {
-  const d = document.getElementById("intel-domain").value;
+  var d = document.getElementById("intel-domain").value;
   if (!d) return;
-  const data = marketData[d];
+  var data = marketData[d];
   document.getElementById("intel-results").style.display = "block";
   document.getElementById("scarcity-val").textContent = data.scarcity;
   document.getElementById("tenure-val").textContent = data.tenure;
   document.getElementById("donor-val").textContent = data.donors;
   document.getElementById("trend-val").textContent = data.trend;
-  const alertEl = document.getElementById("market-alert");
+  var alertEl = document.getElementById("market-alert");
   alertEl.textContent = data.alert;
   alertEl.classList.add("visible");
 }
 
+/* PM CALIBRATION */
 function populateLevels(selectedLabel) {
-  const co = document.getElementById("company").value;
-  const sel = document.getElementById("level");
+  var co = document.getElementById("company").value;
+  var sel = document.getElementById("level");
   sel.innerHTML = '<option value="">— Select level —</option>';
   if (co && levelMap[co]) {
-    levelMap[co].forEach((l, i) => {
-      const opt = document.createElement("option");
-      opt.value = i; opt.textContent = l;
-      if (selectedLabel && l.toLowerCase().includes(selectedLabel.toLowerCase())) opt.selected = true;
+    var levels = levelMap[co];
+    for (var i = 0; i < levels.length; i++) {
+      var opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = levels[i];
+      if (selectedLabel && levels[i].toLowerCase().indexOf(selectedLabel.toLowerCase()) !== -1) opt.selected = true;
       sel.appendChild(opt);
-    });
+    }
   }
 }
 
-async function parseLinkedIn() {
-  const text = document.getElementById("linkedin-text").value.trim();
+document.getElementById("company").addEventListener("change", function() { populateLevels(); });
+
+function parseLinkedIn() {
+  var text = document.getElementById("linkedin-text").value.trim();
   if (!text) { setLevelStatus("Please paste some LinkedIn profile text first.", false); return; }
   setLevelStatus("Analyzing profile...", true);
   document.querySelector(".btn-ai").disabled = true;
-  try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514", max_tokens: 1000,
-        messages: [{ role: "user", content: `You are a recruiting specialist. A
+
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{
+        role: "user",
+        content: "You are a recruiting specialist. Analyze this LinkedIn profile text and extract the candidate's current information for PM leveling at Meta.\n\nLinkedIn text:\n" + text + "\n\nReturn ONLY a JSON object with no markdown or backticks:\n{\"company\": \"exact company name matching one of: Google, Apple, Amazon, Microsoft, Salesforce, Uber, Airbnb, Stripe, LinkedIn, Netflix, Twitter / X, Snap, ByteDance / TikTok, PwC, Deloitte, McKinsey, Accenture, JPMorgan, Goldman Sachs, Other (large tech), Other (consulting / finance), Other (startup / mid-size)\",\"title\": \"their most recent product or consulting title\",\"yoe\": \"estimated years as one of: 0-1, 1-2, 2-4, 4-6, 6-9, 9-12, 12+\",\"insight\": \"1-2 sentences on how this background maps to Meta PM leveling\",\"confidence\": \"high, medium, or low\"}"
+      }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var raw = "";
+    for (var i = 0; i < data.content.length; i++) {
+      if (data.content[i].type === "text") { raw = data.content[i].text; break; }
+    }
+    var parsed;
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, "").trim()); }
+    catch(e) { setLevelStatus("Could not parse the profile. Try adding more detail.", false); document.querySelector(".btn-ai").disabled = false; return; }
+
+    var compSel = document.getElementById("company");
+    for (var i = 0; i < compSel.options.length; i++) {
+      if (compSel.options[i].value && parsed.company && compSel.options[i].value.toLowerCase() === parsed.company.toLowerCase()) {
+        compSel.value = compSel.options[i].value; break;
+      }
+    }
+    if (!compSel.value && parsed.company) {
+      for (var i = 0; i < compSel.options.length; i++) {
+        if (compSel.options[i].value && parsed.company && parsed.company.toLowerCase().indexOf(compSel.options[i].value.toLowerCase().split(" ")[0]) !== -1) {
+          compSel.value = compSel.options[i].value; break;
+        }
+      }
+    }
+    populateLevels(parsed.title);
+    var yoeSel = document.getElementById("yoe");
+    for (var i = 0; i < yoeSel.options.length; i++) {
+      if (yoeSel.options[i].value === parsed.yoe) { yoeSel.value = yoeSel.options[i].value; break; }
+    }
+    var banner = document.getElementById("parsed-banner");
+    banner.textContent = "Auto-filled: \"" + parsed.title + "\" at " + parsed.company + " · " + parsed.yoe + " yrs · Confidence: " + parsed.confidence;
+    banner.classList.add("visible");
+    aiInsight = parsed.insight || null;
+    setLevelStatus("Profile parsed. Review fields below then tap Show Meta leveling.", false);
+    document.querySelector(".btn-ai").disabled = false;
+  })
+  .catch(function() {
+    setLevelStatus("Something went wrong. Check your connection and try again.", false);
+    document.querySelector(".btn-ai").disabled = false;
+  });
+}
+
+function setLevelStatus(msg, loading) {
+  document.getElementById("status-text").textContent = msg;
+  var s = document.getElementById("spinner");
+  if (loading) s.classList.add("active"); else s.classList.remove("active");
+}
+
+function computeLevel() {
+  var co = document.getElementById("company").value;
+  var li = document.getElementById("level").value;
+  var yoe = document.getElementById("yoe").value;
+  if (!co || li === "" || !yoe) {
+    document.getElementById("leveling-results").innerHTML = '<div class="empty">Please fill in all three fields.</div>';
+    return;
+  }
+  var srcIdx = parseInt(li);
+  var yoeIdx = yoeMap[yoe];
+  var srcLabel = levelMap[co][srcIdx];
+  var scores = [];
+  for (var mi = 0; mi < metaLevels.length; mi++) {
+    var s = 0;
+    var diff = Math.abs(mi - srcIdx);
+    if (diff === 0) s += 3; else if (diff === 1) s += 2; else if (diff === 2) s += 1;
+    var gridRow = Math.min(yoeIdx * 2, yoeGrid.length - 1);
+    s += (yoeGrid[gridRow][mi] || 0);
+    scores.push(s);
+  }
+  var maxScore = Math.max.apply(null, scores);
+  var rows = [];
+  for (var i = 0; i < metaLevels.length; i++) {
+    var delta = maxScore - scores[i];
+    var fitIdx = delta === 0 ? 0 : delta === 1 ? 1 : delta === 2 ? 2 : delta === 3 ? 3 : 4;
+    rows.push({ml: metaLevels[i], i: i, fitIdx: fitIdx, isTop: delta === 0});
+  }
+  var top = null;
+  for (var i = 0; i < rows.length; i++) { if (rows[i].isTop) { top = rows[i]; break; } }
+
+  var html = '<div class="card result-wrap">';
+  html += '<p class="result-header">Meta PM mapping for <strong>' + srcLabel + '</strong> at <strong>' + co + '</strong> &middot; <strong>' + yoe + ' yrs</strong></p>';
+  html += '<div class="table-wrap"><table><thead><tr><th>Meta level</th><th>Fit</th><th>What this means</th></tr></thead><tbody>';
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    html += '<tr' + (r.isTop ? ' class="highlight-row"' : '') + '>';
+    html += '<td><span class="level-pill">' + r.ml + '</span></td>';
+    html += '<td><span class="badge ' + fitBadge[r.fitIdx] + '">' + fitLabels[r.fitIdx] + '</span></td>';
+    html += '<td>' + metaDescriptions[r.i] + '</td></tr>';
+  }
+  html += '</tbody></table></div>';
+  html += '<p class="note"><strong>Recommended target:</strong> ' + top.ml + ' — ' + metaDescriptions[top.i] + '<br><br>Leveling at Meta depends heavily on interview performance and scope signal. Final decisions are made by the hiring committee.</p>';
+  if (aiInsight) html += '<div class="ai-insight visible"><div class="ai-insight-label">AI Leveling Insight</div>' + aiInsight + '</div>';
+  html += '</div>';
+  document.getElementById("leveling-results").innerHTML = html;
+  document.getElementById("leveling-results").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+function resetLeveling() {
+  document.getElementById("company").value = "";
+  document.getElementById("level").innerHTML = '<option value="">— Select level —</option>';
+  document.getElementById("yoe").value = "";
+  document.getElementById("linkedin-text").value = "";
+  document.getElementById("parsed-banner").classList.remove("visible");
+  document.getElementById("leveling-results").innerHTML = '<div class="empty">Fill in the fields above or paste a LinkedIn summary to see the cross-company level mapping.</div>';
+  setLevelStatus("", false);
+  aiInsight = null;
+}
+
+/* SOURCING */
+function runSourcing() {
+  var jd = document.getElementById("jd-input").value.trim();
+  if (!jd) { setSourcingStatus("Please paste a job description first.", false); return; }
+  setSourcingStatus("Mapping talent clusters...", true);
+  document.getElementById("sourcing-btn").disabled = true;
+  document.getElementById("sourcing-output").classList.remove("visible");
+
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{
+        role: "user",
+        content: "You are a senior technical recruiter at Meta. Analyze this job description and produce a sourcing intelligence brief.\n\nJob Description:\n" + jd + "\n\nRespond in plain text (no markdown) with these sections:\nTARGET TALENT CLUSTERS: 2-3 specific candidate profiles to prioritize\nTOP DONOR COMPANIES: 4-5 companies to source from and why\nSEARCH STRATEGY: Specific Boolean or LinkedIn search tips for this role\nWATCH-OUTS: 1-2 common mistakes when sourcing for this role"
+      }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var text = "";
+    for (var i = 0; i < data.content.length; i++) {
+      if (data.content[i].type === "text") { text = data.content[i].text; break; }
+    }
+    document.getElementById("sourcing-content").textContent = text || "No response received.";
+    document.getElementById("sourcing-output").classList.add("visible");
+    setSourcingStatus("", false);
+    document.getElementById("sourcing-btn").disabled = false;
+  })
+  .catch(function() {
+    setSourcingStatus("Something went wrong. Try again.", false);
+    document.getElementById("sourcing-btn").disabled = false;
+  });
+}
+
+function setSourcingStatus(msg, loading) {
+  document.getElementById("sourcing-status").textContent = msg;
+  var s = document.getElementById("sourcing-spinner");
+  if (loading) s.classList.add("active"); else s.classList.remove("active");
+}
+
+/* STRATEGY */
+function generateStrategy() {
+  var profile = document.getElementById("profile-snippet").value.trim();
+  if (!profile) { setStrategyStatus("Please paste a candidate profile first.", false); return; }
+  setStrategyStatus("Synthesizing engagement strategy...", true);
+  document.getElementById("strategy-btn").disabled = true;
+  document.getElementById("strategy-output").classList.remove("visible");
+
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{
+        role: "user",
+        content: "You are a senior recruiter at Meta. Analyze this candidate profile and create a personalized outreach and engagement strategy.\n\nCandidate Profile:\n" + profile + "\n\nRespond in plain text (no markdown) with these sections:\nCANDIDATE SNAPSHOT: 2-3 sentences on who this person is and what they care about\nHOOK / OPENING ANGLE: The single most compelling reason Meta would appeal to them\nOUTREACH MESSAGE: A short, personalized 3-4 sentence LinkedIn message to send\nENGAGEMENT STRATEGY: How to move them through the process, key concerns to address, timing, and objection handling\nRISK FACTORS: Likely reasons they might decline and how to preempt them"
+      }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var text = "";
+    for (var i = 0; i < data.content.length; i++) {
+      if (data.content[i].type === "text") { text = data.content[i].text; break; }
+    }
+    document.getElementById("strategy-content").textContent = text || "No response received.";
+    document.getElementById("strategy-output").classList.add("visible");
+    setStrategyStatus("", false);
+    document.getElementById("strategy-btn").disabled = false;
+  })
+  .catch(function() {
+    setStrategyStatus("Something went wrong. Try again.", false);
+    document.getElementById("strategy-btn").disabled = false;
+  });
+}
+
+function setStrategyStatus(msg, loading) {
+  document.getElementById("strategy-status").textContent = msg;
+  var s = document.getElementById("strategy-spinner");
+  if (loading) s.classList.add("active"); else s.classList.remove("active");
+}
+</script>
+</body>
+</html>
