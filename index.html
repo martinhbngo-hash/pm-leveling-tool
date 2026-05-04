@@ -294,6 +294,38 @@ tr:last-child td{border-bottom:none;}
 .sidebar-co-avatar{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#7c5cfc,#a855f7);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;}
 .sidebar-co-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.8);}
 .sidebar-co-sub{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+/* HM Partner tab */
+.hm-stage { border-left: 3px solid var(--primary); border-radius: 0; padding-left: 14px; margin-bottom: 1.5rem; }
+.hm-stage-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.hm-stage-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.hm-stage-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+.hm-badge-prep { background: var(--primary-light); color: var(--primary); }
+.hm-badge-active { background: var(--warning-light); color: #92400e; }
+.hm-badge-close { background: var(--success-light); color: #065f46; }
+.hm-action { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.hm-action:last-child { border-bottom: none; }
+.hm-action input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+.hm-action-text { flex: 1; }
+.hm-action-label { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.hm-action-sub { font-size: 11px; color: var(--text-2); margin-top: 3px; line-height: 1.5; }
+.hm-action-sub strong { color: var(--primary); }
+.hm-action.completed .hm-action-label { text-decoration: line-through; color: var(--text-3); }
+.hm-callout { background: var(--primary-light); border: 1px solid var(--border-2); border-radius: 10px; padding: 11px 13px; margin-top: 10px; }
+.hm-callout-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--primary); margin-bottom: 5px; }
+.hm-callout p { font-size: 12px; color: var(--primary-dark); line-height: 1.6; }
+.hm-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+@media(max-width:500px){ .hm-input-row { grid-template-columns: 1fr; } }
+.hm-progress-bar { height: 6px; background: var(--border); border-radius: 20px; overflow: hidden; margin: 6px 0 2px; }
+.hm-progress-fill { height: 100%; border-radius: 20px; background: var(--primary); transition: width .3s ease; }
+.hm-req-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.125rem; margin-bottom: .875rem; }
+.hm-req-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.hm-req-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.hm-req-meta { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+.stage-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.stage-pill { font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border-2); background: var(--surface); color: var(--text-2); cursor: pointer; transition: all .15s; }
+.stage-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+.stage-pill:hover:not(.active) { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 </style>
 </head>
 <body>
@@ -364,6 +396,7 @@ tr:last-child td{border-bottom:none;}
       <button class="tab-btn" onclick="openTab(this,'tab-sourcing')"><span class="tab-icon">🔍</span>Sourcing</button>
       <button class="tab-btn" onclick="openTab(this,'tab-scorecard')"><span class="tab-icon">📝</span>Scorecard</button>
       <button class="tab-btn" onclick="openTab(this,'tab-strategy')"><span class="tab-icon">💬</span>Strategy</button>
+      <button class="tab-btn" onclick="openTab(this,'tab-hmpartner')"><span class="tab-icon">🤝</span>HM Partner</button>
       <div class="tab-divider"></div>
       <div class="sidebar-section-label">Reference</div>
       <button class="tab-btn" onclick="openTab(this,'tab-competitive')"><span class="tab-icon">🏆</span>Competitive</button>
@@ -894,6 +927,54 @@ tr:last-child td{border-bottom:none;}
           </div>
         </div>
         <div id="comp-benchmark-output" class="output-block"></div>
+      </div>
+
+
+      <!-- ═══ HM PARTNER TAB ═══ -->
+      <div id="tab-hmpartner" class="tab-content">
+
+        <!-- Req setup card -->
+        <div class="card">
+          <div class="section-label">Requisition Context</div>
+          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Fill in the req details once. The action plan below will reference them throughout.</p>
+          <div class="hm-input-row">
+            <div class="field"><label>Hiring Manager Name</label><input type="text" id="hm-name" placeholder="e.g. Jane Smith" oninput="updateHMContext()"/></div>
+            <div class="field"><label>Role Title</label><input type="text" id="hm-role-title" placeholder="e.g. Staff SWE — Infrastructure" oninput="updateHMContext()"/></div>
+            <div class="field"><label>Team / Org</label><input type="text" id="hm-team" placeholder="e.g. Core Infrastructure" oninput="updateHMContext()"/></div>
+            <div class="field"><label>Date Req Opened</label><input type="text" id="hm-date-opened" placeholder="e.g. May 1, 2025" oninput="updateHMContext()"/></div>
+            <div class="field"><label>Target Start Date</label><input type="text" id="hm-target-start" placeholder="e.g. July 2025" oninput="updateHMContext()"/></div>
+            <div class="field"><label>Number of Profiles to Present</label>
+              <select id="hm-profiles-target" onchange="updateHMContext()">
+                <option value="3">3 profiles</option>
+                <option value="5" selected>5 profiles</option>
+                <option value="8">8 profiles</option>
+                <option value="10">10+</option>
+              </select>
+            </div>
+          </div>
+          <div id="hm-context-banner" style="display:none;" class="hm-callout">
+            <div class="hm-callout-label">Active Req</div>
+            <p id="hm-context-text"></p>
+          </div>
+        </div>
+
+        <!-- Stage selector -->
+        <div class="card">
+          <div class="section-label" style="margin-bottom:.75rem;">Where are you in the search?</div>
+          <div class="stage-selector">
+            <div class="stage-pill active" onclick="selectHMStage(this,'present')" id="stage-pill-present">Presenting profiles</div>
+            <div class="stage-pill" onclick="selectHMStage(this,'screen')" id="stage-pill-screen">Prescreens underway</div>
+            <div class="stage-pill" onclick="selectHMStage(this,'loop')" id="stage-pill-loop">Interview loop</div>
+            <div class="stage-pill" onclick="selectHMStage(this,'offer')" id="stage-pill-offer">Offer & close</div>
+            <div class="stage-pill" onclick="selectHMStage(this,'stalled')" id="stage-pill-stalled">Search stalled</div>
+          </div>
+          <div class="hm-progress-bar"><div class="hm-progress-fill" id="hm-progress-fill" style="width:20%;"></div></div>
+          <div style="font-size:10px;color:var(--text-3);text-align:right;" id="hm-progress-label">Stage 1 of 5</div>
+        </div>
+
+        <!-- Action plan output -->
+        <div id="hm-action-plan"></div>
+
       </div>
 
     </div><!-- /tab-main -->
@@ -1886,6 +1967,7 @@ function loadPlacements(){
   try{ var s=localStorage.getItem('rih_universal_placements'); if(s) placements=JSON.parse(s); }catch(e){ placements=[]; }
   renderPlacements();
   if(typeof renderCalibrationList === 'function') renderCalibrationList();
+  if(typeof renderHMActionPlan === 'function') renderHMActionPlan();
 }
 function savePlacements(){ try{ localStorage.setItem('rih_universal_placements',JSON.stringify(placements)); }catch(e){} }
 function addPlacement(){
@@ -2995,6 +3077,206 @@ function deleteCalibration(id){
 }
 
 loadCalibration();
+
+/* ══════════════════════════════════════
+   HM PARTNER TAB
+══════════════════════════════════════ */
+var hmChecked = {};
+var hmCurrentStage = 'present';
+
+function updateHMContext(){
+  var hm = document.getElementById('hm-name').value.trim();
+  var role = document.getElementById('hm-role-title').value.trim();
+  var team = document.getElementById('hm-team').value.trim();
+  var opened = document.getElementById('hm-date-opened').value.trim();
+  var target = document.getElementById('hm-target-start').value.trim();
+  var coName = activeCompany ? activeCompany.name : 'your company';
+  var banner = document.getElementById('hm-context-banner');
+  var text = document.getElementById('hm-context-text');
+  if(hm || role){
+    banner.style.display = 'block';
+    var parts = [];
+    if(hm) parts.push('HM: <strong>'+hm+'</strong>');
+    if(role) parts.push('Role: <strong>'+role+'</strong>');
+    if(team) parts.push('Team: <strong>'+team+'</strong>');
+    if(opened) parts.push('Opened: <strong>'+opened+'</strong>');
+    if(target) parts.push('Target start: <strong>'+target+'</strong>');
+    parts.push('Company: <strong>'+coName+'</strong>');
+    text.innerHTML = parts.join(' &nbsp;·&nbsp; ');
+  } else {
+    banner.style.display = 'none';
+  }
+  renderHMActionPlan();
+}
+
+function selectHMStage(el, stage){
+  document.querySelectorAll('.stage-pill').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  hmCurrentStage = stage;
+  var stageMap = {present:1, screen:2, loop:3, offer:4, stalled:2};
+  var pct = {present:20, screen:40, loop:60, offer:85, stalled:30};
+  var label = {present:'Stage 1 of 5 — Presenting profiles', screen:'Stage 2 of 5 — Prescreens underway', loop:'Stage 3 of 5 — Interview loop', offer:'Stage 4 of 5 — Offer & close', stalled:'Search needs recalibration'};
+  document.getElementById('hm-progress-fill').style.width = pct[stage]+'%';
+  document.getElementById('hm-progress-label').textContent = label[stage];
+  renderHMActionPlan();
+}
+
+function toggleHMCheck(id){
+  hmChecked[id] = !hmChecked[id];
+  var row = document.getElementById('hmrow-'+id);
+  if(row) row.classList.toggle('completed', hmChecked[id]);
+  // update progress
+  var allBoxes = document.querySelectorAll('.hm-action input[type="checkbox"]');
+  var checked = document.querySelectorAll('.hm-action input[type="checkbox"]:checked').length;
+}
+
+function renderHMActionPlan(){
+  var hm = document.getElementById('hm-name').value.trim() || 'the HM';
+  var role = document.getElementById('hm-role-title').value.trim() || 'this role';
+  var team = document.getElementById('hm-team').value.trim() || 'the team';
+  var profTarget = document.getElementById('hm-profiles-target').value || '5';
+  var coName = activeCompany ? activeCompany.name : 'your company';
+  var stage = hmCurrentStage;
+
+  var plans = {
+    present: {
+      title: 'Presenting profiles to ' + hm,
+      badge: 'prep',
+      badgeLabel: 'Pre-screen stage',
+      intro: 'You have profiles in hand. This stage is about packaging them credibly, calibrating with ' + hm + ' quickly, and protecting your pipeline from being picked apart without structure.',
+      coCallout: 'At ' + coName + ', the internal reputation of the researcher is built here. How you present profiles signals whether you understand the bar — not just whether you can find names.',
+      actions: [
+        {id:'p1', label:'Send '+profTarget+' profiles with a structured narrative per candidate', sub:'Do not send a raw LinkedIn list. Each profile needs: detected company background, scale context, years of experience, top 3 signals, and the one risk to probe. A one-paragraph narrative per candidate, not a resume attachment.', warn:'Sending raw profiles without context trains '+hm+' to evaluate on brand alone, not signal.'},
+        {id:'p2', label:'Anchor the calibration framing before '+hm+' reviews', sub:'Send a short note before they open the profiles: I have included a range intentionally — some are the most obvious fits, one or two are less conventional but worth a conversation. Let me know which profiles you want to prioritize and I will book prescreens this week.', warn:'Without this, you will get back a yes/no list with no calibration data.'},
+        {id:'p3', label:'Request a 20-minute calibration call within 48 hours of sending profiles', sub:'Do not wait for async feedback. A live call on the first batch is non-negotiable — it surfaces how '+hm+' is actually evaluating candidates vs. what they said in the intake. The gap between those two things is always instructive.'},
+        {id:'p4', label:'On the calibration call: probe every no for the actual reason', sub:'When '+hm+' passes on a candidate, push: "What specifically is missing?" Is it company background, scale, seniority signal, or something cultural? Each no is calibration data. Log it — it sharpens the next slate.'},
+        {id:'p5', label:'Track the yes/no ratio and surface patterns immediately', sub:'If '+hm+' passes on 4 out of 5 profiles from a similar background, name it: "I'm noticing you are less excited about candidates from [X background] — is that a pattern or specific to these profiles?" Forces honesty early.'},
+        {id:'p6', label:'Confirm next steps in writing after the calibration call', sub:'Send a 3-line recap: who is advancing, what you are adjusting in sourcing based on feedback, and when the next slate or prescreen updates will land. Creates accountability on both sides.'}
+      ]
+    },
+    screen: {
+      title: 'Managing prescreens with ' + hm,
+      badge: 'active',
+      badgeLabel: 'Active search',
+      intro: 'Prescreens are where good searches accelerate and bad searches die. Your job is to give '+hm+' structured signal, not raw conversation notes — and to manage their time and attention carefully.',
+      coCallout: coName + ' hiring managers are typically running multiple priorities simultaneously. The researcher who makes the process easy and structured gets faster decisions and more access.',
+      actions: [
+        {id:'s1', label:'Debrief with '+hm+' within 24 hours of each prescreen', sub:'Do not wait until you have seen 5 candidates. Debrief individually and immediately. Ask: "What did you hear that excited you? What is the one thing you would want to probe deeper in the loop?" Capture this verbatim.'},
+        {id:'s2', label:'Send a structured prescreen summary after each call', sub:'One paragraph per candidate: what you assessed, what the signal was, what the residual risk is, and your recommendation (advance / hold / pass with reason). This positions you as an analyst, not a scheduler.'},
+        {id:'s3', label:'Flag any calibration drift in real time', sub:'If '+hm+' is advancing candidates who do not match the original ICP, name it directly: "I notice we are moving forward with candidates lighter on [X] than we discussed — should I adjust what I am sourcing for?" Do not silently recalibrate.'},
+        {id:'s4', label:'Keep the pipeline moving — do not let candidates sit more than 5 business days', sub:'Identify and eliminate every wait point. Is '+hm+' slow to debrief? Is the coordinator slow to schedule? Surface blockers early and own the resolution, even if it is someone else's job.'},
+        {id:'s5', label:'Update your sourcing in response to what you are hearing in prescreens', sub:'Every prescreen teaches you something about what actually clears the bar vs. what the intake said would. Feed this back into your search string and calibration history log.'},
+        {id:'s6', label:'Give '+hm+' a pipeline health update every week', sub:'One message: how many candidates screened, how many advancing, what you are hearing in the market (comp expectations, competing offers, timeline concerns). Keeps them informed without requiring a meeting.'}
+      ]
+    },
+    loop: {
+      title: 'Managing the interview loop',
+      badge: 'active',
+      badgeLabel: 'Loop in progress',
+      intro: 'This is where the search is most at risk of stalling. Your job shifts from sourcing to orchestration, candidate management, and internal alignment.',
+      coCallout: 'At '+coName+', interview loop velocity is often the single biggest differentiator between researchers who close searches and those who lose candidates to faster-moving competitors.',
+      actions: [
+        {id:'l1', label:'Set candidate expectations on timeline before the loop starts', sub:'Tell every candidate: "Here is what the process looks like, the expected timeline, and when you will hear back after each stage." Candidates who do not know what to expect accept competing offers. This is your job to manage, not the coordinator's.'},
+        {id:'l2', label:'Check in with every candidate after each loop stage', sub:'A 5-minute call or a direct message: "How did it go? How are you feeling about the role?" This surfaces concerns before they become withdrawals. It also gives you close intelligence — what questions came up, what made them excited or hesitant.'},
+        {id:'l3', label:'Run a debrief with '+hm+' within 24 hours of the loop completing', sub:'Do not wait for formal feedback forms. Get '+hm+' on the phone: "Where did they land for you? What is the one thing you would want to know more about?" Push for a hire/no hire read before the formal debrief meeting.'},
+        {id:'l4', label:'Identify and close any internal alignment gaps before the offer stage', sub:'If '+hm+' is excited but another interviewer has concerns, surface and resolve this now. An offer that gets challenged internally after it goes out is significantly harder to close. Better to slow down for 48 hours than to issue a conflicted offer.'},
+        {id:'l5', label:'Re-engage the candidate's motivation actively during the loop', sub:'The candidate is evaluating you as much as you are evaluating them. During the loop, send relevant context: a news article about '+coName+', a note about the team's recent work, or a message connecting what they heard in the loop to what they told you they cared about. Do not go dark.'},
+        {id:'l6', label:'Get comp expectations on record before the loop ends', sub:'Before the loop closes, have a direct comp conversation: "I want to make sure we are aligned before we get to the offer stage — what is the range that would get you excited, and what are you working with currently?" No surprises at offer.'}
+      ]
+    },
+    offer: {
+      title: 'Offer strategy and close',
+      badge: 'close',
+      badgeLabel: 'Offer stage',
+      intro: 'Most searches that fail at offer stage could have been saved 4 weeks earlier. Your job now is to close cleanly, quickly, and without surprises on either side.',
+      coCallout: 'At '+coName+', the offer stage is where researcher reputation is made or lost. A researcher who surfaces comp misalignment at offer — not before — will not get the best reqs.',
+      actions: [
+        {id:'o1', label:'Confirm the candidate's current comp picture in full before the offer is built', sub:'Base, equity (unvested amount and cliff dates), bonus, benefits. Know exactly what they are leaving and what the walk-away number is. Do not let the offer team build blind.'},
+        {id:'o2', label:'Ask directly: "Is there anything that would prevent you from accepting if the offer hits your range?"', sub:'Do the close before the offer goes out. If there is a counter-offer risk, a competing process, or a personal situation — find out now. This is not pushy; it is professional. Surprises after offer hurt everyone.'},
+        {id:'o3', label:'Set a 48-hour decision window when the offer goes out', sub:'Do not leave the offer open-ended. "We would love to have a decision by [date] — does that work for you?" A deadline creates urgency and signals confidence. Candidates who need 2 weeks to decide are either using you as leverage or are not motivated enough.'},
+        {id:'o4', label:'Stay in contact with the candidate every day from offer to acceptance', sub:'One message or call per day. Not chasing — supporting. "Anything I can clarify? Any questions that came up?" This is where deals are lost to silence. Keep the momentum.'},
+        {id:'o5', label:'If a counter-offer comes in, have the conversation immediately', sub:'Call the candidate directly: "I heard you got a counter — I want to understand what it looks like and whether there is anything we can do. I also want to make sure you are making the right long-term decision, not just the right short-term one." Be direct, not transactional.'},
+        {id:'o6', label:'Debrief with '+hm+' immediately after acceptance', sub:'Three things: what worked, what slowed the search down, and what you would do differently next time. This cements the partnership and positions you as a strategic partner, not a vendor. Log the outcome in the Calibration History tab.'}
+      ]
+    },
+    stalled: {
+      title: 'Recalibrating a stalled search',
+      badge: 'prep',
+      badgeLabel: 'Needs attention',
+      intro: 'A stalled search has one of three root causes: the ICP is wrong, the market does not have what the ICP describes, or the internal process is too slow. Your job is to diagnose which one and act on it — not keep sourcing harder.',
+      coCallout: 'At '+coName+', a search that stalls for more than 3 weeks without a diagnosis is a reputation risk. Surface the problem and the solution at the same time — never just the problem.',
+      actions: [
+        {id:'st1', label:'Run a search post-mortem before doing anything else', sub:'Pull your data: How many candidates sourced? How many responded? How many made it to prescreen? Where are candidates dropping? The drop-off point tells you exactly what is broken. If no one is responding, it is a sourcing or messaging problem. If everyone is failing prescreens, it is an ICP problem. If loop pass rates are low, it is a calibration problem.'},
+        {id:'st2', label:'Request an urgent calibration reset with '+hm+'', sub:'Do not frame this as failure. Frame it as intelligence: "I want to share what I am seeing in the market and make sure we are aligned on what we are looking for before I continue investing time in sourcing." Bring data: response rates, pass rates, what candidates are saying about the role.'},
+        {id:'st3', label:'Present '+hm+' with a market reality check', sub:'If the ICP does not exist at the supply level they expect, show them: "Here is how many candidates on LinkedIn match the profile exactly — it is [X]. Here is how many are available and open to opportunities — it is [Y]. Here is what realistic options look like." Numbers beat opinions.'},
+        {id:'st4', label:'Propose three specific adjustments — not a vague "we should broaden"', sub:'Example: "Option 1: Open to candidates from [adjacent background] with a probe question for the gap. Option 2: Lower the scale requirement from 100M to 10M users. Option 3: Accept a candidate 6 months lighter on experience with a faster ramp plan." Give '+hm+' decisions to make, not problems to solve.'},
+        {id:'st5', label:'Audit the internal process for speed blockers', sub:'Track every stage: time from application to prescreen, prescreen to debrief, debrief to loop, loop to offer. If any stage is taking more than 5 business days on average, it is a process problem — and the best candidates are withdrawing there. Name it and propose a fix.'},
+        {id:'st6', label:'Refresh your outreach messaging and sourcing channels', sub:'If response rates are low, the problem is the message or the source — not the market. Test a different hook, a different subject line, or a different sourcing channel. Doing the same thing louder is not a strategy.'}
+      ]
+    }
+  };
+
+  var plan = plans[stage];
+  if(!plan) return;
+
+  var completedCount = 0;
+  var total = plan.actions.length;
+  for(var i=0;i<plan.actions.length;i++){
+    if(hmChecked[plan.actions[i].id]) completedCount++;
+  }
+  var pct = total > 0 ? Math.round((completedCount/total)*100) : 0;
+
+  var h = '<div class="hm-req-card">';
+  h += '<div class="hm-req-header">';
+  h += '<div><div class="hm-req-title">'+plan.title+'</div>';
+  h += '<div class="hm-req-meta">'+role+' · '+team+' · '+coName+'</div></div>';
+  h += '<span class="hm-stage-badge hm-badge-'+plan.badge+'">'+plan.badgeLabel+'</span>';
+  h += '</div>';
+
+  // Progress
+  h += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">';
+  h += '<div style="flex:1;"><div class="hm-progress-bar"><div class="hm-progress-fill" style="width:'+pct+'%;"></div></div></div>';
+  h += '<span style="font-size:11px;font-weight:600;color:var(--primary);min-width:50px;text-align:right;">'+completedCount+'/'+total+' done</span>';
+  h += '</div>';
+
+  // Intro
+  h += '<p style="font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:10px;">'+plan.intro+'</p>';
+
+  // Company callout
+  h += '<div class="hm-callout" style="margin-bottom:1rem;"><div class="hm-callout-label">'+coName+' context</div><p>'+plan.coCallout+'</p></div>';
+
+  // Actions
+  h += '<div class="hm-stage" style="border-left-color:var(--primary);">';
+  for(var i=0;i<plan.actions.length;i++){
+    var a = plan.actions[i];
+    var isChecked = hmChecked[a.id] || false;
+    h += '<div class="hm-action'+(isChecked?' completed':'')+'" id="hmrow-'+a.id+'">';
+    h += '<input type="checkbox" '+(isChecked?'checked':'')+' onchange="toggleHMCheck(''+a.id+'')" />';
+    h += '<div class="hm-action-text">';
+    h += '<div class="hm-action-label">'+a.label+'</div>';
+    h += '<div class="hm-action-sub">'+a.sub+'</div>';
+    if(a.warn) h += '<div style="font-size:11px;color:#991b1b;background:var(--danger-light);border-radius:6px;padding:4px 8px;margin-top:5px;display:inline-block;">&#9888; '+a.warn+'</div>';
+    h += '</div></div>';
+  }
+  h += '</div>';
+
+  // Notes field
+  h += '<div class="field" style="margin-top:1rem;"><label>Researcher notes for this stage</label>';
+  h += '<textarea id="hm-stage-notes" style="min-height:70px;" placeholder="Log calibration feedback, blockers, decisions made, things to carry into next stage..." oninput="saveHMNotes()">'+((hmStageNotes && hmStageNotes[stage])||'')+'</textarea></div>';
+
+  h += '</div>';
+
+  document.getElementById('hm-action-plan').innerHTML = h;
+}
+
+var hmStageNotes = {};
+function saveHMNotes(){
+  var ta = document.getElementById('hm-stage-notes');
+  if(ta) hmStageNotes[hmCurrentStage] = ta.value;
+}
+
+// Init
+renderHMActionPlan();
 
 </script>
 </body>
