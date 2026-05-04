@@ -254,6 +254,7 @@ tr:last-child td{border-bottom:none;}
           <label>Role Family</label>
           <select id="intel-domain" onchange="updateIntel()">
             <option value="">— Select role family —</option>
+            <option value="pm">Product Management</option>
             <option value="swe">Software Engineering (IC)</option>
             <option value="em">Engineering Management</option>
             <option value="ds">Data Science / ML Engineering</option>
@@ -285,6 +286,7 @@ tr:last-child td{border-bottom:none;}
           <label>Role Family</label>
           <select id="lev-role-family" onchange="onLevRoleFamilyChange()">
             <option value="">— Select role family —</option>
+            <option value="pm">Product Management</option>
             <option value="swe">Software Engineering (IC)</option>
             <option value="em">Engineering Management</option>
             <option value="ds">Data Science / ML Engineering</option>
@@ -353,6 +355,7 @@ tr:last-child td{border-bottom:none;}
             <label>Role Family</label>
             <select id="sourcing-role" onchange="runSourcing()">
               <option value="">— Select role —</option>
+              <option value="pm">Product Management</option>
               <option value="swe">Software Engineering (IC)</option>
               <option value="em">Engineering Management</option>
               <option value="ds">Data Science / ML Engineering</option>
@@ -452,6 +455,7 @@ tr:last-child td{border-bottom:none;}
         <div class="field"><label>Filter by Role Family</label>
           <select id="comp-filter" onchange="renderCompetitive()">
             <option value="all">All roles</option>
+            <option value="pm">Product Management</option>
             <option value="swe">Software Engineering</option>
             <option value="em">Engineering Management</option>
             <option value="ds">Data Science / ML</option>
@@ -476,6 +480,7 @@ tr:last-child td{border-bottom:none;}
           <div class="field"><label>Role Family</label>
             <select id="p-role-family">
               <option value="">— Select —</option>
+              <option>Product Management</option>
               <option>Software Engineering (IC)</option><option>Engineering Management</option>
               <option>Data Science / ML Engineering</option><option>Data Engineering</option>
               <option>Site Reliability / DevOps</option><option>Security Engineering</option>
@@ -542,6 +547,19 @@ function initMobile(){
 
 /* ══ MARKET INTEL DATA ══ */
 var marketData = {
+  "pm":{scarcity:"High",tenure:"2.6 yrs",donors:"Google, Amazon, Microsoft",trend:"Stable. Technical PM bar rising at Meta.",alert:"Meta levels conservatively vs Google. Candidates often expect IC5+ — set expectations early in the process.",
+    inflow:[
+      {company:"Google",pct:32,note:"#1 source for Meta PM hires. APM alumni and PM II–Senior PM pipeline."},
+      {company:"Amazon",pct:20,note:"2-year RSU cliff drives outbound. Strong execution and data bar."},
+      {company:"Microsoft",pct:12,note:"More moveable post-Copilot. Teams and legacy Office PMs are easiest."},
+      {company:"Airbnb",pct:8,note:"Strong design-thinking. Often want more scale and resources."},
+      {company:"Stripe",pct:7,note:"High product craft. Move when they want consumer scale."},
+      {company:"Startups (Series A–C)",pct:13,note:"Founders and early PMs who want to see product at scale."},
+      {company:"Other FAANG / Big Tech",pct:8,note:"Apple, LinkedIn, Netflix PMs seeking broader product ownership."}
+    ],
+    topPaths:["Google Senior PM → Meta IC5","Amazon Principal PM → Meta IC6","Startup Head of Product → Meta IC5"],
+    watchout:"Google PMs often expect lateral or upward leveling. Meta consistently levels conservatively on external hires — set expectations at first contact, not after the loop."},
+
   "swe":{scarcity:"High",tenure:"2.3 yrs",donors:"Google, Amazon, Microsoft",trend:"AI/ML skills commanding premium. $400K+ TC common at E6+.",alert:"Google and Amazon aggressively counter-offer E5+ engineers. Always probe unvested RSU balances before extending.",
     inflow:[{company:"Google",pct:30,note:"Largest source. L5/L6 pipeline is strong — 2yr RSU refresh creates reluctance but scope gap is the pitch."},{company:"Amazon",pct:22,note:"SDE II/III outbound spikes at 2yr mark due to back-loaded RSU schedule."},{company:"Microsoft",pct:12,note:"Strong systems and cloud eng pipeline. More moveable post-Copilot reorg."},{company:"Startups (Series B–D)",pct:14,note:"Engineers seeking stability and scale after equity disappointment or failed liquidity."},{company:"Apple",pct:8,note:"Strong quality bar. PMs want more autonomy — engineers often want faster shipping culture."},{company:"Other Big Tech",pct:14,note:"Uber, Airbnb, Snap, LinkedIn. Good execution bar, moveable when equity is underwater."}],
     topPaths:["Google L5 → Meta E5","Amazon SDE III → Meta E5","Startup Principal Eng → Meta E6"],
@@ -582,6 +600,36 @@ var marketData = {
 
 /* ══ LEVELING DATA ══ */
 var levelingData = {
+  "pm":{
+    metaLevels:["IC3 (APM)","IC4 (PM)","IC5 (Senior PM)","IC6 (Staff PM)","IC7 (Group PM / Dir)","IC8 (Director)","IC9+ (VP)"],
+    metaDescs:[
+      "Entry-level APM. Works on defined problems with close mentorship.",
+      "Executes independently on a product area. Drives scoped roadmaps.",
+      "Owns a product surface area. Influences cross-functional teams.",
+      "Drives complex, ambiguous bets. Strong org-wide influence.",
+      "Manages PMs or leads a large product domain. Sets team strategy.",
+      "Owns a major product pillar. Significant business and org impact.",
+      "Executive-level. Defines company-level product vision."
+    ],
+    companies:{
+      "Google":["APM","PM II","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+      "Amazon":["PM I","PM II","Senior PM","Principal PM","Sr. Principal PM","Director of PM","VP of Product"],
+      "Apple":["New Grad PM","PM","Senior PM","Lead PM","Principal PM","Director of PM","VP of Product"],
+      "Microsoft":["PM","PM II","Senior PM","Principal PM","Group PM","Director of PM","CVP / VP"],
+      "Meta":["IC3 (APM)","IC4 (PM)","IC5 (Senior PM)","IC6 (Staff PM)","IC7 (Group PM)","IC8 (Director)","IC9+ (VP)"],
+      "Netflix":["PM","PM","Senior PM","Senior PM","Director of PM","VP of Product","VP of Product"],
+      "Uber":["APM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+      "Airbnb":["New Grad PM","PM","Senior PM","Staff PM","Director of PM","VP of Product","CPO"],
+      "Stripe":["PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+      "LinkedIn":["APM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+      "Salesforce":["Associate PM","PM","Senior PM","Lead PM","Principal PM","Director of PM","VP of Product"],
+      "ByteDance / TikTok":["PM","PM","Senior PM","Senior PM","PM Lead","Director of PM","VP of Product"],
+      "Palantir":["PM","PM","Senior PM","Staff PM","Principal PM","Director of PM","VP of Product"],
+      "Other (large tech)":["Junior PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+      "Other (startup / mid-size)":["PM","PM","Senior PM","Head of Product","VP of Product","CPO","—"]
+    }
+  },
+
   "swe":{
     metaLevels:["E3","E4","E5","E6","E7","E8","E9"],
     metaDescs:["New grad / entry level. Works on well-defined tasks with close mentorship.","Mid-level. Executes independently on features. Strong coding fundamentals.","Senior. Owns a significant technical area. Leads design of complex features.","Staff. Drives technical direction across teams. Significant org-wide impact.","Principal. Company-wide technical leadership. Sets long-term architecture.","Distinguished Engineer. Rare — external expert-level technical leadership.","Fellow. Exceptional technical leadership, typically public expert in field."],
@@ -716,6 +764,20 @@ var fitBadge = ["badge-match","badge-match","badge-match","badge-stretch","badge
 
 /* ══ SOURCING DATA ══ */
 var sourcingData = {
+  "pm":{
+    clusters:[
+      "IC PMs at Google, Amazon, Microsoft with 3–7 years ownership of consumer or B2B products",
+      "Ex-startup founders or early PMs (Series A–C) with 0→1 experience",
+      "PMs from high-bar companies (Stripe, Airbnb, Uber) who own full product surfaces"
+    ],
+    donors:["Google (APM alumni, PM II ready to go Senior)","Amazon (PM II → Senior PM pipeline)","Microsoft (PM → Senior PM track)","Stripe (high product craft)","Airbnb (strong design-thinking)"],
+    search:"LinkedIn: \"Product Manager\" AND (\"launched\" OR \"roadmap\" OR \"0 to 1\") NOT \"project manager\"\nBoolean: (\"Senior PM\" OR \"Product Manager\") AND (Google OR Amazon OR Microsoft OR Stripe)",
+    watchouts:[
+      "Don't confuse Project Managers with Product Managers — filter for product ownership language",
+      "Beware title inflation at mid-size companies — 'Director of Product' at a 50-person startup may map to IC4 at Meta"
+    ]
+  },
+
   "swe":{clusters:["L5/L6 engineers at Google and Amazon with distributed systems or backend depth","Staff engineers at Stripe, Airbnb, Uber ready for a scope increase","Principal engineers at startups that have stalled or gone through a down round"],donors:["Google (L5 pipeline)","Amazon (SDE III — 2yr cliff)","Microsoft (Senior SWE)","Stripe (L4/L5)","Databricks (Senior SWE)"],search:"LinkedIn: (\"Software Engineer\" OR \"SWE\") AND (\"distributed\" OR \"backend\" OR \"systems\") NOT \"frontend only\"\nBoolean: (\"Senior Software Engineer\" OR \"Staff Engineer\") AND (Google OR Amazon OR Stripe OR Databricks)",watchouts:["Verify production ownership — many candidates contributed to large systems without driving architecture","Frontend engineers applying for backend roles — validate systems design depth before screening"]},
   "em":{clusters:["L7 Engineering Managers at Google with 6–10 direct reports and clear IC background","Amazon SDMs at 18-month mark with strong operational execution track record","Startup CTOs or VPs at Series B companies where engineering org is plateauing"],donors:["Google (L7 EM pipeline)","Amazon (SDM — 18mo cliff)","Microsoft (Principal EM)","Startup CTOs (20–60 person orgs)","Airbnb / Uber Senior EMs"],search:"LinkedIn: (\"Engineering Manager\" OR \"Director of Engineering\") AND (\"team of\" OR \"managed\" OR \"reports\") NOT \"project manager\"\nBoolean: (\"Senior Engineering Manager\" OR \"Director of Engineering\") AND (Google OR Amazon OR Stripe)",watchouts:["Validate true people management — many ICs get EM titles without managing humans","Startup VPs often managed no direct reports — verify headcount they personally managed"]},
   "ds":{clusters:["Research Scientists at Google DeepMind with LLM or production ML systems experience","Applied ML Engineers at OpenAI or Anthropic seeking more scale and career structure","PhD graduates from top programs (MIT, Stanford, CMU, Berkeley) with relevant research focus"],donors:["Google / DeepMind (Research Scientist pipeline)","OpenAI (Applied Research Engineer)","Anthropic","Amazon Alexa / Rufus ML team","Meta FAIR alumni (strong boomerang pipeline)"],search:"LinkedIn: (\"Machine Learning Engineer\" OR \"Research Scientist\" OR \"Applied Scientist\") AND (\"production\" OR \"LLM\" OR \"deep learning\")\nBoolean: (\"ML Engineer\" OR \"Research Scientist\") AND (Google OR OpenAI OR Anthropic OR DeepMind)",watchouts:["Academic research ≠ production ML — validate model serving, monitoring, and system design alongside modeling depth","Many candidates claim GenAI experience from wrapper applications — probe for actual model training or fine-tuning ownership"]},
@@ -737,20 +799,20 @@ var levelSourcingNotes = {
 };
 
 var compData = [
-  {name:"Google",roles:["swe","em","ds","de","sre","sec","se","qa","hw"],threat:"high",pm_bar:"Very high. Strong system design and coding bar. L5/L6 engineers are well-trained but often scope-limited.",teams:["Search Infra","YouTube Eng","Google Cloud","DeepMind","Ads Systems","Chrome Security","SRE"],retention:"Annual RSU refresh after 4yr cliff. Aggressive counter-offers of 20–30% equity bump.",intel:"Always ask about unvested RSU balance before extending an offer. Google will match or beat your offer — your pitch needs to be about scope, not comp."},
+  {name:"Google",roles:["pm","swe","em","ds","de","sre","sec","se","qa","hw"],threat:"high",pm_bar:"Very high. Strong system design and coding bar. L5/L6 engineers are well-trained but often scope-limited.",teams:["Search Infra","YouTube Eng","Google Cloud","DeepMind","Ads Systems","Chrome Security","SRE"],retention:"Annual RSU refresh after 4yr cliff. Aggressive counter-offers of 20–30% equity bump.",intel:"Always ask about unvested RSU balance before extending an offer. Google will match or beat your offer — your pitch needs to be about scope, not comp."},
   {name:"NVIDIA",roles:["swe","ds","hw"],threat:"high",pm_bar:"Elite. GPU and AI accelerator engineers are among the most sought-after in the market.",teams:["GPU Architecture","CUDA Platform","AI Accelerator","Networking (Mellanox)","Software Platform"],retention:"Stock performance has been exceptional — most engineers are deeply vested and motivated to stay.",intel:"Counter-offer risk is extreme. Meta's pitch must focus on the technical challenge (custom silicon, AR/VR hardware) and impact — not comp, which NVIDIA will match."},
   {name:"Apple",roles:["swe","ds","hw","sec","qa"],threat:"high",pm_bar:"High craft and quality bar. Extremely secretive culture — candidates often want more autonomy, visibility, and faster shipping culture.",teams:["Silicon Engineering","Sensing & Connectivity","iOS Platform","Privacy & Security","Machine Learning"],retention:"Strong identity and brand loyalty. Equity is competitive.",intel:"Apple engineers often want more impact visibility and product voice. Pitch Meta's openness about technology direction and the ability to see your work used by billions of users."},
-  {name:"Amazon",roles:["swe","em","ds","de","sre","sec","se","qa"],threat:"med",pm_bar:"Strong execution and operational bar. 6-pager culture means strong written communication. Engineers can feel process-heavy.",teams:["AWS Infrastructure","Alexa AI","Prime Video","Advertising Tech","Amazon Devices","AWS Security"],retention:"20/20/60 RSU vesting creates a major cliff at year 2. Engineers often leave immediately after.",intel:"Target candidates at the 18–24 month mark. They've cleared the cliff and are emotionally ready to move. The pitch: scope and technical challenge without the operational overhead."},
-  {name:"Microsoft",roles:["swe","em","ds","de","sre","sec","qa"],threat:"med",pm_bar:"Solid. Copilot and AI division attracting stronger talent. Non-AI engineering roles are more moveable.",teams:["Azure Infrastructure","GitHub","Copilot / AI","Xbox","Security Response Center","Teams Platform"],retention:"WLB and stability are the main retention factors. Engineers here often want better technical challenges.",intel:"Non-AI Microsoft engineers are among the most moveable in the market. Azure infra and security teams are high-quality sources. Pitch technical challenge and pace."},
-  {name:"Stripe",roles:["swe","de","se"],threat:"med",pm_bar:"Very high product and engineering craft. Extremely strong API and distributed systems depth.",teams:["Payments Infrastructure","Developer Platform","Radar (ML)","Financial Infrastructure","Atlas"],retention:"Strong culture and mission retention. Equity at current valuation is meaningful.",intel:"Stripe engineers are moveable when they want consumer scale. Meta's 3B+ user pitch lands well here — they're used to building for millions, not billions."},
+  {name:"Amazon",roles:["pm","swe","em","ds","de","sre","sec","se","qa"],threat:"med",pm_bar:"Strong execution and operational bar. 6-pager culture means strong written communication. Engineers can feel process-heavy.",teams:["AWS Infrastructure","Alexa AI","Prime Video","Advertising Tech","Amazon Devices","AWS Security"],retention:"20/20/60 RSU vesting creates a major cliff at year 2. Engineers often leave immediately after.",intel:"Target candidates at the 18–24 month mark. They've cleared the cliff and are emotionally ready to move. The pitch: scope and technical challenge without the operational overhead."},
+  {name:"Microsoft",roles:["pm","swe","em","ds","de","sre","sec","qa"],threat:"med",pm_bar:"Solid. Copilot and AI division attracting stronger talent. Non-AI engineering roles are more moveable.",teams:["Azure Infrastructure","GitHub","Copilot / AI","Xbox","Security Response Center","Teams Platform"],retention:"WLB and stability are the main retention factors. Engineers here often want better technical challenges.",intel:"Non-AI Microsoft engineers are among the most moveable in the market. Azure infra and security teams are high-quality sources. Pitch technical challenge and pace."},
+  {name:"Stripe",roles:["pm","swe","de","se"],threat:"med",pm_bar:"Very high product and engineering craft. Extremely strong API and distributed systems depth.",teams:["Payments Infrastructure","Developer Platform","Radar (ML)","Financial Infrastructure","Atlas"],retention:"Strong culture and mission retention. Equity at current valuation is meaningful.",intel:"Stripe engineers are moveable when they want consumer scale. Meta's 3B+ user pitch lands well here — they're used to building for millions, not billions."},
   {name:"CrowdStrike",roles:["swe","sec"],threat:"med",pm_bar:"Strong endpoint security and threat detection depth. Engineers want more interesting research-driven problems.",teams:["Threat Intelligence","Endpoint Detection","Cloud Security","Identity Protection","Adversary Intelligence"],retention:"Post-IPO equity is less of a draw. Talented engineers are often looking for more technical depth.",intel:"Strong source for security engineers. Pitch Meta's scale of threat surface and the research opportunities — it's genuinely more interesting than pure product security."},
   {name:"Palo Alto Networks",roles:["sec","swe"],threat:"med",pm_bar:"Network and cloud security depth. SASE and zero-trust expertise.",teams:["Prisma Cloud","Cortex XDR","Network Security","Unit 42 Threat Research"],retention:"Solid equity and culture. Engineers value the security-first mission.",intel:"Good source for cloud and network security engineers. Pitch Meta's breadth of security challenge — protecting a platform used by 3B people is a unique career opportunity."},
   {name:"Databricks",roles:["swe","ds","de"],threat:"low",pm_bar:"Strong data platform and Spark engineering depth. Open source contributions are common.",teams:["Spark Core","MLflow","Delta Lake","Lakehouse Platform","Mosaic AI"],retention:"Pre-IPO equity upside is the main hook. If IPO delayed, engineers become more moveable.",intel:"Databricks engineers are moveable if Meta's data infra challenges are compelling. Pitch the scale — Meta's data problems are orders of magnitude larger than most companies."},
   {name:"Snowflake",roles:["swe","de"],threat:"low",pm_bar:"Cloud data warehouse and SQL engine depth. Strong distributed systems background.",teams:["Query Optimizer","Storage Engine","Streaming (Snowpipe)","Platform Engineering"],retention:"Post-IPO equity less of a draw. Engineers often want more interesting systems problems.",intel:"Good source for data engineering roles. Pitch Meta's data scale and the opportunity to work on systems that handle petabyte-scale data in real time."},
   {name:"Qualcomm",roles:["swe","hw"],threat:"low",pm_bar:"Strong mobile SoC and wireless platform expertise. AR/VR is a compelling pitch for this talent pool.",teams:["Snapdragon Platform","5G Modem","Camera ISP","AI Engine","IoT Platform"],retention:"Mid-tier retention — equity less exciting than pure software. Engineers often want to work on more cutting-edge systems.",intel:"Meta's AR/VR hardware is a genuine attractor for Qualcomm engineers. The transition from phone chips to headset chips is technically compelling and a career differentiator."},
   {name:"Intel",roles:["swe","hw"],threat:"low",pm_bar:"Processor design and silicon engineering depth. Stock performance has lowered retention significantly.",teams:["Core Architecture","AI Accelerator (Gaudi)","Foundry Services","Network & Edge","Autonomous Driving (Mobileye)"],retention:"Stock underperformance has significantly reduced retention. Intel engineers are more moveable than they've been in a decade.",intel:"Intel is the most moveable major semiconductor employer right now. Engineers are frustrated by slow execution and stock performance. Pitch Meta's pace, scale, and technical investment in custom silicon."},
-  {name:"ByteDance / TikTok",roles:["swe","ds","de"],threat:"high",pm_bar:"Extremely data-driven. Engineers ship fast and operate at scale. Strong ML and recommendation system depth.",teams:["Recommendation Algorithm","Creator Tools","Ads System","E-commerce","LIVE Platform"],retention:"Regulatory uncertainty around US operations is the opening. Engineers are nervous about long-term stability.",intel:"Regulatory uncertainty is your pitch. TikTok engineers want stability — Meta is the obvious destination. Target recommendation, ads, and video infrastructure engineers."},
-  {name:"Uber",roles:["swe","em","de","sre"],threat:"low",pm_bar:"Good marketplace and distributed systems depth. Engineers have owned complex real-time systems at scale.",teams:["Marketplace Platform","Driver App","Maps & Navigation","Data Infrastructure","SRE"],retention:"Lower retention than FAANG. Equity is less competitive post-restructure.",intel:"Easier to move than FAANG. Strong source for marketplace, real-time systems, and data infrastructure roles. Move fast — Uber engineers are often actively looking."}
+  {name:"ByteDance / TikTok",roles:["pm","swe","ds","de"],threat:"high",pm_bar:"Extremely data-driven. Engineers ship fast and operate at scale. Strong ML and recommendation system depth.",teams:["Recommendation Algorithm","Creator Tools","Ads System","E-commerce","LIVE Platform"],retention:"Regulatory uncertainty around US operations is the opening. Engineers are nervous about long-term stability.",intel:"Regulatory uncertainty is your pitch. TikTok engineers want stability — Meta is the obvious destination. Target recommendation, ads, and video infrastructure engineers."},
+  {name:"Uber",roles:["pm","swe","em","de","sre"],threat:"low",pm_bar:"Good marketplace and distributed systems depth. Engineers have owned complex real-time systems at scale.",teams:["Marketplace Platform","Driver App","Maps & Navigation","Data Infrastructure","SRE"],retention:"Lower retention than FAANG. Equity is less competitive post-restructure.",intel:"Easier to move than FAANG. Strong source for marketplace, real-time systems, and data infrastructure roles. Move fast — Uber engineers are often actively looking."}
 ];
 
 var strategyData = {
@@ -992,7 +1054,8 @@ function parseJD(){
   var text=document.getElementById('jd-input').value.trim().toLowerCase();
   if(!text){alert('Please paste a job description first.');return;}
   var role='swe';
-  if(text.indexOf('engineering manager')!==-1||text.indexOf('manage engineers')!==-1||text.indexOf('direct reports')!==-1) role='em';
+  if(text.indexOf('product manager')!==-1||text.indexOf('senior pm')!==-1||text.indexOf('associate product manager')!==-1) role='pm';
+  else if(text.indexOf('engineering manager')!==-1||text.indexOf('manage engineers')!==-1||text.indexOf('direct reports')!==-1) role='em';
   else if((text.indexOf('machine learning')!==-1||text.indexOf('deep learning')!==-1||text.indexOf('ml engineer')!==-1)&&text.indexOf('research')!==-1) role='ds';
   else if(text.indexOf('data engineer')!==-1||text.indexOf('data pipeline')!==-1||text.indexOf('etl')!==-1||text.indexOf('spark')!==-1) role='de';
   else if(text.indexOf('machine learning')!==-1||text.indexOf('applied scientist')!==-1||text.indexOf('research scientist')!==-1) role='ds';
@@ -1095,6 +1158,35 @@ function runSourcing(){
 
 /* ══ PRESCREEN TEMPLATES ══ */
 var prescreenTemplates = {
+  "pm":{label:"Product Management",sections:[
+    {title:"Product Ownership & Scope",qs:[
+      {q:"Tell me about the product area you currently own. What's the scope — how many users, what's the revenue or engagement impact?",
+       probe:"Listen for: specific metrics, clarity of ownership, whether they can articulate impact in numbers. Vague answers are a yellow flag.",
+       flag:"Can't quantify impact or scope — may not have true ownership",
+       good:"Owns a clear product surface with measurable outcomes"},
+      {q:"Walk me through a major product decision you made in the last 12 months. What tradeoffs did you weigh and who did you have to convince?",
+       probe:"You're probing for: decision-making authority, cross-functional influence, and whether they drove the outcome or were along for the ride.",
+       flag:"Only describes decisions made by others or with full consensus",
+       good:"Made a hard call with real tradeoffs, influenced eng/design/leadership to align"}
+    ]},
+    {title:"Strategy & Prioritization",qs:[
+      {q:"How do you build your roadmap? Walk me through how you decided what to work on last quarter.",
+       probe:"Looking for: structured prioritization, ability to say no, alignment with business goals. Watch for roadmaps driven entirely by stakeholder requests.",
+       flag:"Roadmap is purely stakeholder-driven with no clear PM judgment",
+       good:"Uses a clear framework, balances user needs, business goals, and technical constraints"},
+      {q:"Tell me about a time you had to kill or deprioritize something that stakeholders were excited about.",
+       probe:"Tests conviction and communication. Great PMs protect the roadmap.",
+       flag:"Never killed anything — or killed it without managing stakeholders well",
+       good:"Clear narrative on why, communicated early, offered alternatives"}
+    ]},
+    {title:"Meta Fit",qs:[
+      {q:"Meta operates at massive scale — billions of users. Tell me about the largest-scale product challenge you've dealt with.",
+       probe:"Scale is non-negotiable at Meta. Candidates who've only worked on 100K-user products will face a significant bar gap.",
+       flag:"No experience with systems serving more than 1M users",
+       good:"Has shipped to 10M+ users, understands scale-specific tradeoffs"}
+    ]}
+  ]},
+
   "swe":{label:"Software Engineering",sections:[
     {title:"Technical Depth",qs:[
       {q:"Walk me through the most complex distributed system you've designed or significantly contributed to. What were the key tradeoffs you made?",probe:"Listen for: system design ownership (not just contribution), specific tradeoffs (consistency vs availability, latency vs throughput), and evidence they drove architecture decisions.",flag:"Describes a system they used but didn't design — no ownership signal",good:"Clear ownership of key design decisions with specific tradeoffs articulated"},
