@@ -215,22 +215,29 @@
 
 <script>
 const industries = {
-  tech: {
-    "Google": ["L3","L4","L5 (Sr)","L6 (Staff)","L7 (Prin)","L8 (Dir)"],
-    "Amazon": ["L4","L5","L6 (Sr)","L7 (Prin)","L8 (Dir)","L10"],
-    "Meta": ["IC3","IC4","IC5","IC6","IC7","IC8"]
-  },
-  consulting: {
-    "McKinsey": ["Associate","EM","Assoc Partner","Partner","Sr Partner","Director"],
-    "BCG": ["Consultant","Project Lead","Principal","Partner","MD","Sr Partner"]
-  },
-  finance: {
-    "Goldman Sachs": ["Analyst","Associate","VP","Exec Director","MD","Partner"],
-    "JP Morgan": ["Analyst","Associate","VP","Exec Director","MD","MD+"]
-  },
-  enterprise: {
-    "General": ["Analyst","Manager","Sr Manager","Director","Sr Director","VP"]
-  }
+  const levelMap = {
+  "Google": ["APM","PM II","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "Apple": ["New Grad PM","PM","Senior PM","Lead PM","Principal PM","Director of PM","VP of Product"],
+  "Amazon": ["PM I","PM II","Senior PM","Principal PM","Sr. Principal PM","Director of PM","VP of Product"],
+  "Microsoft": ["PM","PM II","Senior PM","Principal PM","Group PM","Director of PM","CVP / VP"],
+  "Salesforce": ["Associate PM","PM","Senior PM","Lead PM","Principal PM","Director of PM","VP of Product"],
+  "Uber": ["APM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "Airbnb": ["New Grad PM","PM","Senior PM","Staff PM","Director of PM","VP of Product","CPO"],
+  "Stripe": ["PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "LinkedIn": ["APM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "Netflix": ["PM","PM","Senior PM","Senior PM","Director of PM","VP of Product","VP of Product"],
+  "Twitter / X": ["PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "Snap": ["APM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "ByteDance / TikTok": ["PM","PM","Senior PM","Senior PM","PM Lead","Director of PM","VP of Product"],
+  "PwC": ["Associate","Senior Associate","Manager","Senior Manager","Director","Managing Director","Partner"],
+  "Deloitte": ["Analyst","Consultant","Senior Consultant","Manager","Senior Manager","Director","Partner"],
+  "McKinsey": ["Business Analyst","Associate","Engagement Manager","Associate Principal","Principal","Partner","Senior Partner"],
+  "Accenture": ["Analyst","Consultant","Senior Consultant","Manager","Senior Manager","Associate Director","Managing Director"],
+  "JPMorgan": ["Analyst","Associate","VP","Executive Director","Managing Director","Partner","Managing Director"],
+  "Goldman Sachs": ["Analyst","Associate","VP","Executive Director","Managing Director","Partner","Partner"],
+  "Other (large tech)": ["Junior PM","PM","Senior PM","Staff PM","Group PM","Director of PM","VP of Product"],
+  "Other (consulting / finance)": ["Analyst","Associate / Consultant","Manager","Senior Manager","Director","Managing Director","Partner / VP"],
+  "Other (startup / mid-size)": ["PM","PM","Senior PM","Senior PM / PM Lead","Head of Product","Director of PM","VP / CPO"],
 };
 
 const metaMap = ["IC3", "IC4", "IC5", "IC6", "IC7", "IC8"];
