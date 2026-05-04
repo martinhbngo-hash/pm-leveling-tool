@@ -326,6 +326,28 @@ tr:last-child td{border-bottom:none;}
 .stage-pill { font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border-2); background: var(--surface); color: var(--text-2); cursor: pointer; transition: all .15s; }
 .stage-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 .stage-pill:hover:not(.active) { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+
+/* Scorecard input modes */
+.input-mode-tabs { display: flex; gap: 3px; margin-bottom: 8px; background: var(--bg); border-radius: 9px; padding: 3px; }
+.input-mode-tab { flex: 1; padding: 6px 4px; font-size: 10px; font-weight: 700; text-align: center; border-radius: 6px; cursor: pointer; border: none; background: transparent; color: var(--text-3); font-family: inherit; transition: all .15s; letter-spacing: .02em; }
+.input-mode-tab.active { background: var(--surface); color: var(--primary); box-shadow: 0 1px 4px rgba(124,92,252,.15); }
+.input-mode-tab:hover:not(.active) { color: var(--text-2); }
+.input-mode-pane { display: none; }
+.input-mode-pane.active { display: block; }
+.pdf-drop-zone { border: 1.5px dashed var(--border-2); border-radius: 9px; padding: 16px 10px; text-align: center; cursor: pointer; transition: all .15s; background: var(--bg); }
+.pdf-drop-zone:hover { border-color: var(--primary); background: var(--primary-light); }
+.pdf-drop-zone.has-file { border-color: #6ee7b7; background: var(--success-light); }
+.pdf-drop-icon { font-size: 22px; margin-bottom: 4px; }
+.pdf-drop-label { font-size: 12px; font-weight: 600; color: var(--text-2); }
+.pdf-drop-sub { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+.pdf-file-input { display: none; }
+.linkedin-url-input { width: 100%; padding: 9px 11px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text); font-family: inherit; margin-bottom: 8px; }
+.linkedin-url-input:focus { outline: none; border-color: var(--primary); }
+.linkedin-guide { background: var(--primary-light); border: 1px solid var(--border-2); border-radius: 8px; padding: 9px 11px; margin-bottom: 8px; }
+.linkedin-guide-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--primary); margin-bottom: 5px; }
+.linkedin-guide ol { padding-left: 1.1rem; }
+.linkedin-guide li { font-size: 11px; color: var(--primary-dark); line-height: 1.7; }
+.linkedin-guide li strong { color: var(--primary); }
 </style>
 </head>
 <body>
@@ -2146,11 +2168,56 @@ function renderCandidates() {
   var html = '';
   for (var ci = 0; ci < scCandidates.length; ci++) {
     var cand = scCandidates[ci];
+    var mode = cand.inputMode || 'text';
     html += '<div class="cand-col" id="cand-col-'+cand.id+'">';
     html += '<button onclick="removeCandidate('+cand.id+')" style="position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text-3);font-size:16px;cursor:pointer;padding:0;width:auto;line-height:1;">&#x2715;</button>';
     html += '<label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2);margin-bottom:5px;display:block;">Candidate '+(ci+1)+'</label>';
-    html += '<input class="cand-name-input" placeholder="Name or initials" value="'+cand.name+'" onchange="scCandidates['+ci+'].name=this.value;" />';
-    html += '<textarea class="cand-resume-area" placeholder="Paste resume text here. The tool will detect matching skills automatically..." oninput="scCandidates['+ci+'].resume=this.value;autoScoreResume('+ci+');">'+cand.resume+'</textarea>';
+    html += '<input class="cand-name-input" placeholder="Initials or ref code" value="'+cand.name+'" onchange="scCandidates['+ci+'].name=this.value;" />';
+
+    // Input mode tabs
+    html += '<div class="input-mode-tabs">';
+    html += '<button class="input-mode-tab'+(mode==='text'?' active':'')+'" onclick="setInputMode('+ci+',\"text\")">Paste text</button>';
+    html += '<button class="input-mode-tab'+(mode==='pdf'?' active':'')+'" onclick="setInputMode('+ci+',\"pdf\")">PDF upload</button>';
+    html += '<button class="input-mode-tab'+(mode==='linkedin'?' active':'')+'" onclick="setInputMode('+ci+',\"linkedin\")">LinkedIn</button>';
+    html += '</div>';
+
+    // Pane: paste text
+    html += '<div class="input-mode-pane'+(mode==='text'?' active':'')+'" id="pane-text-'+cand.id+'">';
+    html += '<textarea class="cand-resume-area" placeholder="Paste resume text, LinkedIn About section, or any profile text here. Skills and company will be detected automatically..." oninput="scCandidates['+ci+'].resume=this.value;autoScoreResume('+ci+');">'+cand.resume+'</textarea>';
+    html += '</div>';
+
+    // Pane: PDF upload
+    html += '<div class="input-mode-pane'+(mode==='pdf'?' active':'')+'" id="pane-pdf-'+cand.id+'">';
+    if(cand._pdfFileName) {
+      html += '<div class="pdf-drop-zone has-file" onclick="triggerPDFInput('+cand.id+')">';
+      html += '<div class="pdf-drop-icon">&#9989;</div>';
+      html += '<div class="pdf-drop-label">'+cand._pdfFileName+'</div>';
+      html += '<div class="pdf-drop-sub">Click to replace</div>';
+      html += '</div>';
+    } else {
+      html += '<div class="pdf-drop-zone" onclick="triggerPDFInput('+cand.id+')">';
+      html += '<div class="pdf-drop-icon">&#128196;</div>';
+      html += '<div class="pdf-drop-label">Click to upload PDF resume</div>';
+      html += '<div class="pdf-drop-sub">Text extracted automatically · Works with text-based PDFs</div>';
+      html += '</div>';
+    }
+    html += '<input type="file" accept=".pdf" class="pdf-file-input" id="pdf-input-'+cand.id+'" onchange="handlePDFUpload(event,'+ci+')" />';
+    if(cand._pdfText) html += '<div class="detected-banner" style="margin-top:6px;">PDF text extracted — '+Math.round(cand._pdfText.length/5)+' words detected. Auto-scoring applied.</div>';
+    html += '</div>';
+
+    // Pane: LinkedIn
+    html += '<div class="input-mode-pane'+(mode==='linkedin'?' active':'')+'" id="pane-linkedin-'+cand.id+'">';
+    html += '<input class="linkedin-url-input" type="url" placeholder="https://linkedin.com/in/username" value="'+(cand._linkedinUrl||'')+'" oninput="scCandidates['+ci+']._linkedinUrl=this.value" />';
+    html += '<div class="linkedin-guide">';
+    html += '<div class="linkedin-guide-title">How to extract profile data</div>';
+    html += '<ol>';
+    html += '<li>Open the profile at the URL above</li>';
+    html += '<li>Click <strong>More</strong> → <strong>Save to PDF</strong> or select all text on the page (<strong>Cmd+A</strong> / <strong>Ctrl+A</strong>)</li>';
+    html += '<li>Paste the copied text into the box below — the tool will extract skills, company, and seniority automatically</li>';
+    html += '</ol>';
+    html += '</div>';
+    html += '<textarea class="cand-resume-area" style="min-height:70px;" placeholder="Paste LinkedIn profile text here after copying from the page..." oninput="scCandidates['+ci+'].resume=this.value;autoScoreResume('+ci+');">'+cand.resume+'</textarea>';
+    html += '</div>';
     var detected = cand._detectedSkills ? cand._detectedSkills : [];
     if (detected.length) {
       html += '<div class="detected-banner">Skills detected: ';
@@ -3281,6 +3348,89 @@ function saveHMNotes(){
 
 // Init
 renderHMActionPlan();
+
+function triggerPDFInput(id){
+  var el=document.getElementById('pdf-input-'+id);
+  if(el) el.click();
+}
+
+function setInputMode(ci,mode){
+  if(!scCandidates[ci]) return;
+  scCandidates[ci].inputMode=mode;
+  renderCandidates();
+}
+
+function handlePDFUpload(event,ci){
+  var file=event.target.files[0];
+  if(!file||!scCandidates[ci]) return;
+  scCandidates[ci]._pdfFileName=file.name;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var uint8=new Uint8Array(e.target.result);
+    var raw='';
+    for(var i=0;i<Math.min(uint8.length,500000);i++) raw+=String.fromCharCode(uint8[i]);
+    var extracted=extractPDFText(raw);
+    scCandidates[ci]._pdfText=extracted;
+    scCandidates[ci].resume=extracted;
+    renderCandidates();
+    autoScoreResume(ci);
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function extractPDFText(raw){
+  var text='';
+  var i=0;
+  var cr=String.fromCharCode(13);
+  var lf=String.fromCharCode(10);
+  while(i<raw.length){
+    if(raw.substr(i,6)==='stream'){
+      i+=6;
+      if(raw[i]===cr) i++;
+      if(raw[i]===lf) i++;
+      var endIdx=raw.indexOf('endstream',i);
+      if(endIdx===-1) break;
+      var block=raw.substring(i,endIdx);
+      var btIdx=0;
+      while((btIdx=block.indexOf('BT',btIdx))!==-1){
+        var etIdx=block.indexOf('ET',btIdx);
+        if(etIdx===-1) break;
+        var tb=block.substring(btIdx,etIdx);
+        var ms=tb.match(/\(([^)]{0,200})\)\s*(?:Tj|'|")/g)||[];
+        for(var j=0;j<ms.length;j++){
+          var m2=ms[j].match(/\(([^)]*)\)/);
+          if(m2&&m2[1]){
+            var str=m2[1].replace(/\\n/g,' ').replace(/\\r/g,' ').replace(/\\\\/g,'');
+            var cleaned='';
+            for(var ci2=0;ci2<str.length;ci2++){
+              var code=str.charCodeAt(ci2);
+              if(code>=32) cleaned+=str[ci2]; else cleaned+=' ';
+            }
+            if(cleaned.trim()) text+=cleaned+' ';
+          }
+        }
+        var tj=tb.match(/\[([^\]]{0,500})\]\s*TJ/g)||[];
+        for(var j=0;j<tj.length;j++){
+          var parts=tj[j].match(/\(([^)]{0,200})\)/g)||[];
+          for(var k=0;k<parts.length;k++){
+            var p=parts[k].replace(/^\(|\)$/g,'').replace(/\\\\/g,'');
+            var cp='';
+            for(var ci3=0;ci3<p.length;ci3++){
+              var code2=p.charCodeAt(ci3);
+              if(code2>=32) cp+=p[ci3]; else cp+=' ';
+            }
+            if(cp.trim()) text+=cp;
+          }
+          text+=' ';
+        }
+        btIdx=etIdx+2;
+      }
+      i=endIdx+9;
+    } else { i++; }
+  }
+  text=text.replace(/\s{3,}/g,' ').replace(/([a-z])([A-Z])/g,'$1 $2').trim();
+  return text||'[Could not extract text — try a text-based PDF or paste the text manually in the Paste text tab.]';
+}
 
 </script>
 </body>
