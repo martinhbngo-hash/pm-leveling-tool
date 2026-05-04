@@ -222,6 +222,18 @@ tr:last-child td { border-bottom: none; }
   <!-- TAB 3: SOURCING -->
   <div id="tab-sourcing" class="tab-content">
     <div class="card">
+      <div class="section-label">Option 1 — Paste a Job Description</div>
+      <div class="field">
+        <textarea id="jd-input" placeholder="Paste the job description here. The tool will automatically detect the role type and level, then generate sourcing intel..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="parseJD()">Analyze JD</button>
+      </div>
+      <div id="jd-note" class="parsed-note" style="display:none;margin-top:8px;"></div>
+
+      <div class="divider">or select manually</div>
+
+      <div class="section-label">Option 2 — Select role and level</div>
       <div class="field">
         <label>Role Type</label>
         <select id="sourcing-role" onchange="updateSourcingRole()">
@@ -533,6 +545,51 @@ function resetLeveling() {
   document.getElementById("linkedin-text").value = "";
   document.getElementById("parsed-note").style.display = "none";
   document.getElementById("leveling-results").innerHTML = '<div class="empty">Fill in the fields above or paste a LinkedIn summary to see the cross-company level mapping.</div>';
+}
+
+
+/* ── JD PARSER ── */
+function parseJD() {
+  var text = document.getElementById("jd-input").value.trim().toLowerCase();
+  if (!text) { alert("Please paste a job description first."); return; }
+
+  // Detect role type
+  var detectedRole = "pm";
+  if (text.indexOf("associate product manager") !== -1 || text.indexOf("apm") !== -1 || text.indexOf("new grad") !== -1) detectedRole = "apm";
+  else if (text.indexOf("technical program") !== -1 || (text.indexOf("technical") !== -1 && text.indexOf("program manager") !== -1)) detectedRole = "tpm";
+  else if (text.indexOf("technical product") !== -1 || (text.indexOf("technical") !== -1 && text.indexOf("engineer") !== -1 && text.indexOf("product manager") !== -1)) detectedRole = "tpm";
+  else if (text.indexOf("growth") !== -1 && (text.indexOf("product manager") !== -1 || text.indexOf("pm") !== -1)) detectedRole = "growth";
+  else if ((text.indexOf("data") !== -1 || text.indexOf("analytics") !== -1) && text.indexOf("product manager") !== -1) detectedRole = "data";
+  else if (text.indexOf("machine learning") !== -1 || text.indexOf("ml pm") !== -1 || text.indexOf("ai pm") !== -1 || text.indexOf("generative") !== -1 || text.indexOf("llm") !== -1) detectedRole = "ai-pm";
+  else if (text.indexOf("platform") !== -1 || text.indexOf("infrastructure") !== -1 || text.indexOf("developer experience") !== -1 || text.indexOf("api") !== -1) detectedRole = "platform";
+  else if (text.indexOf("director") !== -1 || text.indexOf("manage a team") !== -1 || text.indexOf("manage pms") !== -1 || text.indexOf("people manager") !== -1) detectedRole = "pm-mgr";
+
+  // Detect level
+  var detectedLevel = "ic5";
+  if (text.indexOf("associate") !== -1 || text.indexOf("entry level") !== -1 || text.indexOf("new grad") !== -1 || text.indexOf("0-2 years") !== -1 || text.indexOf("1-3 years") !== -1) detectedLevel = "ic4";
+  else if (text.indexOf("staff") !== -1 || text.indexOf("8+ years") !== -1 || text.indexOf("10+ years") !== -1) detectedLevel = "ic6";
+  else if (text.indexOf("group pm") !== -1 || text.indexOf("director") !== -1 || text.indexOf("12+ years") !== -1) detectedLevel = "ic7";
+  else if (text.indexOf("senior director") !== -1 || text.indexOf("vp") !== -1) detectedLevel = "ic8";
+  else if (text.indexOf("senior product manager") !== -1 || text.indexOf("senior pm") !== -1 || text.indexOf("4+ years") !== -1 || text.indexOf("5+ years") !== -1 || text.indexOf("6+ years") !== -1) detectedLevel = "ic5";
+
+  // Set dropdowns
+  var roleSel = document.getElementById("sourcing-role");
+  for (var i = 0; i < roleSel.options.length; i++) {
+    if (roleSel.options[i].value === detectedRole) { roleSel.value = detectedRole; break; }
+  }
+  var levelSel = document.getElementById("sourcing-level");
+  for (var i = 0; i < levelSel.options.length; i++) {
+    if (levelSel.options[i].value === detectedLevel) { levelSel.value = detectedLevel; break; }
+  }
+
+  var roleLabels = {"pm":"Product Manager (IC)","pm-mgr":"PM Manager / Director","apm":"APM / Associate PM","tpm":"Technical PM / TPM","growth":"Growth PM","data":"Data / Analytics PM","ai-pm":"AI / ML PM","platform":"Platform / Infra PM"};
+  var levelLabels = {"ic4":"IC4 (PM)","ic5":"IC5 (Senior PM)","ic6":"IC6 (Staff PM)","ic7":"IC7 (Group PM / Director)","ic8":"IC8 (Director)"};
+
+  var noteEl = document.getElementById("jd-note");
+  noteEl.style.display = "block";
+  noteEl.textContent = "Detected: " + roleLabels[detectedRole] + " · " + levelLabels[detectedLevel] + ". Adjust the dropdowns below if needed.";
+
+  runSourcing();
 }
 
 /* ── SOURCING ── */
