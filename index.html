@@ -696,8 +696,12 @@ tr:last-child td{border-bottom:none;}
       <div id="tab-placements" class="tab-content">
         <div class="card">
           <div class="section-label">Log a Placement</div>
+          <div style="background:var(--warning-light);border:1px solid #fcd34d;border-radius:10px;padding:9px 13px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px;">
+            <span style="font-size:14px;flex-shrink:0;">&#9888;</span>
+            <p style="font-size:11px;color:#92400e;line-height:1.5;"><strong>Privacy note:</strong> Depending on your jurisdiction (GDPR, CCPA, etc.), storing candidate names alongside employment history may constitute personal data. Consider using <strong>initials or a reference code</strong> instead of a full name. Data is stored locally in your browser and should be cleared periodically.</p>
+          </div>
           <div class="placement-form-grid">
-            <div class="field"><label>Candidate Name</label><input type="text" id="p-name" placeholder="Full name"/></div>
+            <div class="field"><label>Candidate Reference <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-3);font-size:10px;">(initials or ID recommended)</span></label><input type="text" id="p-name" placeholder="e.g. A.M. or Ref-042"/></div>
             <div class="field"><label>Previous Company</label><input type="text" id="p-prev-co" placeholder="e.g. Google"/></div>
             <div class="field"><label>Previous Title</label><input type="text" id="p-prev-title" placeholder="e.g. Senior SWE"/></div>
             <div class="field"><label>Role Family</label>
