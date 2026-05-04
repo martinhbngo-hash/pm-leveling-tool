@@ -6,13 +6,16 @@
 <title>Technical Researcher Intelligence Hub</title>
 <style>
 :root{
-  --bg:#f8f7ff;--surface:#fff;--primary:#6c47ff;--primary-dark:#4f29e8;
+  --bg:#f6f5ff;--surface:#fff;--primary:#7c5cfc;--primary-dark:#5b3fd4;
   --primary-light:#ede9ff;--primary-muted:#a78bfa;
   --success-light:#d1fae5;--warning-light:#fef3c7;--danger-light:#fee2e2;
-  --text:#1e1b4b;--text-2:#6b7280;--text-3:#9ca3af;
+  --text:#18112e;--text-2:#6b7280;--text-3:#9ca3af;
   --border:#e5e3ff;--border-2:#d1ceff;
-  --shadow:0 1px 3px rgba(108,71,255,.08),0 4px 16px rgba(108,71,255,.06);
-  --accent:#6c47ff;
+  --shadow:0 1px 4px rgba(124,92,252,.1),0 6px 20px rgba(124,92,252,.08);
+  --accent:#7c5cfc;
+  --sidebar:#18112e;--sidebar-active:rgba(124,92,252,.25);
+  --sidebar-active-border:rgba(124,92,252,.35);--sidebar-active-text:#c4b2ff;
+  --sidebar-text:rgba(255,255,255,.5);--sidebar-divider:rgba(255,255,255,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{font-size:16px;}
@@ -21,13 +24,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ── WELCOME SCREEN ── */
 #welcome-screen{
   position:fixed;inset:0;z-index:1000;
-  background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4c1d95 100%);
+  background:linear-gradient(135deg,#18112e 0%,#1e1245 40%,#2d1264 100%);
   display:flex;align-items:center;justify-content:center;
   padding:1.5rem;overflow-y:auto;
 }
 .welcome-card{
-  background:rgba(255,255,255,.07);backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.15);border-radius:20px;
+  background:rgba(255,255,255,.06);backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.13);border-radius:20px;
   padding:2rem 1.75rem;max-width:560px;width:100%;
 }
 .welcome-logo{width:48px;height:48px;background:linear-gradient(135deg,#6c47ff,#9333ea);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;}
@@ -50,7 +53,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .company-option .co-name{font-size:13px;font-weight:600;color:white;}
 .company-option .co-type{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;}
 .company-emoji{display:none;}
-.welcome-btn{width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;font-family:inherit;box-shadow:0 4px 16px rgba(108,71,255,.4);transition:all .15s;}
+.welcome-btn{width:100%;padding:14px;background:#7c5cfc;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;font-family:inherit;box-shadow:0 4px 16px rgba(108,71,255,.4);transition:all .15s;}
 .welcome-btn:hover{background:var(--primary-dark);}
 .welcome-btn:disabled{opacity:.4;cursor:not-allowed;}
 .custom-company-row{display:flex;gap:8px;margin-top:8px;}
@@ -66,30 +69,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.875rem;flex-wrap:wrap;}
 .topbar-left{display:flex;align-items:center;gap:.75rem;}
-.logo-mark{width:36px;height:36px;flex-shrink:0;background:linear-gradient(135deg,#6c47ff,#9333ea);border-radius:9px;display:flex;align-items:center;justify-content:center;}
+.logo-mark{width:36px;height:36px;flex-shrink:0;background:linear-gradient(135deg,#7c5cfc,#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(124,92,252,.35);}
 .logo-mark svg{width:18px;height:18px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.header-text h1{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.02em;}
-.header-text p{font-size:11px;color:var(--text-2);margin-top:1px;}
-.company-switcher{display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;cursor:pointer;transition:all .15s;}
-.company-switcher:hover{border-color:var(--primary);background:var(--primary-light);}
-.company-switcher .co-badge{font-size:12px;font-weight:700;color:var(--primary);}
-.company-switcher .switch-label{font-size:10px;color:var(--text-3);}
+.header-text h1{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.03em;}
+.header-text p{font-size:11px;color:var(--text-3);margin-top:2px;}
+.company-switcher{display:flex;align-items:center;gap:8px;background:var(--sidebar);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:7px 13px;cursor:pointer;transition:all .15s;}
+.company-switcher:hover{border-color:rgba(124,92,252,.5);background:#1f1540;}
+.company-switcher .co-badge{font-size:12px;font-weight:700;color:#c4b2ff;}
+.company-switcher .switch-label{font-size:10px;color:rgba(255,255,255,.35);}
 .co-emoji-sm{display:none;}
 
-.disclaimer-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px;}
-.disclaimer-dot{width:7px;height:7px;border-radius:50%;background:#f59e0b;border:1.5px solid #fcd34d;flex-shrink:0;margin-top:3px;}
-.disclaimer-bar p{font-size:11px;color:var(--text-2);line-height:1.5;}
+.disclaimer-bar{background:linear-gradient(90deg,#f0eeff,#f5f0ff);border:1px solid var(--border);border-radius:10px;padding:8px 14px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px;}
+.disclaimer-dot{width:6px;height:6px;border-radius:50%;background:#f59e0b;flex-shrink:0;margin-top:4px;}
+.disclaimer-bar p{font-size:11px;color:#6b5fa6;line-height:1.5;}
 .disclaimer-bar a{color:var(--primary);font-weight:600;text-decoration:none;}
 
 .tab-layout{display:flex;gap:16px;align-items:flex-start;}
-.tab-sidebar{width:182px;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:6px;box-shadow:var(--shadow);position:sticky;top:1rem;}
-.sidebar-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);padding:7px 10px 3px;}
-.tab-divider{height:1px;background:var(--border);margin:5px 4px;}
-.tab-btn{display:flex;align-items:center;gap:8px;width:100%;padding:10px 11px;background:transparent;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text-2);transition:all .18s;text-align:left;font-family:inherit;touch-action:manipulation;margin-bottom:2px;}
+.tab-sidebar{width:188px;flex-shrink:0;background:var(--sidebar);border:none;border-radius:16px;padding:12px 8px;box-shadow:0 4px 24px rgba(24,17,46,.18);position:sticky;top:1rem;display:flex;flex-direction:column;}
+.sidebar-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);padding:8px 10px 3px;}
+.tab-divider{height:1px;background:var(--sidebar-divider);margin:6px 4px;}
+.tab-btn{display:flex;align-items:center;gap:9px;width:100%;padding:9px 11px;background:transparent;border:1px solid transparent;border-radius:9px;cursor:pointer;font-size:12px;font-weight:600;color:var(--sidebar-text);transition:all .15s;text-align:left;font-family:inherit;touch-action:manipulation;margin-bottom:2px;}
 .tab-icon{font-size:14px;flex-shrink:0;}
-.tab-btn:hover{background:var(--primary-light);color:var(--primary);}
-.tab-btn.active{background:var(--primary);color:white;box-shadow:0 2px 8px rgba(108,71,255,.3);}
+.tab-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.tab-btn.active{background:var(--sidebar-active);color:var(--sidebar-active-text);border-color:var(--sidebar-active-border);}
 .tab-main{flex:1;min-width:0;}
+.sidebar-footer{margin-top:auto;padding-top:10px;border-top:1px solid var(--sidebar-divider);}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 
@@ -98,8 +102,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .tab-layout{flex-direction:column;gap:0;}
   .tab-sidebar{width:100%;position:static;border-radius:12px;margin-bottom:1rem;display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:4px;padding:5px;}
   .tab-sidebar::-webkit-scrollbar{display:none;}
-  .sidebar-section-label,.tab-divider{display:none;}
-  .tab-btn{flex:0 0 auto;width:auto;padding:9px 13px;margin-bottom:0;font-size:11px;white-space:nowrap;}
+  .sidebar-section-label,.tab-divider,.sidebar-footer{display:none;}
+  .tab-btn{flex:0 0 auto;width:auto;padding:9px 13px;margin-bottom:0;font-size:11px;white-space:nowrap;color:rgba(255,255,255,.7);}
+  .tab-btn.active{color:var(--sidebar-active-text);}
   .tab-icon{display:none;}
   .tab-main{width:100%;}
   .card{padding:1rem;border-radius:12px;}
@@ -115,9 +120,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .company-switcher .switch-label{display:none;}
 }
 
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.125rem;margin-bottom:.875rem;box-shadow:var(--shadow);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:.875rem;box-shadow:0 1px 3px rgba(124,92,252,.06),0 4px 16px rgba(124,92,252,.05);}
 .section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--primary);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.section-label::before{content:'';width:3px;height:12px;background:var(--primary);border-radius:2px;display:inline-block;}
+.section-label::before{content:'';width:3px;height:12px;background:var(--primary);border-radius:2px;display:inline-block;box-shadow:0 0 8px rgba(124,92,252,.4);}
 .field{margin-bottom:1rem;}
 .field:last-child{margin-bottom:0;}
 label{font-size:11px;font-weight:700;color:var(--text-2);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.06em;}
@@ -133,7 +138,7 @@ textarea::placeholder,input::placeholder{color:var(--text-3);font-size:14px;}
 @media(min-width:480px){.btn-row{flex-direction:row;flex-wrap:wrap;}}
 button{width:100%;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;border:1.5px solid transparent;touch-action:manipulation;-webkit-appearance:none;}
 @media(min-width:480px){button{width:auto;}}
-.btn-primary{background:var(--primary);color:white;border-color:var(--primary);box-shadow:0 2px 8px rgba(108,71,255,.28);}
+.btn-primary{background:var(--primary);color:white;border-color:var(--primary);box-shadow:0 2px 12px rgba(124,92,252,.35);}
 .btn-primary:active{background:var(--primary-dark);transform:scale(.98);}
 .btn-primary:disabled{opacity:.45;cursor:not-allowed;}
 .btn-ghost{background:var(--surface);color:var(--text-2);border-color:var(--border-2);}
@@ -147,14 +152,14 @@ button{width:100%;padding:12px 18px;border-radius:10px;font-size:13px;font-weigh
 .banner-green{background:var(--success-light);border:1px solid #6ee7b7;color:#065f46;}
 
 .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.875rem;}
-.stat-card{background:var(--bg);padding:11px 13px;border-radius:10px;border:1px solid var(--border);position:relative;overflow:hidden;}
-.stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--primary);}
+.stat-card{background:var(--surface);padding:12px 14px;border-radius:12px;border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:var(--card-shadow);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--primary),var(--primary-muted));}
 .stat-val{font-size:15px;font-weight:700;color:var(--text);display:block;margin-top:3px;line-height:1.3;}
 .stat-label{font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
 
 .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);-webkit-overflow-scrolling:touch;margin-bottom:1rem;}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:320px;}
-th{background:var(--primary-light);padding:9px 12px;text-align:left;font-weight:700;font-size:10px;color:var(--primary);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap;}
+th{background:linear-gradient(90deg,#eae6ff,#f0ecff);padding:9px 12px;text-align:left;font-weight:700;font-size:9px;color:var(--primary);text-transform:uppercase;letter-spacing:.09em;border-bottom:1px solid var(--border);white-space:nowrap;}
 td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;line-height:1.4;font-size:13px;}
 tr:last-child td{border-bottom:none;}
 .highlight-row{background:var(--primary-light);}
@@ -173,7 +178,7 @@ tr:last-child td{border-bottom:none;}
 .output-block.visible{display:block;}
 .output-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 13px;margin-bottom:.75rem;}
 .output-section:last-child{margin-bottom:0;}
-.output-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.output-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .output-section-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--primary);display:inline-block;box-shadow:0 0 0 3px var(--primary-light);flex-shrink:0;}
 .output-section p{font-size:13px;color:var(--text);line-height:1.7;}
 .output-section ul{padding-left:1rem;}
@@ -282,6 +287,13 @@ tr:last-child td{border-bottom:none;}
 .sc-flag-red p { color: #991b1b; }
 .sc-prescreen-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--primary); margin: 1rem 0 8px; display: flex; align-items: center; gap: 6px; }
 .sc-prescreen-section-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); display: inline-block; box-shadow: 0 0 0 3px var(--primary-light); flex-shrink: 0; }
+
+.sidebar-footer{margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);margin-left:-2px;margin-right:-2px;padding-left:8px;padding-right:8px;}
+.sidebar-co-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 10px;cursor:pointer;transition:all .15s;}
+.sidebar-co-chip:hover{background:rgba(255,255,255,.11);border-color:rgba(124,92,252,.4);}
+.sidebar-co-avatar{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#7c5cfc,#a855f7);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;}
+.sidebar-co-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.8);}
+.sidebar-co-sub{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
 </style>
 </head>
 <body>
@@ -295,7 +307,7 @@ tr:last-child td{border-bottom:none;}
       <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     </div>
     <h1>Technical Researcher Intelligence Hub</h1>
-    <p>Select your company to personalise all talent intel, leveling maps, competitive landscape, and sourcing strategy to your organization.</p>
+    <p>Select your company to personalize all talent intel, leveling maps, competitive landscape, and sourcing strategy to your organization.</p>
 
     <span class="welcome-label">Search or select your company</span>
     <input class="company-search" id="co-search" placeholder="Type to search — e.g. Google, Stripe, McKinsey..." oninput="filterCompanies()" autocomplete="off" autocorrect="off" spellcheck="false"/>
@@ -355,7 +367,19 @@ tr:last-child td{border-bottom:none;}
       <div class="tab-divider"></div>
       <div class="sidebar-section-label">Reference</div>
       <button class="tab-btn" onclick="openTab(this,'tab-competitive')"><span class="tab-icon">🏆</span>Competitive</button>
+      <button class="tab-btn" onclick="openTab(this,'tab-candidates')"><span class="tab-icon">👤</span>Candidates</button>
+      <button class="tab-btn" onclick="openTab(this,'tab-comp')"><span class="tab-icon">💰</span>Comp</button>
       <button class="tab-btn" onclick="openTab(this,'tab-placements')"><span class="tab-icon">📋</span>Placements</button>
+      <div class="sidebar-footer"></div>
+      <div class="sidebar-footer" id="sidebar-footer-wrap" style="display:none;">
+        <div class="sidebar-co-chip" onclick="switchCompany()">
+          <div class="sidebar-co-avatar" id="sidebar-avatar">?</div>
+          <div>
+            <div class="sidebar-co-name" id="sidebar-co-name">—</div>
+            <div class="sidebar-co-sub">Switch company</div>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <div class="tab-main">
@@ -479,6 +503,37 @@ tr:last-child td{border-bottom:none;}
               </select>
             </div>
           </div>
+          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+            <label class="intake-toggle-row">
+              <input type="checkbox" id="icp-cb" onchange="toggleICP()"/>
+              <span>Define Ideal Candidate Profile (ICP)</span>
+            </label>
+            <div class="intake-fields" id="icp-fields">
+              <div class="form-2col" style="margin-top:1rem;">
+                <div class="field"><label>Must come from</label><input type="text" id="icp-co-types" placeholder="e.g. Big Tech, AI-Native, Series B+" oninput="updateICP()"/></div>
+                <div class="field"><label>Must NOT come from</label><input type="text" id="icp-co-exclude" placeholder="e.g. Consulting, Defense" oninput="updateICP()"/></div>
+                <div class="field"><label>Minimum scale signal</label>
+                  <select id="icp-scale" onchange="updateICP()">
+                    <option value="">— Any scale —</option>
+                    <option value="100M+">100M+ users</option><option value="10M+">10M+ users</option>
+                    <option value="1M+">1M+ users</option><option value="enterprise">Enterprise / B2B at scale</option>
+                    <option value="any">Any — scale not critical</option>
+                  </select>
+                </div>
+                <div class="field"><label>Years experience (min)</label>
+                  <select id="icp-yoe" onchange="updateICP()">
+                    <option value="">— Any —</option>
+                    <option value="2">2+</option><option value="4">4+</option>
+                    <option value="6">6+</option><option value="8">8+</option><option value="12">12+</option>
+                  </select>
+                </div>
+                <div class="field"><label>Non-negotiable skills</label><input type="text" id="icp-skills" placeholder="e.g. Go, Kubernetes, distributed systems" oninput="updateICP()"/></div>
+                <div class="field"><label>Hard no backgrounds</label><input type="text" id="icp-hard-no" placeholder="e.g. no pure frontend, no non-tech" oninput="updateICP()"/></div>
+              </div>
+              <div class="field"><label>What good looks like</label><textarea id="icp-good" style="min-height:60px;" placeholder="Describe the profile that would make the HM say yes immediately..." oninput="updateICP()"></textarea></div>
+              <div class="field"><label>What has failed before on this role type</label><textarea id="icp-fail" style="min-height:55px;" placeholder="Backgrounds or signals that looked good but didn't work out..." oninput="updateICP()"></textarea></div>
+            </div>
+          </div>
           <div class="intake-section">
             <label class="intake-toggle-row">
               <input type="checkbox" id="intake-cb" onchange="toggleIntake()"/>
@@ -513,7 +568,32 @@ tr:last-child td{border-bottom:none;}
       <!-- ═══ STRATEGY ═══ -->
       <div id="tab-strategy" class="tab-content">
         <div class="card">
-          <div class="field"><label>Candidate's Current Company Type</label>
+          <div class="field"><label>Candidate name (optional)</label>
+            <input type="text" id="strat-cand-name" placeholder="e.g. Alex M. — personalizes the close strategy" oninput="updateStrategy()"/>
+          </div>
+          <div class="form-2col">
+            <div class="field"><label>Unvested equity remaining</label>
+              <select id="strat-equity" onchange="updateStrategy()">
+                <option value="">— Select —</option>
+                <option value="none">None / fully vested</option>
+                <option value="low">Under $100K</option>
+                <option value="mid">$100K – $300K</option>
+                <option value="high">$300K – $600K</option>
+                <option value="very_high">$600K+</option>
+              </select>
+            </div>
+            <div class="field"><label>Months until next vest cliff</label>
+              <select id="strat-vest-timing" onchange="updateStrategy()">
+                <option value="">— Select —</option>
+                <option value="now">Vesting now / recently vested</option>
+                <option value="3mo">Within 3 months</option>
+                <option value="6mo">3–6 months away</option>
+                <option value="12mo">6–12 months away</option>
+                <option value="far">12+ months away</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Candidate's current company type</label>
             <select id="strat-co-type" onchange="updateStrategy()">
               <option value="">— Select type —</option>
               <option value="bigtech">Big Tech (Google, Apple, Amazon, Microsoft, Meta)</option>
@@ -666,6 +746,97 @@ tr:last-child td{border-bottom:none;}
           </div>
         </div>
 
+      </div>
+
+
+      <!-- ═══ CANDIDATES TAB ═══ -->
+      <div id="tab-candidates" class="tab-content">
+        <div class="card">
+          <div class="section-label" style="margin-bottom:.5rem;">Candidate Fit Narratives</div>
+          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Auto-drafted from Scorecard signals. Edit before sharing with the hiring manager. Scores candidates in Scorecard tab first.</p>
+          <div class="btn-row" style="margin-bottom:0;">
+            <button class="btn-primary" onclick="generateNarratives()">Generate from Scorecard</button>
+          </div>
+        </div>
+        <div id="narratives-output"><div class="empty">Score candidates in the Scorecard tab first, then click Generate above.</div></div>
+      </div>
+
+      <!-- ═══ COMP TAB ═══ -->
+      <div id="tab-comp" class="tab-content">
+        <div class="card">
+          <div class="section-label">Compensation Benchmarking</div>
+          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Estimated total compensation ranges calibrated to mid-2025 market data. Sources: Levels.fyi, Glassdoor, Blind, and recruiter community surveys. All figures are USD annual TC (base + equity + bonus). Treat as directional — individual comp varies based on interview performance, competing offers, and negotiation.</p>
+          <div class="form-2col">
+            <div class="field"><label>Role Family</label>
+              <select id="comp-role" onchange="updateCompBenchmark()">
+                <option value="">— Select role —</option>
+                <option value="swe">Software Engineering (IC)</option>
+                <option value="pm">Product Management</option>
+                <option value="em">Engineering Management</option>
+                <option value="ds">Data Science / ML Engineering</option>
+                <option value="de">Data Engineering</option>
+                <option value="sre">Site Reliability / DevOps</option>
+                <option value="sec">Security Engineering</option>
+                <option value="se">Solutions / Sales Engineering</option>
+                <option value="qa">QA / SDET</option>
+                <option value="hw">Hardware Engineering</option>
+              </select>
+            </div>
+            <div class="field"><label>Company Type</label>
+              <select id="comp-co-type" onchange="updateCompBenchmark()">
+                <option value="">— Select type —</option>
+                <option value="bigtech">Big Tech (Google, Meta, Amazon, Apple, Microsoft, Netflix)</option>
+                <option value="ai_native">AI-Native (OpenAI, Anthropic, xAI, Mistral)</option>
+                <option value="midtech">Mid-size Tech (Stripe, Airbnb, Uber, Databricks, etc.)</option>
+                <option value="startup_late">Late-stage / Pre-IPO Startup</option>
+                <option value="startup_b">Series B Startup</option>
+                <option value="startup_a">Series A Startup</option>
+                <option value="fintech">Fintech (Plaid, Robinhood, Coinbase, Klarna)</option>
+                <option value="enterprise">Enterprise Tech (Salesforce, Oracle, Cisco, SAP)</option>
+                <option value="finance">Finance / Banking (Goldman, JPMorgan, Citadel)</option>
+                <option value="consulting">Consulting (McKinsey, Deloitte, Accenture)</option>
+                <option value="defense">Defense / Gov Tech (Palantir, Lockheed, Booz Allen)</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+            <div class="section-label" style="margin-bottom:.5rem;">Calibration History</div>
+            <p style="font-size:12px;color:var(--text-2);margin-bottom:.75rem;line-height:1.5;">Log what has worked and what hasn't. Auto-enriches from Placements tab and surfaces patterns when you run comp benchmarks.</p>
+            <div class="form-2col">
+              <div class="field"><label>Role family</label>
+                <select id="cal-role">
+                  <option value="">— Select —</option>
+                  <option value="swe">Software Engineering</option><option value="pm">Product Management</option>
+                  <option value="em">Engineering Management</option><option value="ds">Data Science / ML</option>
+                  <option value="de">Data Engineering</option><option value="sre">SRE / DevOps</option>
+                  <option value="sec">Security Engineering</option><option value="se">Solutions Engineering</option>
+                  <option value="qa">QA / SDET</option><option value="hw">Hardware Engineering</option>
+                </select>
+              </div>
+              <div class="field"><label>Company type of hire</label>
+                <select id="cal-co-type">
+                  <option value="">— Select —</option>
+                  <option value="Big Tech">Big Tech</option><option value="AI-Native">AI-Native</option>
+                  <option value="Mid-size Tech">Mid-size Tech</option><option value="Startup">Startup</option>
+                  <option value="Fintech">Fintech</option><option value="Finance">Finance / Banking</option>
+                  <option value="Enterprise">Enterprise Tech</option><option value="Consulting">Consulting</option>
+                  <option value="Defense">Defense / Gov Tech</option>
+                </select>
+              </div>
+            </div>
+            <div class="field"><label>Outcome</label>
+              <select id="cal-outcome">
+                <option value="">— Select —</option>
+                <option value="worked">Worked — placed and performed well</option>
+                <option value="didnt">Did not work — failed interview or exited early</option>
+              </select>
+            </div>
+            <div class="field"><label>Notes (optional)</label><input type="text" id="cal-note" placeholder="e.g. Google L5 → strong performer, consulting → failed systems design"/></div>
+            <div class="btn-row"><button class="btn-primary" onclick="addCalibrationEntry(document.getElementById('cal-role').value, document.getElementById('cal-co-type').value, document.getElementById('cal-outcome').value, document.getElementById('cal-note').value)">Log calibration entry</button></div>
+            <div id="cal-log" style="margin-top:.875rem;"></div>
+          </div>
+        </div>
+        <div id="comp-benchmark-output" class="output-block"></div>
       </div>
 
     </div><!-- /tab-main -->
@@ -908,8 +1079,15 @@ function switchCompany(){
 function initApp(){
   // Update topbar
   document.getElementById('topbar-co-name').textContent = activeCompany.name;
+  // Sidebar chip
+  var sidebarAvatar = document.getElementById('sidebar-avatar');
+  var sidebarCoName = document.getElementById('sidebar-co-name');
+  var sidebarFooter = document.getElementById('sidebar-footer-wrap');
+  if(sidebarAvatar) sidebarAvatar.textContent = activeCompany.name.slice(0,2).toUpperCase();
+  if(sidebarCoName) sidebarCoName.textContent = activeCompany.name;
+  if(sidebarFooter) sidebarFooter.style.display = 'block';
   
-  document.getElementById('topbar-subtitle').textContent = 'Personalised for ' + activeCompany.name + ' · Market Intel · Leveling · Sourcing · Strategy';
+  document.getElementById('topbar-subtitle').textContent = 'Personalized for ' + activeCompany.name + ' · Market Intel · Leveling · Sourcing · Strategy';
 
   // Update leveling context note
   document.getElementById('lev-context-note').innerHTML =
@@ -945,6 +1123,50 @@ function initApp(){
 
   // Load placements
   loadPlacements();
+}
+
+/* ══ CLOSE INTELLIGENCE ══ */
+function buildCloseIntel(coType,level,motivation,equity,vestTiming,candName){
+  if(!equity&&!vestTiming) return '';
+  var name=candName||'this candidate';
+  var h='<div class="output-section"><div class="output-section-label">Close Strategy'+(candName?' — '+candName:'')+'</div>';
+  if(equity||vestTiming){
+    h+='<div style="background:var(--primary-light);border:1px solid var(--border-2);border-radius:10px;padding:11px 13px;margin-bottom:.75rem;">';
+    h+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);margin-bottom:8px;">Equity situation</div>';
+    if(equity&&equity!=='none'){
+      var em={low:'Under $100K',mid:'$100K–$300K',high:'$300K–$600K',very_high:'$600K+'};
+      var ev=em[equity]||equity;
+      var urg=(equity==='high'||equity==='very_high')?'<strong>Significant retention anchor. Have the equity conversation before offer stage.</strong>':'Moderate anchor. Consider aligning offer timing to a vest cliff where possible.';
+      h+='<p style="font-size:12px;color:var(--primary-dark);line-height:1.6;margin-bottom:6px;"><strong>Unvested equity:</strong> '+ev+'. '+urg+'</p>';
+    }
+    if(vestTiming&&vestTiming!=='now'){
+      var vm={'3mo':'Cliff within 3 months — ask directly whether they want to wait or are ready to walk away now.',
+        '6mo':'Cliff in 3–6 months — explore whether a signing bonus bridges the gap. Get finance involved in offer strategy now.',
+        '12mo':'Cliff in 6–12 months — significant walk-away cost. Consider planting the seed and following up at the 3-month mark.',
+        'far':'Cliff 12+ months away — very difficult to close. Revisit in 9–10 months when the conversation becomes realistic.'};
+      h+='<p style="font-size:12px;color:var(--primary-dark);line-height:1.6;"><strong>Vest timing:</strong> '+(vm[vestTiming]||vestTiming)+'</p>';
+    } else if(vestTiming==='now'){
+      h+='<p style="font-size:12px;color:var(--primary-dark);line-height:1.6;"><strong>Vest timing:</strong> Recently vested or vesting now — <strong>optimal window. Move with urgency.</strong></p>';
+    }
+    h+='</div>';
+  }
+  var cm={
+    scale:'Lead with specific technical scale — users, data volume, system complexity. Be concrete. Avoid vague "big impact" language.',
+    growth:'Lay out the explicit career path. What level are they joining? What does promotion look like and what is the typical timeline?',
+    money:'Be direct and transparent about comp early. Share the range and equity structure. Uncertainty about comp kills deals.',
+    tech:'Focus on the specific technical challenge. What is the hardest problem they would work on? What can they build here they cannot build anywhere else?',
+    brand:'Anchor on what working here does for their career — the name, the network, the pedigree of the team they will join.',
+    change:'Move fast. Do not let the process drag while their current company works on retaining them.',
+    mission:'Connect the role to something they genuinely care about. Research their background for signals. Do not manufacture alignment — find the real thread.'
+  };
+  if(cm[motivation]){
+    h+='<div style="background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 11px;">';
+    h+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);margin-bottom:4px;">Primary close angle</div>';
+    h+='<p style="font-size:12px;color:var(--text);line-height:1.6;">'+cm[motivation]+'</p>';
+    h+='</div>';
+  }
+  h+='</div>';
+  return h;
 }
 
 /* ══ TABS ══ */
@@ -1514,6 +1736,9 @@ function updateStrategy(){
   var coType = document.getElementById('strat-co-type').value;
   var level = document.getElementById('strat-level').value;
   var motivation = document.getElementById('strat-motivation').value;
+  var equity = document.getElementById('strat-equity') ? document.getElementById('strat-equity').value : '';
+  var vestTiming = document.getElementById('strat-vest-timing') ? document.getElementById('strat-vest-timing').value : '';
+  var candName = document.getElementById('strat-cand-name') ? document.getElementById('strat-cand-name').value.trim() : '';
   var outputEl = document.getElementById('strategy-output');
   if(!coType||!level||!motivation){ outputEl.classList.remove('visible'); return; }
   var coName = activeCompany ? activeCompany.name : 'your company';
@@ -1527,9 +1752,7 @@ function updateStrategy(){
   var objs = strategyData.objections[coType]||[];
   for(var i=0;i<objs.length;i++) h+='<li style="margin-bottom:9px;">'+objs[i]+'</li>';
   h+='</ul></div>';
-  // Title equivalency section
-  h += buildTitleEquivalency(role);
-
+  h += buildCloseIntel(coType, level, motivation, equity, vestTiming, candName);
   outputEl.innerHTML=h; outputEl.classList.add('visible');
 }
 
@@ -2360,6 +2583,284 @@ function getRoleLabel(role) {
   var labels = {"pm":"Product Management","swe":"Software Engineering","em":"Engineering Management","ds":"Data Science / ML","de":"Data Engineering","sre":"SRE / DevOps","sec":"Security Engineering","se":"Solutions Engineering","qa":"QA / SDET","hw":"Hardware Engineering"};
   return labels[role] || role;
 }
+
+/* ══ ICP BUILDER ══ */
+var icpData={};
+function toggleICP(){var cb=document.getElementById('icp-cb');var f=document.getElementById('icp-fields');if(cb.checked)f.classList.add('open');else f.classList.remove('open');updateICP();}
+function updateICP(){
+  var cb=document.getElementById('icp-cb');
+  if(!cb||!cb.checked){var s=document.getElementById('icp-summary');if(s)s.style.display='none';return;}
+  icpData={
+    coTypes:document.getElementById('icp-co-types').value.trim(),
+    coExclude:document.getElementById('icp-co-exclude').value.trim(),
+    scale:document.getElementById('icp-scale').value,
+    yoe:document.getElementById('icp-yoe').value,
+    skills:document.getElementById('icp-skills').value.trim(),
+    hardNo:document.getElementById('icp-hard-no').value.trim(),
+    good:document.getElementById('icp-good').value.trim(),
+    fail:document.getElementById('icp-fail').value.trim()
+  };
+  var any=icpData.coTypes||icpData.coExclude||icpData.scale||icpData.yoe||icpData.skills||icpData.hardNo||icpData.good||icpData.fail;
+  var el=document.getElementById('icp-summary');
+  if(!el||!any){if(el)el.style.display='none';return;}
+  var h='<div class="intake-context-card"><div class="intake-context-label">Ideal Candidate Profile — Active</div><div class="intake-tag-row">';
+  if(icpData.coTypes)h+='<span class="intake-tag">From: '+icpData.coTypes+'</span>';
+  if(icpData.scale)h+='<span class="intake-tag">Scale: '+icpData.scale+'</span>';
+  if(icpData.yoe)h+='<span class="intake-tag">'+icpData.yoe+'+ yrs</span>';
+  if(icpData.skills){icpData.skills.split(',').forEach(function(s){var t=s.trim();if(t)h+='<span class="intake-tag">'+t+'</span>';});}
+  if(icpData.coExclude)h+='<span class="intake-tag" style="background:var(--danger-light);color:#991b1b;border-color:#fca5a5;">Exclude: '+icpData.coExclude+'</span>';
+  if(icpData.hardNo)h+='<span class="intake-tag" style="background:var(--danger-light);color:#991b1b;border-color:#fca5a5;">No: '+icpData.hardNo+'</span>';
+  h+='</div>';
+  if(icpData.good)h+='<p><strong>What good looks like:</strong> '+icpData.good+'</p>';
+  if(icpData.fail)h+='<p style="color:#991b1b;"><strong>What has failed before:</strong> '+icpData.fail+'</p>';
+  h+='</div>';
+  el.innerHTML=h;el.style.display='block';
+}
+
+/* ══ SEARCH STRING GENERATOR ══ */
+function generateSearchString(){
+  var role=document.getElementById('sourcing-role').value;
+  if(!role){alert('Select a role family first.');return;}
+  var teData=titleEquivalency[role];
+  var titles=[];
+  if(teData){for(var i=0;i<Math.min(teData.same.length,5);i++)titles.push('"'+teData.same[i].title+'"');}
+  var skills=[];
+  if(window._scRequiredSkills)skills=skills.concat(window._scRequiredSkills);
+  var intake=getIntake();
+  if(intake&&intake.musthave){intake.musthave.split(',').forEach(function(s){var t=s.trim().toLowerCase();if(t&&skills.indexOf(t)===-1)skills.push(t);});}
+  if(icpData&&icpData.skills){icpData.skills.split(',').forEach(function(s){var t=s.trim().toLowerCase();if(t&&skills.indexOf(t)===-1)skills.push(t);});}
+  var adjTitles=[];
+  if(teData&&teData.adjacent){for(var i=0;i<Math.min(teData.adjacent.length,4);i++)adjTitles.push('"'+teData.adjacent[i].title+'"');}
+  var parts=[];
+  if(titles.length)parts.push('('+titles.join(' OR ')+')');
+  if(skills.length)parts.push('AND ('+(skills.map(function(s){return '"'+s+'"';}).join(' OR '))+')');
+  if(adjTitles.length)parts.push('OR ('+adjTitles.join(' OR ')+')');
+  if(icpData&&icpData.hardNo){var e=icpData.hardNo.split(',').map(function(s){return 'NOT "'+s.trim()+'"';});parts=parts.concat(e);}
+  if(intake&&intake.dealbreakers){var e2=intake.dealbreakers.split(',').map(function(s){return 'NOT "'+s.trim()+'"';});parts=parts.concat(e2);}
+  var str=parts.join(' ');
+  var outEl=document.getElementById('sourcing-output');
+  var existing=document.getElementById('search-gen-container');
+  if(!existing){
+    var div=document.createElement('div');div.id='search-gen-container';div.className='output-section';
+    outEl.insertBefore(div,outEl.firstChild);
+  }
+  document.getElementById('search-gen-container').innerHTML=
+    '<div class="output-section-label">Generated Search String</div>'+
+    '<p style="font-size:12px;color:var(--text-2);margin-bottom:8px;">Built from JD keywords + intake + ICP + title equivalents + adjacent functions + exclusions.</p>'+
+    '<div style="background:var(--bg);border:1.5px solid var(--primary);border-radius:10px;padding:11px 13px;font-size:12px;font-family:monospace;color:var(--text);line-height:1.8;word-break:break-word;">'+str+'</div>'+
+    '<button class="copy-btn" style="margin-top:8px;" onclick="copyGenSearch()">Copy search string</button>';
+  outEl.classList.add('visible');
+}
+function copyGenSearch(){
+  var boxes=document.querySelectorAll('#search-gen-container div[style*="monospace"]');
+  if(!boxes.length)return;
+  var text=boxes[0].textContent;
+  if(navigator.clipboard)navigator.clipboard.writeText(text).then(function(){alert('Search string copied.');});
+  else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Copied.');}
+}
+
+/* ══ CALIBRATION ══ */
+var calibrationLog=[];
+function loadCalibration(){try{var s=localStorage.getItem('rih_calibration');if(s)calibrationLog=JSON.parse(s);}catch(e){calibrationLog=[];}renderCalLog();}
+function saveCalibration(){try{localStorage.setItem('rih_calibration',JSON.stringify(calibrationLog));}catch(e){}}
+function addCalibrationEntry(role,coType,outcome,note){
+  if(!role||!coType||!outcome){alert('Please fill in role, company type, and outcome.');return;}
+  calibrationLog.unshift({id:Date.now(),role:role,coType:coType,outcome:outcome,note:note||'',date:new Date().toLocaleDateString()});
+  saveCalibration();renderCalLog();
+  ['cal-role','cal-co-type','cal-outcome','cal-note'].forEach(function(id){var el=document.getElementById(id);if(el){if(el.tagName==='SELECT')el.value='';else el.value='';}});
+}
+function deleteCalEntry(id){calibrationLog=calibrationLog.filter(function(e){return e.id!==id;});saveCalibration();renderCalLog();}
+function renderCalLog(){
+  var el=document.getElementById('cal-log');if(!el)return;
+  if(!calibrationLog.length){el.innerHTML='<div class="empty" style="font-size:12px;padding:1rem;">No calibration entries yet. Log placements above to build your pattern library.</div>';return;}
+  var h='';
+  for(var i=0;i<calibrationLog.length;i++){
+    var e=calibrationLog[i];
+    var worked=e.outcome==='worked';
+    h+='<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:7px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">';
+    h+='<div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">';
+    h+='<span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;background:'+(worked?'var(--success-light)':'var(--danger-light)')+';color:'+(worked?'#065f46':'#991b1b')+';">'+(worked?'Worked':'Did not work')+'</span>';
+    h+='<span style="font-size:11px;color:var(--text-2);">'+e.coType+' → '+e.role+'</span>';
+    h+='<span style="font-size:10px;color:var(--text-3);">'+e.date+'</span>';
+    h+='</div>';
+    if(e.note)h+='<p style="font-size:11px;color:var(--text-2);font-style:italic;">'+e.note+'</p>';
+    h+='</div>';
+    h+='<button onclick="deleteCalEntry('+e.id+')" style="background:none;border:none;color:var(--text-3);font-size:16px;cursor:pointer;padding:0;width:auto;line-height:1;">&#x2715;</button>';
+    h+='</div>';
+  }
+  el.innerHTML=h;
+}
+function getCalibrationInsights(role){
+  var rel=calibrationLog.filter(function(e){return e.role===role;});
+  if(!rel.length)return null;
+  var worked=rel.filter(function(e){return e.outcome==='worked';});
+  var didnt=rel.filter(function(e){return e.outcome==='didnt';});
+  var ct={};worked.forEach(function(e){ct[e.coType]=(ct[e.coType]||0)+1;});
+  var top=Object.keys(ct).sort(function(a,b){return ct[b]-ct[a];}).slice(0,3);
+  return{worked:worked.length,didnt:didnt.length,topWorked:top};
+}
+
+/* ══ COMP BENCHMARKING ══ */
+var compBenchData={
+  swe:{bigtech:[{l:'E3 / New Grad',base:'$165–190K',equity:'$180–250K/yr',bonus:'$30–50K',tc:'$380–500K'},{l:'E4 / Mid-level',base:'$190–220K',equity:'$220–300K/yr',bonus:'$40–60K',tc:'$450–590K'},{l:'E5 / Senior',base:'$225–265K',equity:'$300–450K/yr',bonus:'$60–90K',tc:'$590–820K'},{l:'E6 / Staff',base:'$265–320K',equity:'$500–800K/yr',bonus:'$80–140K',tc:'$850K–1.3M'},{l:'E7 / Principal',base:'$320–400K',equity:'$800K–1.5M/yr',bonus:'$120–200K',tc:'$1.2–2.1M'}],ai_native:[{l:'SWE',base:'$175–210K',equity:'$300–600K/yr',bonus:'$50–100K',tc:'$525K–1M+'},{l:'Senior SWE',base:'$220–280K',equity:'$500K–1.2M/yr',bonus:'$80–150K',tc:'$800K–1.6M'},{l:'Staff SWE',base:'$280–380K',equity:'$1M–2.5M/yr',bonus:'$120–200K',tc:'$1.4–3.1M'}],midtech:[{l:'Mid-level SWE',base:'$165–200K',equity:'$120–200K/yr',bonus:'$25–45K',tc:'$310–450K'},{l:'Senior SWE',base:'$195–240K',equity:'$180–300K/yr',bonus:'$40–70K',tc:'$415–620K'},{l:'Staff SWE',base:'$240–300K',equity:'$300–600K/yr',bonus:'$60–100K',tc:'$600K–1M'}],startup_late:[{l:'SWE',base:'$155–195K',equity:'$100–250K/yr',bonus:'$20–40K',tc:'$275–490K'},{l:'Senior SWE',base:'$185–230K',equity:'$150–400K/yr',bonus:'$30–60K',tc:'$365–700K'},{l:'Staff SWE',base:'$230–290K',equity:'$300–700K/yr',bonus:'$50–90K',tc:'$580K–1.1M'}],startup_b:[{l:'SWE',base:'$140–175K',equity:'0.1–0.5% vested',bonus:'$15–30K',tc:'$155–210K cash + equity upside'},{l:'Senior SWE',base:'$165–210K',equity:'0.3–1% vested',bonus:'$20–40K',tc:'$190–260K cash + equity upside'}],startup_a:[{l:'SWE',base:'$120–155K',equity:'0.3–1% vested',bonus:'$10–20K',tc:'$135–180K cash + equity upside'}],fintech:[{l:'SWE',base:'$155–190K',equity:'$100–180K/yr',bonus:'$20–40K',tc:'$275–420K'},{l:'Senior SWE',base:'$185–230K',equity:'$150–280K/yr',bonus:'$35–65K',tc:'$370–590K'},{l:'Staff SWE',base:'$230–285K',equity:'$250–500K/yr',bonus:'$55–90K',tc:'$535–890K'}],enterprise:[{l:'SWE',base:'$130–160K',equity:'$20–60K/yr',bonus:'$15–30K',tc:'$165–260K'},{l:'Senior SWE',base:'$155–195K',equity:'$40–100K/yr',bonus:'$25–45K',tc:'$220–350K'},{l:'Staff SWE',base:'$195–250K',equity:'$80–180K/yr',bonus:'$40–70K',tc:'$315–510K'}],finance:[{l:'SWE / Analyst',base:'$150–200K',equity:'None',bonus:'$50–200K',tc:'$200–410K'},{l:'Associate SWE',base:'$175–230K',equity:'None',bonus:'$80–250K',tc:'$260–500K'},{l:'VP SWE',base:'$220–310K',equity:'None',bonus:'$150–400K',tc:'$380–730K'}],consulting:[{l:'Analyst',base:'$95–115K',equity:'None',bonus:'$15–30K',tc:'$110–150K'},{l:'Consultant',base:'$115–145K',equity:'None',bonus:'$25–50K',tc:'$140–200K'},{l:'Manager',base:'$145–185K',equity:'None',bonus:'$40–80K',tc:'$185–275K'}],defense:[{l:'Engineer I/II',base:'$95–130K',equity:'None',bonus:'$5–15K',tc:'$100–150K'},{l:'Senior Engineer',base:'$120–160K',equity:'None',bonus:'$10–25K',tc:'$130–190K'},{l:'Principal Eng',base:'$155–210K',equity:'None',bonus:'$15–35K',tc:'$170–250K'}]},
+  pm:{bigtech:[{l:'IC4 / PM',base:'$165–200K',equity:'$160–260K/yr',bonus:'$35–60K',tc:'$360–530K'},{l:'IC5 / Senior PM',base:'$200–245K',equity:'$260–420K/yr',bonus:'$55–90K',tc:'$515–760K'},{l:'IC6 / Staff PM',base:'$245–310K',equity:'$430–700K/yr',bonus:'$85–140K',tc:'$760K–1.2M'},{l:'IC7 / Director PM',base:'$310–400K',equity:'$700K–1.3M/yr',bonus:'$130–220K',tc:'$1.1–1.9M'}],ai_native:[{l:'PM',base:'$185–240K',equity:'$400–900K/yr',bonus:'$60–120K',tc:'$645K–1.3M'},{l:'Senior PM',base:'$230–310K',equity:'$700K–1.8M/yr',bonus:'$90–170K',tc:'$1M–2.3M'}],midtech:[{l:'PM',base:'$155–195K',equity:'$120–200K/yr',bonus:'$25–50K',tc:'$300–460K'},{l:'Senior PM',base:'$185–230K',equity:'$180–320K/yr',bonus:'$40–75K',tc:'$405–640K'},{l:'Staff PM',base:'$230–290K',equity:'$300–550K/yr',bonus:'$65–110K',tc:'$595K–960K'}],startup_late:[{l:'Senior PM',base:'$175–220K',equity:'$150–400K/yr',bonus:'$30–60K',tc:'$355–690K'}],startup_b:[{l:'PM',base:'$140–175K',equity:'0.3–1% vested',bonus:'$15–30K',tc:'$160–210K cash + equity'}],fintech:[{l:'PM',base:'$155–195K',equity:'$120–200K/yr',bonus:'$25–50K',tc:'$300–455K'},{l:'Senior PM',base:'$185–235K',equity:'$180–320K/yr',bonus:'$40–75K',tc:'$410–640K'}],enterprise:[{l:'PM',base:'$125–155K',equity:'$20–60K/yr',bonus:'$15–30K',tc:'$160–255K'}],consulting:[{l:'Associate / PM',base:'$115–145K',equity:'None',bonus:'$25–50K',tc:'$140–200K'}]},
+  em:{bigtech:[{l:'M1 / EM',base:'$240–290K',equity:'$400–700K/yr',bonus:'$80–130K',tc:'$720K–1.2M'},{l:'M2 / Sr EM / Director',base:'$290–370K',equity:'$600K–1.2M/yr',bonus:'$120–200K',tc:'$1M–1.8M'}],ai_native:[{l:'EM',base:'$260–340K',equity:'$600K–1.5M/yr',bonus:'$100–200K',tc:'$960K–2M+'},{l:'Director',base:'$340–450K',equity:'$1M–2.5M/yr',bonus:'$150–300K',tc:'$1.5–3.3M'}],midtech:[{l:'EM',base:'$215–265K',equity:'$250–500K/yr',bonus:'$50–90K',tc:'$515–870K'},{l:'Director',base:'$265–340K',equity:'$400–800K/yr',bonus:'$80–140K',tc:'$745K–1.3M'}],startup_b:[{l:'EM / Head of Eng',base:'$175–225K',equity:'0.5–2% vested',bonus:'$25–50K',tc:'$205–285K cash + equity'}],fintech:[{l:'EM',base:'$210–260K',equity:'$200–400K/yr',bonus:'$50–90K',tc:'$460–760K'}],enterprise:[{l:'EM',base:'$175–220K',equity:'$50–120K/yr',bonus:'$35–65K',tc:'$260–415K'}]},
+  ds:{bigtech:[{l:'E4 / Data Scientist',base:'$185–220K',equity:'$200–320K/yr',bonus:'$40–65K',tc:'$425–610K'},{l:'E5 / Senior DS',base:'$225–270K',equity:'$320–500K/yr',bonus:'$60–100K',tc:'$605–880K'},{l:'E6 / Staff DS/MLE',base:'$270–340K',equity:'$550–900K/yr',bonus:'$90–150K',tc:'$910K–1.4M'},{l:'Research Scientist',base:'$220–290K',equity:'$300–600K/yr',bonus:'$60–120K',tc:'$580K–1M'}],ai_native:[{l:'ML Engineer',base:'$200–280K',equity:'$500K–1.5M/yr',bonus:'$80–160K',tc:'$780K–2M+'},{l:'Research Scientist',base:'$240–360K',equity:'$800K–3M/yr',bonus:'$100–200K',tc:'$1.1–3.6M'},{l:'Research Engineer',base:'$220–300K',equity:'$600K–2M/yr',bonus:'$80–150K',tc:'$900K–2.5M'}],midtech:[{l:'Data Scientist',base:'$165–205K',equity:'$140–240K/yr',bonus:'$30–55K',tc:'$335–510K'},{l:'Senior DS / MLE',base:'$200–250K',equity:'$220–380K/yr',bonus:'$45–80K',tc:'$465–720K'}],fintech:[{l:'Data Scientist',base:'$160–200K',equity:'$120–220K/yr',bonus:'$30–60K',tc:'$310–490K'}],finance:[{l:'Quant Researcher',base:'$175–250K',equity:'None',bonus:'$150–600K',tc:'$325–870K'}]},
+  de:{bigtech:[{l:'E4 / Data Eng',base:'$180–215K',equity:'$190–300K/yr',bonus:'$38–62K',tc:'$410–590K'},{l:'E5 / Senior DE',base:'$215–260K',equity:'$300–480K/yr',bonus:'$58–95K',tc:'$575–845K'},{l:'E6 / Staff DE',base:'$260–330K',equity:'$500–820K/yr',bonus:'$85–145K',tc:'$845K–1.3M'}],midtech:[{l:'Data Engineer',base:'$155–195K',equity:'$130–230K/yr',bonus:'$28–52K',tc:'$315–490K'},{l:'Senior DE',base:'$190–240K',equity:'$210–360K/yr',bonus:'$42–72K',tc:'$445–685K'}],fintech:[{l:'Data Engineer',base:'$155–190K',equity:'$110–200K/yr',bonus:'$28–52K',tc:'$295–455K'}],enterprise:[{l:'Data Engineer',base:'$120–155K',equity:'$15–50K/yr',bonus:'$15–28K',tc:'$150–245K'}]},
+  sre:{bigtech:[{l:'E4 / SRE',base:'$180–215K',equity:'$200–320K/yr',bonus:'$38–65K',tc:'$420–610K'},{l:'E5 / Senior SRE',base:'$220–265K',equity:'$320–500K/yr',bonus:'$60–100K',tc:'$600–880K'},{l:'E6 / Staff SRE',base:'$265–330K',equity:'$520–850K/yr',bonus:'$90–150K',tc:'$875K–1.35M'}],midtech:[{l:'SRE',base:'$165–205K',equity:'$150–260K/yr',bonus:'$30–55K',tc:'$345–530K'},{l:'Senior SRE',base:'$200–250K',equity:'$240–400K/yr',bonus:'$45–80K',tc:'$485–745K'}],fintech:[{l:'SRE',base:'$160–200K',equity:'$120–220K/yr',bonus:'$28–55K',tc:'$310–490K'}]},
+  sec:{bigtech:[{l:'E4 / Security Eng',base:'$185–220K',equity:'$200–330K/yr',bonus:'$40–68K',tc:'$425–625K'},{l:'E5 / Senior Sec Eng',base:'$225–275K',equity:'$330–520K/yr',bonus:'$62–105K',tc:'$620–910K'},{l:'E6 / Staff Sec Eng',base:'$275–345K',equity:'$540–900K/yr',bonus:'$95–160K',tc:'$910K–1.4M'}],midtech:[{l:'Security Engineer',base:'$170–210K',equity:'$160–280K/yr',bonus:'$32–60K',tc:'$360–560K'},{l:'Senior Sec Eng',base:'$205–255K',equity:'$250–420K/yr',bonus:'$48–85K',tc:'$500–770K'}]},
+  se:{bigtech:[{l:'Solutions Engineer',base:'$155–190K',equity:'$160–260K/yr',bonus:'$30–60K',tc:'$345–520K'},{l:'Senior SE',base:'$185–230K',equity:'$240–380K/yr',bonus:'$45–80K',tc:'$470–705K'}],midtech:[{l:'Solutions Engineer',base:'$140–175K',equity:'$120–210K/yr',bonus:'$25–50K',tc:'$285–445K'},{l:'Senior SE',base:'$165–210K',equity:'$180–300K/yr',bonus:'$38–70K',tc:'$383–595K'}],enterprise:[{l:'Solutions Engineer',base:'$115–145K',equity:'$15–40K/yr',bonus:'$20–45K',tc:'$150–240K'}]},
+  qa:{bigtech:[{l:'E4 / SDET',base:'$170–205K',equity:'$180–290K/yr',bonus:'$35–60K',tc:'$385–570K'},{l:'E5 / Senior SDET',base:'$205–250K',equity:'$285–460K/yr',bonus:'$55–90K',tc:'$545–810K'}],midtech:[{l:'SDET',base:'$155–190K',equity:'$130–220K/yr',bonus:'$28–52K',tc:'$315–480K'},{l:'Senior SDET',base:'$185–230K',equity:'$200–340K/yr',bonus:'$40–70K',tc:'$425–650K'}],enterprise:[{l:'QA Engineer',base:'$110–140K',equity:'$10–30K/yr',bonus:'$12–25K',tc:'$132–200K'}]},
+  hw:{bigtech:[{l:'E4 / HW Engineer',base:'$175–215K',equity:'$190–310K/yr',bonus:'$38–65K',tc:'$403–600K'},{l:'E5 / Senior HW Eng',base:'$215–265K',equity:'$310–510K/yr',bonus:'$60–105K',tc:'$585–890K'},{l:'E6 / Staff HW Eng',base:'$265–340K',equity:'$530–880K/yr',bonus:'$90–155K',tc:'$885K–1.4M'}],midtech:[{l:'Hardware Engineer',base:'$160–200K',equity:'$140–250K/yr',bonus:'$30–58K',tc:'$330–520K'},{l:'Senior HW Engineer',base:'$195–245K',equity:'$220–400K/yr',bonus:'$45–82K',tc:'$460–740K'}],defense:[{l:'HW Engineer',base:'$100–135K',equity:'None',bonus:'$10–22K',tc:'$112–160K'},{l:'Senior HW Eng',base:'$130–170K',equity:'None',bonus:'$15–30K',tc:'$148–205K'}]}
+};
+
+function updateCompBenchmark(){
+  var role=document.getElementById('comp-role').value;
+  var coType=document.getElementById('comp-co-type').value;
+  var outEl=document.getElementById('comp-benchmark-output');
+  if(!role||!coType){outEl.classList.remove('visible');return;}
+  var data=compBenchData[role]?compBenchData[role][coType]:null;
+  if(!data||!data.length){outEl.innerHTML='<div class="empty">No comp data available for this combination. Check Levels.fyi directly for this role type.</div>';outEl.classList.add('visible');return;}
+  var roleLabels={pm:'Product Management',swe:'Software Engineering',em:'Engineering Management',ds:'Data Science / ML',de:'Data Engineering',sre:'SRE / DevOps',sec:'Security Engineering',se:'Solutions Engineering',qa:'QA / SDET',hw:'Hardware Engineering'};
+  var coLabels={bigtech:'Big Tech',ai_native:'AI-Native',midtech:'Mid-size Tech',startup_late:'Late-stage Startup',startup_b:'Series B',startup_a:'Series A',fintech:'Fintech',enterprise:'Enterprise Tech',finance:'Finance / Banking',consulting:'Consulting',defense:'Defense / Gov Tech'};
+  var h='<div class="output-section"><div class="output-section-label">'+roleLabels[role]+' — '+coLabels[coType]+'</div>';
+  h+='<p style="font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.5;">USD annual TC. Equity annualized from 4-year vest. Ranges reflect 25th–75th percentile. Source: Levels.fyi, Glassdoor, Blind, recruiter surveys (mid-2025).</p>';
+  for(var i=0;i<data.length;i++){
+    var d=data[i];
+    h+='<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;">';
+    h+='<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;">'+d.l+'</div>';
+    h+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><span style="font-size:11px;color:var(--text-2);width:70px;flex-shrink:0;">Base salary</span><div style="flex:1;height:5px;background:var(--border);border-radius:20px;overflow:hidden;"><div style="width:60%;height:100%;border-radius:20px;background:var(--primary);"></div></div><span style="font-size:11px;font-weight:600;color:var(--primary);min-width:100px;text-align:right;">'+d.base+'</span></div>';
+    h+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><span style="font-size:11px;color:var(--text-2);width:70px;flex-shrink:0;">Equity / yr</span><div style="flex:1;height:5px;background:var(--border);border-radius:20px;overflow:hidden;"><div style="width:75%;height:100%;border-radius:20px;background:#9333ea;"></div></div><span style="font-size:11px;font-weight:600;color:#9333ea;min-width:100px;text-align:right;">'+d.equity+'</span></div>';
+    h+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;"><span style="font-size:11px;color:var(--text-2);width:70px;flex-shrink:0;">Bonus</span><div style="flex:1;height:5px;background:var(--border);border-radius:20px;overflow:hidden;"><div style="width:30%;height:100%;border-radius:20px;background:#a78bfa;"></div></div><span style="font-size:11px;font-weight:600;color:#a78bfa;min-width:100px;text-align:right;">'+d.bonus+'</span></div>';
+    h+='<div style="padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2);">Total TC</span><span style="font-size:17px;font-weight:700;color:var(--primary);">'+d.tc+'</span></div>';
+    h+='</div>';
+  }
+  var cal=getCalibrationInsights(role);
+  if(cal&&cal.worked+cal.didnt>0){
+    h+='<div style="background:var(--success-light);border:1px solid #6ee7b7;border-radius:10px;padding:10px 13px;margin-top:0;">';
+    h+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#065f46;margin-bottom:5px;">Calibration insights — '+roleLabels[role]+'</div>';
+    h+='<p style="font-size:12px;color:#065f46;">'+cal.worked+' placements worked · '+cal.didnt+' did not close or failed</p>';
+    if(cal.topWorked.length)h+='<p style="font-size:12px;color:#065f46;margin-top:3px;">Best source types: '+cal.topWorked.join(', ')+'</p>';
+    h+='</div>';
+  }
+  h+='</div>';
+  outEl.innerHTML=h;outEl.classList.add('visible');
+}
+
+/* ══ FIT NARRATIVE ══ */
+function generateNarratives(){
+  if(!scCandidates||!scCandidates.length){document.getElementById('narratives-output').innerHTML='<div class="empty">No candidates in Scorecard yet. Add and score candidates there first.</div>';return;}
+  var totalW=0;SC_DIMENSIONS.forEach(function(d){totalW+=d.weight;});
+  var scored=scCandidates.map(function(cand,i){
+    var w=0;for(var d=0;d<SC_DIMENSIONS.length;d++)w+=(cand.scores[d]||50)*(SC_DIMENSIONS[d].weight/totalW);
+    return{cand:cand,overall:Math.round(w),idx:i};
+  }).sort(function(a,b){return b.overall-a.overall;});
+  var html='';
+  for(var ri=0;ri<scored.length;ri++){
+    var item=scored[ri];var cand=item.cand;
+    var name=cand.name||'Candidate '+(item.idx+1);
+    var verdict=getVerdict(item.overall);
+    var draft=name+' is a ';
+    if(cand._detectedCompany)draft+=cand._detectedCompany.type+' background candidate';else draft+='candidate';
+    if(cand._detectedYoe)draft+=' with approximately '+cand._detectedYoe+' years of experience';
+    draft+='. ';
+    var ss=cand.scores[0]||50;
+    if(ss>=80)draft+='Skills alignment against the JD is strong';
+    else if(ss>=60)draft+='Skills alignment is partial — see gaps below';
+    else draft+='Skills alignment is weak — significant gaps identified';
+    if(cand._detectedSkills&&cand._detectedSkills.length)draft+=' (matched: '+cand._detectedSkills.slice(0,4).join(', ')+')';
+    draft+='. ';
+    if(cand._detectedCompany)draft+='Previous scale context: '+cand._detectedCompany.scale+'. ';
+    if(cand._companyMismatchProbes&&cand._companyMismatchProbes.length)draft+='Industry mismatch flagged — probe questions generated. ';
+    if(cand.summary)draft+='Recruiter notes: '+cand.summary+'. ';
+    draft+='Overall fit score: '+item.overall+'/100 — '+verdict.text+'.';
+    html+='<div style="background:var(--surface);border:1px solid '+(ri===0?'var(--primary)':'var(--border)')+';border-width:'+(ri===0?'1.5px':'1px')+';border-radius:12px;padding:1rem 1.125rem;margin-bottom:.875rem;">';
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">';
+    html+='<div style="display:flex;align-items:center;gap:8px;">';
+    html+='<span style="font-size:10px;font-weight:700;background:'+(ri===0?'var(--primary)':'var(--border)')+';color:'+(ri===0?'white':'var(--text-2)')+';padding:2px 8px;border-radius:20px;">#'+(ri+1)+'</span>';
+    html+='<div style="font-size:14px;font-weight:600;color:var(--text);">'+name+'</div></div>';
+    html+='<div style="display:flex;align-items:center;gap:8px;"><div style="font-size:22px;font-weight:700;color:'+getScoreColor(item.overall)+';">'+item.overall+'</div><span class="verdict-badge '+verdict.cls+'">'+verdict.text+'</span></div>';
+    html+='</div>';
+    html+='<label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2);margin-bottom:5px;display:block;">Fit narrative — edit before sharing with HM</label>';
+    html+='<textarea id="narrative-'+ri+'" style="width:100%;min-height:90px;padding:10px 13px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;font-size:13px;color:var(--text);font-family:inherit;resize:vertical;line-height:1.6;" oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\'">'+draft+'</textarea>';
+    html+='<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">';
+    html+='<button class="copy-btn" onclick="(function(){var ta=document.getElementById(\'narrative-'+ri+'\');if(navigator.clipboard)navigator.clipboard.writeText(ta.value).then(function(){alert(\'Copied.\');});})()">Copy narrative</button>';
+    html+='</div></div>';
+  }
+  document.getElementById('narratives-output').innerHTML=html;
+  setTimeout(function(){document.querySelectorAll('[id^="narrative-"]').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});},50);
+}
+
+/* ══ CLOSE INTELLIGENCE (added to updateStrategy) ══ */
+var _origUpdateStrategy = updateStrategy;
+function updateStrategy(){
+  var coType=document.getElementById('strat-co-type').value;
+  var level=document.getElementById('strat-level').value;
+  var motivation=document.getElementById('strat-motivation').value;
+  var equity=document.getElementById('strat-equity')?document.getElementById('strat-equity').value:'';
+  var vestTiming=document.getElementById('strat-vest-timing')?document.getElementById('strat-vest-timing').value:'';
+  var candName=document.getElementById('strat-cand-name')?document.getElementById('strat-cand-name').value.trim():'';
+  var outputEl=document.getElementById('strategy-output');
+  if(!coType||!level||!motivation){outputEl.classList.remove('visible');return;}
+  var coName=activeCompany?activeCompany.name:'your company';
+  var hookText=strategyData.hooks[coType].replace(/your company/g,coName);
+  var h='';
+  h+='<div class="output-section"><div class="output-section-label">Opening Hook</div><p>'+hookText+'</p></div>';
+  h+='<div class="output-section"><div class="output-section-label">Outreach Message</div>';
+  h+='<p style="background:var(--primary-light);border:1px solid var(--border-2);border-radius:8px;padding:11px 13px;font-size:13px;line-height:1.7;color:var(--text);">'+strategyData.outreach[motivation]+'</p></div>';
+  h+='<div class="output-section"><div class="output-section-label">Timing Guidance</div><p>'+strategyData.timing[level]+'</p></div>';
+  h+='<div class="output-section"><div class="output-section-label">Top Objections to Preempt</div><ul>';
+  var objs=strategyData.objections[coType]||[];
+  for(var i=0;i<objs.length;i++)h+='<li style="margin-bottom:9px;">'+objs[i]+'</li>';
+  h+='</ul></div>';
+  // Candidate-specific close intel
+  if(equity||vestTiming){
+    var name=candName||'the candidate';
+    var equityLabels={none:'No unvested equity',low:'Under $100K unvested',mid:'$100K–$300K unvested',high:'$300K–$600K unvested',very_high:'$600K+ unvested'};
+    
+    h+='<div class="output-section" style="background:var(--primary-light);border-color:var(--border-2);">';
+    h+='<div class="output-section-label">Close Strategy — '+name+'</div>';
+    if(equity&&equity!=='none'){
+      h+='<p style="font-size:12px;color:var(--primary-dark);margin-bottom:8px;"><strong>Equity situation:</strong> '+equityLabels[equity]+'. ';
+      if(equity==='very_high'||equity==='high')h+='This is a significant retention anchor. Have a direct comp conversation early — before the offer stage. Do not wait.';
+      else if(equity==='mid')h+='Moderate anchor. Explore whether offer timing can align to a vest cliff to reduce the cost of leaving.';
+      else h+='Low equity anchor. Comp conversation should be straightforward.';
+      h+='</p>';
+    }
+    if(vestTiming&&vestTiming!=='now'){
+      h+='<p style="font-size:12px;color:var(--primary-dark);margin-bottom:8px;"><strong>Vest timing:</strong> ';
+      if(vestTiming==='3mo')h+='Cliff within 3 months. Consider slowing the process slightly to let them vest, or confirm they are willing to walk away now.';
+      else if(vestTiming==='6mo')h+='Cliff in 3–6 months. Explore whether a signing bonus can bridge the gap. Get finance involved in offer strategy now.';
+      else if(vestTiming==='12mo')h+='Cliff 6–12 months away. This is a significant walk-away cost. Unless motivation is very high, consider planting the seed and following up at the 3-month mark.';
+      else h+='Cliff 12+ months away. Very difficult to close right now. Revisit in 9–10 months when the conversation becomes realistic.';
+      h+='</p>';
+    } else if(vestTiming==='now'){
+      h+='<p style="font-size:12px;color:var(--primary-dark);margin-bottom:8px;"><strong>Vest timing:</strong> Recently vested or vesting now — this is an optimal window. They have the least to lose from leaving right now. Move quickly.</p>';
+    }
+    var closeAngles={scale:'Lead with the scope and scale of the problem. Be specific — users, data volume, system complexity. Avoid vague big-impact language.',growth:'Lay out the explicit career path. What level are they joining at, what is the path to the next level, and what is the typical timeline?',money:'Be direct and transparent about comp early. Share the range and equity structure. Uncertainty about comp kills deals.',tech:'Focus on the specific technical challenge — not the brand. What is the hardest engineering problem they would work on? What can they build here that they cannot build anywhere else?',brand:'Anchor on what working here does for their career specifically. The name, the network, and the pedigree of the team.',change:'If they are unhappy, the bar to move is lower — but counter-offer risk is higher. Move fast.',mission:'Connect the role to something they genuinely care about. Research their background for signals — open source, side projects, prior company choices.'};
+    h+='<p style="font-size:12px;color:var(--primary-dark);"><strong>Primary close angle:</strong> '+closeAngles[motivation]+'</p>';
+    h+='</div>';
+  }
+  outputEl.innerHTML=h;outputEl.classList.add('visible');
+}
+
+/* ══ ADD SEARCH STRING BUTTON TO SOURCING OUTPUT ══ */
+var _origRunSourcing=runSourcing;
+function runSourcing(){
+  _origRunSourcing();
+  var outEl=document.getElementById('sourcing-output');
+  if(!outEl.classList.contains('visible'))return;
+  if(!document.getElementById('gen-search-btn')){
+    var btn=document.createElement('button');
+    btn.id='gen-search-btn';btn.className='btn-primary';
+    btn.style.cssText='font-size:11px;padding:8px 14px;margin-top:.875rem;';
+    btn.textContent='Generate full search string';
+    btn.onclick=generateSearchString;
+    outEl.appendChild(btn);
+  }
+}
+
+loadCalibration();
 
 </script>
 </body>
