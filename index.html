@@ -49,7 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .company-option.selected{background:rgba(108,71,255,.4);}
 .company-option .co-name{font-size:13px;font-weight:600;color:white;}
 .company-option .co-type{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;}
-.company-emoji{font-size:18px;flex-shrink:0;width:28px;text-align:center;}
+.company-emoji{display:none;}
 .welcome-btn{width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;font-family:inherit;box-shadow:0 4px 16px rgba(108,71,255,.4);transition:all .15s;}
 .welcome-btn:hover{background:var(--primary-dark);}
 .welcome-btn:disabled{opacity:.4;cursor:not-allowed;}
@@ -74,7 +74,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .company-switcher:hover{border-color:var(--primary);background:var(--primary-light);}
 .company-switcher .co-badge{font-size:12px;font-weight:700;color:var(--primary);}
 .company-switcher .switch-label{font-size:10px;color:var(--text-3);}
-.co-emoji-sm{font-size:16px;}
+.co-emoji-sm{display:none;}
 
 .disclaimer-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px;}
 .disclaimer-dot{width:7px;height:7px;border-radius:50%;background:#f59e0b;border:1.5px solid #fcd34d;flex-shrink:0;margin-top:3px;}
@@ -268,7 +268,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
     <div class="company-switcher" onclick="switchCompany()">
-      <span class="co-emoji-sm" id="topbar-emoji">🏢</span>
+      
       <div>
         <div class="co-badge" id="topbar-co-name">—</div>
         <div class="switch-label">Switch company</div>
@@ -788,7 +788,7 @@ function switchCompany(){
 function initApp(){
   // Update topbar
   document.getElementById('topbar-co-name').textContent = activeCompany.name;
-  document.getElementById('topbar-emoji').textContent = activeCompany.emoji;
+  
   document.getElementById('topbar-subtitle').textContent = 'Personalised for ' + activeCompany.name + ' · Market Intel · Leveling · Sourcing · Strategy';
 
   // Update leveling context note
@@ -1216,7 +1216,7 @@ function renderCompetitive(){
     var c = filtered[i];
     var tc = c.threat==='high'?'threat-high':c.threat==='med'?'threat-med':'threat-low';
     var tl = c.threat==='high'?'High threat':c.threat==='med'?'Med threat':'Low threat';
-    h+='<div class="comp-card"><h4>'+c.emoji+' '+c.name+' <span class="threat-badge '+tc+'">'+tl+'</span></h4>';
+    h+='<div class="comp-card"><h4>'+c.name+' <span class="threat-badge '+tc+'">'+tl+'</span></h4>';
     h+='<p><strong style="color:var(--primary);">Bar:</strong> '+c.bar+'</p>';
     h+='<p><strong style="color:var(--primary);">Key Teams:</strong> '+c.teams.join(', ')+'</p>';
     h+='<p><strong style="color:var(--primary);">Retention:</strong> '+c.retention+'</p>';
