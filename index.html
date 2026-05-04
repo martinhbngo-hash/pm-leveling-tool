@@ -263,6 +263,25 @@ tr:last-child td{border-bottom:none;}
 .keyword-chip{font-size:11px;background:var(--primary-light);color:var(--primary);border:1px solid var(--border-2);border-radius:20px;padding:2px 8px;display:inline-block;margin:2px;}
 .keyword-miss{background:var(--danger-light);color:#991b1b;border-color:#fca5a5;}
 .detected-banner{background:var(--success-light);border:1px solid #6ee7b7;border-radius:8px;padding:8px 10px;margin-top:6px;font-size:12px;color:#065f46;line-height:1.5;}
+
+/* Scorecard prescreen section */
+.sc-prescreen-q { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; margin-bottom: 10px; }
+.sc-prescreen-q:last-child { margin-bottom: 0; }
+.sc-prescreen-q-text { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+.sc-flag-row { display: flex; flex-direction: column; gap: 6px; }
+.sc-flag { border-radius: 8px; padding: 7px 10px; font-size: 12px; line-height: 1.5; }
+.sc-flag-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+.sc-flag-green { background: var(--success-light); border: 1px solid #6ee7b7; }
+.sc-flag-green .sc-flag-label { color: #065f46; }
+.sc-flag-green p { color: #065f46; }
+.sc-flag-yellow { background: var(--warning-light); border: 1px solid #fcd34d; }
+.sc-flag-yellow .sc-flag-label { color: #92400e; }
+.sc-flag-yellow p { color: #92400e; }
+.sc-flag-red { background: var(--danger-light); border: 1px solid #fca5a5; }
+.sc-flag-red .sc-flag-label { color: #991b1b; }
+.sc-flag-red p { color: #991b1b; }
+.sc-prescreen-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--primary); margin: 1rem 0 8px; display: flex; align-items: center; gap: 6px; }
+.sc-prescreen-section-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); display: inline-block; box-shadow: 0 0 0 3px var(--primary-light); flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -276,7 +295,7 @@ tr:last-child td{border-bottom:none;}
       <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     </div>
     <h1>Technical Researcher Intelligence Hub</h1>
-    <p>Select your company to personalise all talent intel, leveling maps, competitive landscape, and sourcing strategy to your organisation.</p>
+    <p>Select your company to personalise all talent intel, leveling maps, competitive landscape, and sourcing strategy to your organization.</p>
 
     <span class="welcome-label">Search or select your company</span>
     <input class="company-search" id="co-search" placeholder="Type to search — e.g. Google, Stripe, McKinsey..." oninput="filterCompanies()" autocomplete="off" autocorrect="off" spellcheck="false"/>
@@ -636,7 +655,10 @@ tr:last-child td{border-bottom:none;}
           <div id="sc-candidates" class="sc-cands-grid"></div>
         </div>
 
-        <!-- Step 4: Results -->
+        <!-- Step 4: Prescreen -->
+        <div id="sc-prescreen-section" style="display:none;"></div>
+
+        <!-- Step 5: Results -->
         <div id="sc-results" style="display:none;">
           <div class="card">
             <div class="section-label" style="margin-bottom:1rem;">Results — ranked by fit</div>
@@ -1101,6 +1123,227 @@ var sourcingData = {
   "hw":{clusters:["Apple Silicon or Sensing team engineers","NVIDIA GPU or accelerator engineers with AI chip architecture depth","Qualcomm SoC engineers with wireless and mobile platform depth"],donors:["Apple (Silicon / Sensing team)","NVIDIA (GPU / AI accelerator)","Qualcomm (SoC / wireless)","Intel (processor / silicon design)"],search:"LinkedIn: (\"Hardware Engineer\" OR \"Silicon Engineer\" OR \"VLSI Engineer\" OR \"SoC Engineer\") AND (\"ASIC\" OR \"FPGA\" OR \"RTL\" OR \"chip design\")",watchouts:["Hardware search timelines are 2–3x longer than software — start sourcing 6+ months early","Candidates mid-tapeout cannot move — ask about project milestones first"]}
 };
 
+
+/* ══ TITLE EQUIVALENCY DATA ══ */
+var titleEquivalency = {
+  "pm":{
+    same:[
+      {title:"Product Manager", note:"Core title — the baseline. Used at Google, Amazon, Meta, Microsoft, Uber."},
+      {title:"Product Owner", note:"Common in Agile/enterprise shops (Salesforce, SAP, Oracle). Same function, weaker product craft signal — validate ownership depth."},
+      {title:"Program Manager (Product-focused)", note:"At Amazon, PMs are often called Program Managers. Verify they own the roadmap, not just coordination."},
+      {title:"Business Product Manager", note:"Common in fintech and banking. Bridges business and product — strong domain knowledge, validate technical fluency."},
+      {title:"Technical Product Manager", note:"Engineers who moved into PM. Strong at API/platform roles. Same function with a technical lean."},
+      {title:"Group Product Manager", note:"Senior IC PM at Google. Same function as a Staff PM — manages the product, not necessarily people."},
+      {title:"Director of Product (IC)", note:"At startups, Director often means a senior IC PM with no direct reports. Always validate reporting structure."},
+      {title:"Head of Product", note:"Common at Series A–B startups. Often equivalent to a Senior or Staff PM at a larger company. Validate team size."}
+    ],
+    adjacent:[
+      {title:"Strategy & Operations Manager", overlap:"85%", note:"Strong analytical and problem-solving foundation. Familiar with roadmaps and cross-functional stakeholder management. Gap: shipping product and user empathy.", probes:["Have you ever owned a product decision end-to-end — from research to launch to iteration?","Walk me through a time you had to say no to a senior stakeholder based on data you owned."]},
+      {title:"Management Consultant (tech focus)", overlap:"75%", note:"Strong structured thinking, communication, and stakeholder management. Significant gap: shipping software, technical depth, and user research.", probes:["Tell me about something you built vs. something you designed a strategy for.","Have you ever shipped a product to end users? Describe the release and what you measured."]},
+      {title:"UX Researcher", overlap:"80%", note:"Deep user empathy and research skills. Understands user needs better than most PMs. Gap: roadmap prioritisation, stakeholder management, and execution ownership.", probes:["Have you ever had to prioritize between competing user needs with limited engineering capacity?","Walk me through a time your research directly changed a product decision."]},
+      {title:"Data Scientist / Analyst (product-focused)", overlap:"78%", note:"Strong quantitative instincts and experimentation fluency. Often PM-curious. Gap: product vision, cross-functional leadership, and shipping ownership.", probes:["Have you ever defined what to measure, not just measured it?","Walk me through a time a data insight you generated led to a shipped product change — not a recommendation."]},
+      {title:"Business Development Manager", overlap:"72%", note:"Strong commercial instincts, partnership experience, and market awareness. Gap: user-centered thinking and engineering collaboration.", probes:["How have you collaborated with engineering teams in the past?","Tell me about a product decision you influenced vs. a deal you closed."]}
+    ]
+  },
+  "swe":{
+    same:[
+      {title:"Software Engineer", note:"Universal baseline title. Level varies enormously — always clarify seniority."},
+      {title:"Software Developer", note:"Common in Europe, enterprise tech, and consulting. Identical function to Software Engineer."},
+      {title:"Member of Technical Staff (MTS)", note:"Salesforce, Oracle leveling system. MTS = SWE, SMTS = Senior SWE, LMTS = Staff SWE."},
+      {title:"Software Development Engineer (SDE)", note:"Amazon's title for all IC engineers. SDE I = E3, SDE II = E4/E5, SDE III = Senior SWE."},
+      {title:"Software Development Engineer in Test (SDET)", note:"Microsoft and Amazon title for QA-focused SWEs. Strong coding depth — treat as SWE with quality focus."},
+      {title:"Research Engineer", note:"Common at AI labs (OpenAI, Anthropic, DeepMind). Equivalent to a Senior SWE with ML focus."},
+      {title:"Platform Engineer", note:"Infra-focused SWE. Owns the developer platform or internal tooling. Same bar as SWE at top companies."},
+      {title:"Full-Stack Engineer", note:"SWE who works across frontend and backend. Assess which side is stronger for the role."}
+    ],
+    adjacent:[
+      {title:"Machine Learning Engineer", overlap:"85%", note:"Strong Python, systems design, and production engineering. ML-specific knowledge is a bonus for most SWE roles. Gap: may be lighter on distributed systems or backend API work.", probes:["Beyond model work, have you owned a production backend service with an SLA?","Walk me through your experience with API design and database schema ownership."]},
+      {title:"Data Engineer", overlap:"82%", note:"Strong Python, distributed systems (Spark, Kafka), and pipeline thinking. Excellent for backend or infra roles. Gap: may be focused on batch pipelines rather than real-time APIs.", probes:["Have you built user-facing backend services, or primarily internal data pipelines?","Walk me through your experience with service reliability and on-call ownership."]},
+      {title:"DevOps / SRE Engineer", overlap:"80%", note:"Strong infrastructure, automation, and reliability engineering. Often writes more production code than people expect. Gap: feature development and product-facing API design.", probes:["Walk me through the most complex piece of code you wrote that wasn't infrastructure automation.","Have you owned a user-facing feature end-to-end?"]},
+      {title:"Solutions Architect", overlap:"75%", note:"Strong systems design thinking and breadth across the stack. Gap: depth in any one area and production code ownership.", probes:["What was the last production system you personally owned the code for?","Walk me through a system you designed and then implemented yourself, not just advised on."]},
+      {title:"Technical Lead / Tech Lead Manager (TLM)", overlap:"90%", note:"At Google, TLMs are ICs who lead a team without formal management authority. Extremely strong SWE signal — often better than pure ICs at the same level.", probes:["How much of your time is writing code vs. reviewing and directing others?","Walk me through a technical decision you made that other engineers pushed back on. How did you resolve it?"]}
+    ]
+  },
+  "em":{
+    same:[
+      {title:"Engineering Manager", note:"Core title. Manages a team of ICs. Standard across most tech companies."},
+      {title:"Software Development Manager (SDM)", note:"Amazon's EM title. SDM = M1 equivalent. Strong operational and people management bar."},
+      {title:"Director of Engineering", note:"Manages managers or large IC teams. M2/M3 equivalent depending on org size."},
+      {title:"VP of Engineering", note:"Owns a major engineering org. M3+ equivalent. Almost always internal promotion at top companies."},
+      {title:"Engineering Lead", note:"Common at startups. May or may not have direct reports — always clarify."},
+      {title:"Technical Lead Manager (TLM)", note:"Google-specific hybrid: IC + team lead. Strong technical depth but may lack formal people management experience."},
+      {title:"Head of Engineering", note:"Common at Series A–B startups. Often equivalent to a Senior EM or Director at a larger company."}
+    ],
+    adjacent:[
+      {title:"Staff / Principal Engineer (Technical Lead)", overlap:"85%", note:"Strong engineers who informally lead teams. Often better technical managers than formal EMs. Gap: formal people management — PIPs, comp conversations, headcount planning.", probes:["Have you had performance conversations with someone who directly reported to you?","Walk me through how you've handled a team member who wasn't meeting expectations."]},
+      {title:"Product Manager (experienced)", overlap:"72%", note:"Senior PMs have strong cross-functional leadership and team influence skills. Gap: direct people management of engineers.", probes:["Have you ever managed engineers directly — not just influenced them?","Tell me about your experience running engineering sprint cycles, not just product planning."]},
+      {title:"Senior Program Manager", overlap:"78%", note:"Strong project delivery, stakeholder management, and operational rigor. Gap: technical depth and people management of engineers.", probes:["Have you conducted engineering performance reviews?","Walk me through a time you made a technical architecture recommendation over an engineer's preference."]},
+      {title:"CTO (startup, <20 people)", overlap:"80%", note:"Likely managed 2–5 engineers. Strong 0→1 experience. Gap: managing managers, large org design, and performance management at scale.", probes:["How many engineers reported directly to you and how many were in your total org?","Have you ever had to manage out an underperformer? Walk me through the process."]}
+    ]
+  },
+  "ds":{
+    same:[
+      {title:"Machine Learning Engineer", note:"Production-focused ML. Strong engineering depth. Identical function to a Data Scientist with production systems ownership."},
+      {title:"Applied Scientist", note:"Amazon's title for DS/ML roles. Research-applied hybrid. Strong quantitative depth."},
+      {title:"Research Scientist", note:"Academic-leaning ML. Strong on research, lighter on production engineering. Common at AI labs."},
+      {title:"AI Engineer", note:"Emerging title for engineers building on top of LLMs and AI APIs. Assess modeling depth vs. integration depth."},
+      {title:"Research Engineer", note:"Hybrid research + engineering. Common at OpenAI, Anthropic, DeepMind. Often stronger than a standard ML Engineer."},
+      {title:"Quantitative Researcher", note:"Common in finance (Citadel, Two Sigma). Strong statistical modeling. May lack ML production systems experience."}
+    ],
+    adjacent:[
+      {title:"Data Engineer (ML-focused)", overlap:"82%", note:"Owns data pipelines that feed ML systems. Deep Spark, Kafka, and feature store experience. Gap: modeling and experimentation.", probes:["Have you trained and evaluated models, or primarily built the infrastructure that feeds them?","Walk me through an A/B test you designed — not just the infrastructure, but the hypothesis and interpretation."]},
+      {title:"Data Analyst (senior)", overlap:"75%", note:"Strong SQL, statistical analysis, and business insight. Gap: production ML, model training, and software engineering fundamentals.", probes:["Have you built and deployed a model to production? Walk me through the full lifecycle.","How comfortable are you writing production Python code, not just notebooks?"]},
+      {title:"Statistician", overlap:"78%", note:"Deep statistical rigor, experimental design, and inference. Gap: ML frameworks, production engineering, and scale.", probes:["What ML frameworks have you used in production?","Walk me through a time you took a statistical model and deployed it to a production system."]},
+      {title:"Software Engineer (ML-adjacent)", overlap:"80%", note:"Strong production engineering. May have worked on ML systems without doing the modeling. Gap: statistical depth and model evaluation.", probes:["Have you designed the model architecture, or implemented an architecture designed by a researcher?","Walk me through your experience with model evaluation — metrics selection, offline vs. online evaluation."]}
+    ]
+  },
+  "de":{
+    same:[
+      {title:"Data Engineer", note:"Core title. Owns pipelines, ETL, and data infrastructure."},
+      {title:"Analytics Engineer", note:"dbt-era title. SQL-heavy, transformation-focused. Lighter on distributed systems. Validate Spark/streaming depth for platform roles."},
+      {title:"ETL Developer", note:"Legacy title for data pipeline work. Common in enterprise and financial services. Assess for modern stack fluency."},
+      {title:"Data Infrastructure Engineer", note:"Platform-focused DE. Owns the data platform, not just pipelines. Strong infra depth."},
+      {title:"Big Data Engineer", note:"Older title for Hadoop/Spark engineers. Assess for modern cloud-native stack fluency."}
+    ],
+    adjacent:[
+      {title:"Backend Software Engineer", overlap:"82%", note:"Strong production systems, APIs, and distributed thinking. Gap: data modeling, pipeline orchestration, and analytics tooling.", probes:["Have you owned a data pipeline end-to-end — not just the API that feeds it?","Walk me through your experience with batch vs. streaming data processing."]},
+      {title:"Machine Learning Engineer", overlap:"80%", note:"Owns feature pipelines and ML infrastructure. Strong overlap with platform DE roles. Gap: business analytics and reporting pipelines.", probes:["Beyond feature stores, have you owned a general-purpose data pipeline for analytics or reporting?","Walk me through your experience with data quality monitoring and SLA ownership."]},
+      {title:"Platform Engineer / DevOps", overlap:"75%", note:"Strong infra automation and reliability thinking. Gap: data-specific tooling (dbt, Airflow, Spark) and data quality ownership.", probes:["Have you worked with data orchestration tools like Airflow, Prefect, or Dagster?","Walk me through your experience with columnar storage formats like Parquet or Delta Lake."]}
+    ]
+  },
+  "sre":{
+    same:[
+      {title:"Site Reliability Engineer", note:"Google-origin title. Production Engineer at Meta. Same function."},
+      {title:"Production Engineer", note:"Meta's SRE title. Identical function — production ownership, on-call, reliability engineering."},
+      {title:"Platform Engineer", note:"Broader infra scope than SRE. Owns the developer platform. Strong SRE overlap — validate on-call and reliability ownership."},
+      {title:"Infrastructure Engineer", note:"Cloud infra focus. May or may not have on-call responsibility — validate."},
+      {title:"Cloud Engineer", note:"AWS/GCP/Azure-focused infra. Assess for Kubernetes, Terraform, and production systems ownership."},
+      {title:"DevOps Engineer", note:"CI/CD and automation focus. Strong SRE overlap but may lack production on-call ownership. Validate reliability engineering depth."}
+    ],
+    adjacent:[
+      {title:"Backend Software Engineer", overlap:"83%", note:"Strong distributed systems and production engineering. Gap: reliability ownership, on-call, and SLO definition.", probes:["Have you owned an on-call rotation with a defined SLA?","Walk me through a production incident you led — from detection to post-mortem."]},
+      {title:"Systems Engineer", note:"Common in hardware and defense. Strong low-level systems thinking. Gap: cloud-native infrastructure and web-scale reliability.", overlap:"70%", probes:["Walk me through your experience with Kubernetes, container orchestration, and cloud infrastructure.","Have you operated systems serving internet-scale user traffic?"]},
+      {title:"Security Engineer", overlap:"78%", note:"Strong infra depth and defensive thinking. Gap: performance engineering, capacity planning, and user-facing reliability.", probes:["Have you owned availability SLOs for a production service?","Walk me through a time you improved system reliability — not just security posture."]}
+    ]
+  },
+  "sec":{
+    same:[
+      {title:"Security Engineer", note:"Core title. Broad offensive and defensive security engineering."},
+      {title:"Application Security Engineer (AppSec)", note:"Product security focus. Code review, SAST/DAST, secure SDLC. Common at product companies."},
+      {title:"Red Team Engineer", note:"Offensive security specialist. Penetration testing, adversarial simulation. Highly transferable to blue team roles with context."},
+      {title:"Threat Detection Engineer", note:"Detection and response focus. Strong at CrowdStrike, Palo Alto. SIEM, detection rules, adversary TTPs."},
+      {title:"Cloud Security Engineer", note:"AWS/GCP/Azure security specialist. Strong for cloud-native security roles."},
+      {title:"Vulnerability Researcher", note:"Deep offensive security. CVE discovery, binary analysis. Rare and highly valuable."}
+    ],
+    adjacent:[
+      {title:"Software Engineer (security team)", overlap:"85%", note:"Strong SWEs who work on security infrastructure — auth systems, secrets management, policy engines. Excellent for security engineering roles that require production code ownership.", probes:["Walk me through a security-critical system you designed and shipped.","Have you done independent vulnerability research or threat modeling?"]},
+      {title:"Infrastructure / SRE Engineer", overlap:"78%", note:"Strong systems depth and production mindset. Gap: security-specific knowledge — vulnerability assessment, threat modeling, adversarial thinking.", probes:["Have you done security reviews of your own infrastructure? Walk me through your process.","Tell me about a time you caught a security issue in a system you operated."]},
+      {title:"Malware Analyst / Reverse Engineer", overlap:"80%", note:"Deep binary analysis and adversary understanding. Strong for threat detection and red team roles. Gap: production software engineering.", probes:["Have you written production-quality code in a systems language (C, C++, Rust, Go)?","Beyond analysis, have you built detection tools or security automation?"]},
+      {title:"Penetration Tester", overlap:"82%", note:"Strong offensive mindset and vulnerability knowledge. Gap: production engineering and building defensive systems at scale.", probes:["Have you built security tooling, or primarily used existing tools?","Walk me through transitioning from finding vulnerabilities to building systems that prevent them."]}
+    ]
+  },
+  "se":{
+    same:[
+      {title:"Solutions Engineer", note:"Core title. Technical pre-sales and post-sales support."},
+      {title:"Sales Engineer", note:"Identical function to Solutions Engineer. More common in enterprise SaaS."},
+      {title:"Solutions Architect", note:"AWS/cloud variant. More architecture-focused. Same technical pre-sales function."},
+      {title:"Technical Account Manager (TAM)", note:"Post-sales technical relationship management. Lighter on pre-sales demos, stronger on long-term client outcomes."},
+      {title:"Customer Success Engineer", note:"Post-sales technical support. Assess for pre-sales ability and demo fluency."},
+      {title:"Field CTO / Field Engineer", note:"Very senior SE. Technical thought leadership with enterprise C-suite. Strong for strategic accounts."}
+    ],
+    adjacent:[
+      {title:"Software Engineer (API/developer experience)", overlap:"83%", note:"Engineers who've worked on developer-facing products understand the customer deeply. Strong for developer-focused SE roles. Gap: sales process experience and stakeholder communication.", probes:["Have you worked directly with customers or external developers to understand their technical problems?","Walk me through a time you had to explain a technical limitation to a non-technical stakeholder."]},
+      {title:"Technical Program Manager", overlap:"75%", note:"Strong cross-functional coordination and communication. Gap: technical depth and hands-on customer demos.", probes:["Have you delivered technical product demos to enterprise customers?","How comfortable are you debugging a customer's integration issue live on a call?"]},
+      {title:"Developer Relations / Developer Advocate", overlap:"80%", note:"Strong technical communication, API knowledge, and developer empathy. Gap: enterprise sales process and commercial instincts.", probes:["Have you been involved in a commercial sales process — from demo to close?","Walk me through how you'd handle a customer asking for a feature that's on the roadmap but 6 months away."]}
+    ]
+  },
+  "qa":{
+    same:[
+      {title:"SDET (Software Development Engineer in Test)", note:"Core Microsoft/Amazon title. Strong coding depth. Equivalent to a QA Engineer with SWE fundamentals."},
+      {title:"Test Engineer", note:"Google's QA title. TE = SDET equivalent. Strong automation and infrastructure depth."},
+      {title:"Quality Engineer", note:"Broader than QA — includes process and tooling ownership. Common at Apple and enterprise companies."},
+      {title:"Software Test Engineer", note:"Coding-focused QA. Assess for framework ownership vs. individual test writing."},
+      {title:"Automation Engineer", note:"Specialized in test automation frameworks. Same function as SDET with specific automation emphasis."}
+    ],
+    adjacent:[
+      {title:"Backend Software Engineer", overlap:"85%", note:"Strong production engineering that applies directly to test infrastructure. Gap: QA-specific thinking, test strategy, and coverage frameworks.", probes:["Have you owned a test framework or CI pipeline from scratch?","Walk me through how you'd design end-to-end test coverage for a distributed microservices system."]},
+      {title:"DevOps / Platform Engineer", overlap:"80%", note:"Owns CI/CD pipelines which directly intersect with test infrastructure. Gap: test framework design and quality metrics ownership.", probes:["Have you built or owned the testing stages in a CI/CD pipeline?","Walk me through your experience with test parallelisation and flaky test triage."]},
+      {title:"Performance Engineer", overlap:"78%", note:"Specialized in load testing and system performance. Strong overlap with SRE and SDET roles. Gap: functional test coverage and quality strategy.", probes:["Beyond load testing, have you owned functional and integration test coverage?","Walk me through your experience with test data management and environment parity."]}
+    ]
+  },
+  "hw":{
+    same:[
+      {title:"Hardware Engineer", note:"Core title. Broad — covers digital, analog, mixed-signal, VLSI, and system hardware."},
+      {title:"Silicon Engineer", note:"Custom chip / ASIC focus. Strong for silicon design and AI accelerator roles."},
+      {title:"VLSI Engineer", note:"Deep digital IC design. RTL, synthesis, timing closure. Core silicon engineering."},
+      {title:"SoC Engineer", note:"System-on-chip integration. Strong at Qualcomm, MediaTek, Apple Silicon. Platform-level hardware."},
+      {title:"FPGA Engineer", note:"Programmable logic specialist. Strong prototyping and pre-silicon verification background."},
+      {title:"Embedded Systems Engineer", note:"Firmware and hardware interface focus. May be lighter on pure silicon design."},
+      {title:"Chip Design Engineer", note:"RTL and physical design focus. Common at semiconductor companies."}
+    ],
+    adjacent:[
+      {title:"Firmware Engineer", overlap:"80%", note:"Deep hardware-software interface knowledge. Strong for roles requiring bring-up and driver development. Gap: pure RTL / silicon design depth.", probes:["Have you worked on RTL design or digital logic synthesis, or primarily firmware on top of existing silicon?","Walk me through your experience with hardware-software co-design — defining the interface, not just implementing it."]},
+      {title:"Electrical Engineer (systems)", overlap:"75%", note:"Strong in analog design, signal integrity, and PCB. Gap: digital design, RTL, and software-facing hardware.", probes:["Walk me through your experience with digital logic design and RTL.","Have you worked with EDA tools for synthesis and place-and-route?"]},
+      {title:"Robotics Engineer (hardware-focused)", overlap:"78%", note:"Strong mechanical and embedded systems background. Good for sensing, actuation, and mechatronics roles. Gap: pure silicon design.", probes:["How much of your work has been at the silicon level vs. the system and firmware level?","Walk me through your experience with hardware specification and bring-up."]},
+      {title:"Computer Architecture Engineer", overlap:"85%", note:"Deep processor design and performance analysis. Strong for CPU, GPU, and AI accelerator roles. Often PhD-level.", probes:["Walk me through the last microarchitectural performance optimisation you designed and validated.","What simulation and modeling tools have you used to evaluate architectural trade-offs?"]}
+    ]
+  }
+};
+
+function buildTitleEquivalency(role) {
+  var data = titleEquivalency[role];
+  if (!data) return '';
+  var h = '';
+
+  // Section 1: Same function, different titles
+  h += '<div class="output-section">';
+  h += '<div class="output-section-label">Title equivalency — same function, different titles</div>';
+  h += '<p style="font-size:12px;color:var(--text-2);margin-bottom:10px;">These titles represent the same job function. Expand your search to include all of them.</p>';
+  for (var i = 0; i < data.same.length; i++) {
+    var item = data.same[i];
+    h += '<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">';
+    h += (i === data.same.length - 1) ? '<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;">' : '';
+    h += '<div style="flex:1;">';
+    h += '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">';
+    h += '<span style="font-size:13px;font-weight:600;color:var(--text);">' + item.title + '</span>';
+    h += '<span style="font-size:10px;font-weight:600;background:var(--primary-light);color:var(--primary);padding:2px 7px;border-radius:20px;border:1px solid var(--border-2);">Same function</span>';
+    h += '</div>';
+    h += '<p style="font-size:12px;color:var(--text-2);line-height:1.5;">' + item.note + '</p>';
+    h += '</div></div>';
+  }
+  h += '</div>';
+
+  // Section 2: Adjacent functions
+  h += '<div class="output-section">';
+  h += '<div class="output-section-label">Adjacent functions — worth exploring</div>';
+  h += '<p style="font-size:12px;color:var(--text-2);margin-bottom:10px;">These roles share ~80% of the same skills but carry different titles. Often overlooked — and less competitive to hire from.</p>';
+  for (var i = 0; i < data.adjacent.length; i++) {
+    var item = data.adjacent[i];
+    var overlapNum = parseInt(item.overlap);
+    var overlapColor = overlapNum >= 82 ? '#065f46' : overlapNum >= 78 ? '#185FA5' : '#92400e';
+    var overlapBg = overlapNum >= 82 ? 'var(--success-light)' : overlapNum >= 78 ? 'var(--primary-light)' : 'var(--warning-light)';
+    var overlapBorder = overlapNum >= 82 ? '#6ee7b7' : overlapNum >= 78 ? 'var(--border-2)' : '#fcd34d';
+
+    h += '<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px;">';
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px;">';
+    h += '<span style="font-size:13px;font-weight:600;color:var(--text);">' + item.title + '</span>';
+    h += '<span style="font-size:11px;font-weight:700;background:'+overlapBg+';color:'+overlapColor+';padding:3px 9px;border-radius:20px;border:1px solid '+overlapBorder+';">' + item.overlap + ' skills overlap</span>';
+    h += '</div>';
+    h += '<p style="font-size:12px;color:var(--text-2);line-height:1.5;margin-bottom:8px;">' + item.note + '</p>';
+    if (item.probes && item.probes.length) {
+      h += '<div style="background:var(--warning-light);border:1px solid #fcd34d;border-radius:8px;padding:8px 10px;">';
+      h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:5px;">Probe before advancing</div>';
+      for (var pi = 0; pi < item.probes.length; pi++) {
+        h += '<div style="font-size:12px;color:#633806;line-height:1.55;margin-bottom:'+(pi<item.probes.length-1?'5':'0')+'px;padding-left:8px;border-left:2px solid #fcd34d;">' + item.probes[pi] + '</div>';
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
 var levelSourcingNotes = {
   "junior":"Junior / mid-level. Prioritize candidates with 2–4 years of experience who execute independently on well-scoped problems. Coding fundamentals and cultural fit matter most.",
   "senior":"Senior is the most common target level. Candidates should demonstrate full end-to-end ownership of complex technical problems with strong cross-functional execution.",
@@ -1216,6 +1459,9 @@ function runSourcing(){
   h+='<div class="output-section"><div class="output-section-label">Watch-outs</div><ul>';
   for(var i=0;i<data.watchouts.length;i++) h+='<li><span class="chip chip-warn" style="margin-right:6px;">!</span>'+data.watchouts[i]+'</li>';
   h+='</ul></div>';
+  // Title equivalency section
+  h += buildTitleEquivalency(role);
+
   outputEl.innerHTML=h; outputEl.classList.add('visible');
 }
 
@@ -1240,7 +1486,7 @@ var strategyData = {
     "startup":["'I'll lose my equity cliff' → Explore timing. Align offer timing with their vest date. Signing bonus can bridge gaps.","'Culture will be different' → Acknowledge it and be specific about what the team culture actually looks like.","'I want to stay and build' → Validate. If they're a true believer, don't fight it. Revisit at natural breakpoints."],
     "ai_native":["'I'm doing cutting-edge research here' → Pitch the scale of deployment — your company's user base is where their research becomes real impact.","'Culture is very different' → Be direct about differences. Help them understand the transition with a specific example.","'Counter-offer risk' → AI-native companies move fast. Have the comp conversation early and be direct about your offer timeline."],
     "consulting":["'I don't have product / engineering depth' → Reframe their strategy and analytics skills as a strong foundation.","'Will I be taken seriously?' → Share examples of successful consulting-to-tech transitions.","'The interview feels unfamiliar' → Prep them early. Be explicit about what the loop looks like."],
-    "fintech":["'My current equity is meaningful' → Run an honest comparison. Often liquid equity at a stable company compares favourably.","'Is the culture a fit?' → Be specific. Fintech engineers often value rigour — show evidence of engineering quality.","'Will I work on interesting problems?' → Be concrete about the technical challenge — not vague platitudes."],
+    "fintech":["'My current equity is meaningful' → Run an honest comparison. Often liquid equity at a stable company compares favorably.","'Is the culture a fit?' → Be specific. Fintech engineers often value rigor — show evidence of engineering quality.","'Will I work on interesting problems?' → Be concrete about the technical challenge — not vague platitudes."],
     "finance":["'Will I be underpaid?' → Finance TC is often lower than top tech. Run the honest comparison — this is usually a positive surprise.","'Do I have the technical background?' → Be direct about what transfers and what the onboarding curve looks like.","'Can I grow technically?' → Share specific examples of finance-to-tech engineers who grew their technical skills rapidly."],
     "enterprise":["'Is the culture fast enough?' → Be honest about pace. Share specific examples of rapid iteration from recent quarters.","'Will I be behind technically?' → Reassure them. Enterprise engineers often have deeper systems knowledge than expected.","'Why leave stability?' → Anchor on technical challenge and career trajectory — not just compensation."],
     "hardware":["'Hardware search timelines are long' → Acknowledge it. Ask about project milestones — don't ask someone to move mid-tapeout.","'My equity at NVIDIA / Apple is strong' → Be honest about the comp comparison. Lead with technical challenge and mission.","'I'm mid-project' → Build the relationship now and revisit in 6 months. Hardware engineers plan moves around project cycles."],
@@ -1281,6 +1527,9 @@ function updateStrategy(){
   var objs = strategyData.objections[coType]||[];
   for(var i=0;i<objs.length;i++) h+='<li style="margin-bottom:9px;">'+objs[i]+'</li>';
   h+='</ul></div>';
+  // Title equivalency section
+  h += buildTitleEquivalency(role);
+
   outputEl.innerHTML=h; outputEl.classList.add('visible');
 }
 
@@ -1666,7 +1915,7 @@ var COMPANY_PEDIGREE = {
 var INDUSTRY_MISMATCH_PROBES = {
   'Consulting': {
     'swe':  ['Consultants often have advisory rather than hands-on engineering experience. Ask: Walk me through the last production system you owned and deployed yourself — not designed for a client, but built and ran.',
-             'Consulting code quality and engineering rigour varies widely. Ask: Describe your testing and code review practices. How did your team catch bugs before they reached production?',
+             'Consulting code quality and engineering rigor varies widely. Ask: Describe your testing and code review practices. How did your team catch bugs before they reached production?',
              'Scope of ownership is a key gap risk. Ask: What systems did you personally maintain on-call? What was your SLA and what happened when you breached it?'],
     'em':   ['Consulting project leadership is not the same as engineering people management. Ask: How many engineers reported directly to you? Did you conduct performance reviews and comp discussions?',
              'Ask: Tell me about an engineer on your team who was underperforming. What did you do, and what was the outcome?'],
@@ -1683,8 +1932,8 @@ var INDUSTRY_MISMATCH_PROBES = {
   'Defense': {
     'swe':  ['Defense engineering often involves classified, bespoke systems with different quality and velocity norms. Ask: Can you describe the architecture of a system you built, without using classified details? What was the user base and scale?',
              'Ask: What was your deployment cadence? How did you test software before release?',
-             'Ask: What modern cloud, containerisation, or CI/CD tools have you used outside of your defence work?'],
-    'em':   ['Defence leadership structures differ significantly. Ask: Did you manage civilian engineers or military personnel? How did you handle performance management?']
+             'Ask: What modern cloud, containerisation, or CI/CD tools have you used outside of your defense work?'],
+    'em':   ['Defense leadership structures differ significantly. Ask: Did you manage civilian engineers or military personnel? How did you handle performance management?']
   },
   'Enterprise': {
     'swe':  ['Enterprise tech companies often have slow velocity and legacy stacks. Ask: What was your release cadence? Did you deploy to production daily, weekly, or on a longer cycle?',
@@ -1876,6 +2125,14 @@ function scoreAll() {
   scored.sort(function(a,b){ return b.overall - a.overall; });
 
   document.getElementById('sc-results').style.display = 'block';
+  // Build prescreen section
+  var sourceRole = document.getElementById('sourcing-role') ? document.getElementById('sourcing-role').value : '';
+  var intakeForPrescreen = getIntake ? getIntake() : null;
+  var prescreenEl = document.getElementById('sc-prescreen-section');
+  if (prescreenEl) {
+    prescreenEl.innerHTML = buildSCPrescreenSection(sourceRole, intakeForPrescreen);
+    prescreenEl.style.display = 'block';
+  }
   var html = '';
   for (var ri=0;ri<scored.length;ri++) {
     var item = scored[ri];
@@ -1976,6 +2233,132 @@ function scoreAll() {
   }
 
   document.getElementById('sc-results-content').innerHTML = html;
+}
+
+/* ══ SCORECARD PRESCREEN QUESTIONS ══ */
+var scPrescreenQuestions = [
+  {
+    q: "Tell me about the most complex technical problem you have solved in the last 12 months. Walk me through what made it hard and how you approached it.",
+    why: "Assesses technical depth, problem-solving structure, and ownership. Strong candidates are specific — weak ones stay vague.",
+    green: "Names a specific system or problem, articulates trade-offs they personally made, explains what they would do differently. Unprompted mentions of constraints, scale, or stakeholder impact.",
+    yellow: "Answer is detailed but focuses on team effort rather than personal contribution. Hard to isolate their specific role. Needs follow-up: 'What specifically did you own in that?'",
+    red: "Vague answer with no specifics, describes a well-known open-source solution as their own work, or pivots to process rather than a technical decision they made."
+  },
+  {
+    q: "Walk me through your most recent role. What did you own end-to-end, and what required someone else's approval?",
+    why: "Surfaces real ownership vs. contributory work. Candidates often overstate ownership — this question forces specificity.",
+    green: "Clear delineation between what they owned and what required sign-off. Comfortable saying 'I needed approval for X.' Shows self-awareness about scope.",
+    yellow: "Claims to own everything with no checks. Either genuinely a founder/solo contributor, or inflating their scope. Ask: 'Who did you report to and what did they need to approve?'",
+    red: "Can't name a specific decision they made independently. Everything was a team effort. No evidence of individual ownership or accountability."
+  },
+  {
+    q: "What are you looking for in your next role that you are not getting in your current one?",
+    why: "Reveals true motivation and fit. Strong candidates are honest and specific. This also previews what will close them — or lose them.",
+    green: "Specific and honest — names something concrete like scope, scale, technical challenge, or growth. Their answer connects naturally to what this role offers.",
+    yellow: "Generic answers like 'a new challenge' or 'better growth.' Push: 'Can you be more specific — what does that look like day-to-day?' Generic motivation is hard to close.",
+    red: "Only mentions compensation, negative about current employer in a way that feels like a pattern, or cannot articulate what they want. Comp-only motivation at this stage is a risk signal."
+  },
+  {
+    q: "Tell me about a time you disagreed with a technical or product decision made above you. What did you do?",
+    why: "Tests intellectual honesty, communication maturity, and conviction. Strong candidates push back constructively — weak ones either always defer or always steamroll.",
+    green: "Named a specific decision, explains how they raised it (written doc, 1:1, meeting), articulates what happened, and reflects honestly on the outcome — including if they lost the argument.",
+    yellow: "Gives a vague answer or a situation where their disagreement was validated easily. Ask: 'Tell me about a time you pushed back and the decision still went the other way. How did you handle it?'",
+    red: "Says they never disagree, or describes always deferring to leadership. Alternatively, describes every senior decision as wrong — no evidence of constructive disagreement or self-awareness."
+  },
+  {
+    q: "Walk me through a project or initiative that did not go as planned. What happened and what did you learn?",
+    why: "Tests intellectual honesty, resilience, and learning orientation. How someone talks about failure is one of the strongest signals in a prescreen.",
+    green: "Describes a real failure with specifics, takes personal accountability without excessive self-flagellation, and articulates a clear and genuine learning that changed how they work.",
+    yellow: "Describes a setback that wasn't really their fault, or a 'failure' that turned out fine. The lesson learned feels scripted. Ask: 'What would you do differently if you could go back?'",
+    red: "Can't recall a failure or pivots to a challenge that succeeded. Blames external factors exclusively. Shows no genuine reflection or accountability. This is a strong character signal."
+  },
+  {
+    q: "Why are you open to a conversation now? What is the trigger?",
+    why: "Surfaces urgency, real motivation, and potential red flags. Candidates rarely volunteer this — asking directly gets honest answers.",
+    green: "Clear, honest trigger — a reorg, a role change, a leveling issue, or a natural tenure point. The trigger makes sense and connects to what the role offers.",
+    yellow: "Vague — 'just exploring,' 'always open to conversations.' This is common and not a disqualifier, but it means motivation is low and close will be hard. Calibrate accordingly.",
+    red: "Trigger is an active conflict — fired, PIP, or a toxic manager situation they are still emotional about. These aren't automatic disqualifiers but need careful probing before advancing."
+  },
+  {
+    q: "Where do you see yourself in three years, and how does this role connect to that?",
+    why: "Tests trajectory alignment, ambition calibration, and whether the role is actually what they need for their growth — not just what they are willing to accept.",
+    green: "Has a clear direction, articulates how this role connects to it, and shows self-awareness about what they need to get there. Does not need this to be the perfect role — just a clear step.",
+    yellow: "Answer is aspirational but vague — 'I want to grow as a leader' or 'I want to have more impact.' Ask: 'What does that look like specifically — individual contributor or management track?'",
+    red: "Answer is entirely misaligned with the role — wants to be a founder immediately, wants to move into a completely different function, or has no view on their own trajectory."
+  },
+  {
+    q: "What does your current interview process look like — are you talking to other companies?",
+    why: "Surfaces competitive landscape, urgency, and timeline. Knowing where they are in other processes helps you move at the right speed and build the right close strategy.",
+    green: "Is honest about the process — names companies (or types of companies), is clear about timeline, and does not oversell their pipeline. Says they are actively evaluating.",
+    yellow: "Deflects or downplays — 'just a few conversations.' May have more going on than they are sharing. Treat as if the process is active and move with urgency.",
+    red: "Has an exploding offer or is interviewing with a direct competitor who is further along in the process. Requires immediate escalation — don't let this get stale."
+  }
+];
+
+function buildSCPrescreenSection(role, intake) {
+  var h = '<div class="output-section" style="margin-top:.875rem;">';
+  h += '<div class="output-section-label">Prescreen questions — with answer guides</div>';
+  h += '<p style="font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.5;">Eight universal prescreen questions with green, yellow, and red flag answer guides. Use these before advancing any candidate to the technical loop.</p>';
+
+  // Intake-aware opening question
+  if (intake && intake.musthave) {
+    h += '<div class="sc-prescreen-q">';
+    h += '<div class="sc-prescreen-q-text">Walk me through your hands-on experience with ' + intake.musthave + '. How long have you worked with it, at what scale, and what is the most complex thing you have built using it?</div>';
+    h += '<p style="font-size:11px;color:var(--text-2);margin-bottom:8px;font-style:italic;">Custom question from intake must-haves. Push for depth — specifics on scale, ownership, and production use are the signal.</p>';
+    h += '<div class="sc-flag-row">';
+    h += '<div class="sc-flag sc-flag-green"><div class="sc-flag-label">Green</div><p>Immediately names a specific project, scale metric, and their personal ownership. Unprompted depth — does not wait to be asked for specifics.</p></div>';
+    h += '<div class="sc-flag sc-flag-yellow"><div class="sc-flag-label">Yellow</div><p>Familiar with the skill but experience is shallow or team-based. Ask: "What specifically did you build and what would break if you removed your contribution?"</p></div>';
+    h += '<div class="sc-flag sc-flag-red"><div class="sc-flag-label">Red</div><p>Lists the skill without a concrete example, describes academic or tutorial-level use, or admits to only peripheral exposure.</p></div>';
+    h += '</div></div>';
+  }
+
+  // Role-specific question if available
+  var roleSpecific = {
+    'swe': {q:'Walk me through the last production system you shipped end-to-end. What were the reliability and scale requirements, and who was on-call for it?',why:'Surfaces production ownership vs. contributory work. Real engineers can describe SLAs, incident history, and deployment details unprompted.',green:'Names the system, its scale, the oncall rotation, and a real incident they handled. Comfortable describing what broke and what they fixed.',yellow:'Describes a system they contributed to but is vague on SLAs or oncall ownership. Ask: "Were you in the oncall rotation for this system? What was your SLA?"',red:'Can describe the system architecturally but has never been on-call for it or cannot articulate the reliability requirements. Contributor, not owner.'},
+    'em': {q:'Tell me about the last engineer on your team who was underperforming. What did you do, and what was the outcome?',why:'The single most revealing management question. How someone handles underperformance — early identification, direct feedback, structured plan — defines their management quality.',green:'Names a specific person (without details), describes identifying the issue early, giving direct feedback, creating a plan, and reflects honestly on the outcome — including if it did not work.',yellow:'Describes a situation where the engineer "figured it out themselves" or the issue resolved via a team change. They may have avoided the hard conversation. Ask: "Did you have a formal performance conversation with them?"',red:'Cannot recall an underperformance situation, or managed it entirely by reassigning work. No evidence of direct feedback or structured improvement planning.'},
+    'pm': {q:'Tell me about a product decision you made in the last six months that you had to fight for. Who pushed back, and how did you get alignment?',why:'Tests conviction, stakeholder management, and real ownership. Great PMs make hard calls and defend them — they do not just build consensus.',green:'Names a specific decision, describes who pushed back and why, explains how they built the case (data, user research, first principles), and reflects on the outcome — including trade-offs they made.',yellow:'Describes getting alignment but the pushback was minor. Ask: "Was there anyone who actively opposed this? How did you handle them?"',red:'Describes a decision made by committee with no personal stake. Or pivots to a decision where they were right all along and everyone came around. No evidence of real conflict or conviction.'},
+    'ds': {q:'Walk me through a model you shipped to production. How did you decide it was good enough, and what did you monitor after launch?',why:'Production ML is the bar. Many DS candidates have strong modeling skills but have never owned the full lifecycle. This question surfaces the gap immediately.',green:'Names the model, the evaluation criteria (offline and online metrics), the deployment process, and the monitoring strategy. Describes at least one post-launch issue they caught and fixed.',yellow:'Describes building a model that "went to production" but cannot explain monitoring or what they would do if it degraded. Ask: "Who owned the model after launch? Were you in the on-call rotation?"',red:'Can describe the model technically but has never deployed to production. All work is in notebooks or internal tools. The productionization was done by an engineering team.'},
+    'de': {q:'Describe the most complex data pipeline you have owned. What were the SLAs, what broke, and how did you handle it?',why:'Data pipeline ownership at production scale is the core DE signal. Many DE candidates have built pipelines but never owned them under SLA pressure.',green:'Names the pipeline, the schedule and SLA, the data quality checks, and a specific incident they owned — detection, root cause, fix, and prevention.',yellow:'Describes a complex pipeline but is vague on SLAs or data quality monitoring. Ask: "What happened when this pipeline failed? Who got paged?"',red:'Describes building a pipeline but has never owned it under SLA pressure. All incidents were handled by someone else. Contributor, not owner.'},
+    'sre': {q:'Tell me about the worst production incident you have owned. Walk me through detection, response, root cause, and what changed afterward.',why:'Incident ownership is the core SRE signal. The quality of this answer reveals systems thinking, communication under pressure, and whether they drive systemic fixes.',green:'Describes detection (ideally proactive), the incident command process, root cause analysis, and systemic architectural changes that shipped after. Reflects honestly on what they would do differently.',yellow:'Describes an incident they participated in but did not lead. Ask: "Were you the incident commander? Who made the call to rollback or escalate?" Participation is not ownership.',red:'Cannot describe a significant incident, or describes one where the resolution was a restart with no root cause investigation. No post-mortem, no systemic fix.'},
+    'sec': {q:'Tell me about a vulnerability you discovered or a security system you designed. Walk me through your methodology.',why:'Real security engineering depth is almost impossible to fake in a conversation. This question surfaces original thinking vs. tool-users who follow playbooks.',green:'Describes a specific vulnerability with a CVE-like level of detail, or a security system with clear threat modeling — attack surfaces, trust boundaries, and mitigations. Shows original security thinking.',yellow:'Describes using existing tools (Burp Suite, Nessus, SAST scanners) to find issues but has not done independent research. Solid practitioner, but not a researcher.',red:'Describes security work in policy or compliance terms rather than technical. Cannot name a vulnerability they found or a security system they designed from scratch.'},
+    'se': {q:'Walk me through a technical proof of concept you built for an enterprise prospect. How did you diagnose their problem and what did you build?',why:'Solutions Engineers who cannot build and debug independently will hit a ceiling quickly. This question surfaces coding depth and independent problem-solving.',green:'Names the customer problem, describes diagnosing it technically (reading logs, writing code, debugging APIs), and walks through what they built. Can describe debugging a customer integration issue live.',yellow:'Describes a POC but relied heavily on engineering to build it. Ask: "What code did you personally write? Could you debug a customer integration issue on a live call without eng support?"',red:'Describes a presentation or demo as a POC. No evidence of hands-on technical work. Cannot describe writing code or debugging a customer issue independently.'},
+    'qa': {q:'Walk me through a test automation framework you built or significantly redesigned. What were the architecture decisions and what was the impact?',why:'SDET depth requires framework ownership, not just test writing. The architecture decisions reveal whether they think like engineers or like testers.',green:'Describes specific architecture decisions — test runner choice, parallelization strategy, flaky test triage, CI integration. Names the impact in measurable terms: coverage percentage, build time reduction, defect escape rate.',yellow:'Built tests within an existing framework but did not design the framework itself. Ask: "If you were starting from scratch, how would you design this differently and why?"',red:'Describes writing Selenium or Cypress tests without owning the framework. No awareness of framework architecture, test strategy, or quality metrics.'},
+    'hw': {q:'Walk me through the most complex hardware design you have owned from specification to tape-out or bring-up. What were the hardest trade-offs?',why:'Hardware design at depth is impossible to fake. This question surfaces whether they owned the design decisions or contributed to someone else's design.',green:'Names the chip or subsystem, describes the specification process, key architectural trade-offs (power vs. performance, area vs. speed), validation methodology, and what broke in bring-up and how they debugged it.',yellow:'Describes contributing to a design but did not own the specification or key trade-offs. Ask: "What would have been different about this design if you had not been on the project?"',red:'Can describe the final design technically but did not make the key decisions. All design choices were made by a senior engineer or architect they implemented for.'}
+  };
+
+  if (roleSpecific[role]) {
+    var rs = roleSpecific[role];
+    h += '<div class="sc-prescreen-section-label">Role-specific question — ' + getRoleLabel(role) + '</div>';
+    h += '<div class="sc-prescreen-q">';
+    h += '<div class="sc-prescreen-q-text">' + rs.q + '</div>';
+    h += '<p style="font-size:11px;color:var(--text-2);margin-bottom:8px;font-style:italic;">Why ask this: ' + rs.why + '</p>';
+    h += '<div class="sc-flag-row">';
+    h += '<div class="sc-flag sc-flag-green"><div class="sc-flag-label">Green</div><p>' + rs.green + '</p></div>';
+    h += '<div class="sc-flag sc-flag-yellow"><div class="sc-flag-label">Yellow — probe further</div><p>' + rs.yellow + '</p></div>';
+    h += '<div class="sc-flag sc-flag-red"><div class="sc-flag-label">Red</div><p>' + rs.red + '</p></div>';
+    h += '</div></div>';
+  }
+
+  h += '<div class="sc-prescreen-section-label">Universal prescreen questions</div>';
+
+  for (var i = 0; i < scPrescreenQuestions.length; i++) {
+    var pq = scPrescreenQuestions[i];
+    h += '<div class="sc-prescreen-q">';
+    h += '<div class="sc-prescreen-q-text">' + (i+1) + '. ' + pq.q + '</div>';
+    h += '<p style="font-size:11px;color:var(--text-2);margin-bottom:8px;font-style:italic;">Why ask this: ' + pq.why + '</p>';
+    h += '<div class="sc-flag-row">';
+    h += '<div class="sc-flag sc-flag-green"><div class="sc-flag-label">Green</div><p>' + pq.green + '</p></div>';
+    h += '<div class="sc-flag sc-flag-yellow"><div class="sc-flag-label">Yellow — probe further</div><p>' + pq.yellow + '</p></div>';
+    h += '<div class="sc-flag sc-flag-red"><div class="sc-flag-label">Red</div><p>' + pq.red + '</p></div>';
+    h += '</div></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function getRoleLabel(role) {
+  var labels = {"pm":"Product Management","swe":"Software Engineering","em":"Engineering Management","ds":"Data Science / ML","de":"Data Engineering","sre":"SRE / DevOps","sec":"Security Engineering","se":"Solutions Engineering","qa":"QA / SDET","hw":"Hardware Engineering"};
+  return labels[role] || role;
 }
 
 </script>
