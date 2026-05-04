@@ -562,7 +562,12 @@ tr:last-child td{border-bottom:none;}
             </div>
           </div>
         </div>
-        <div id="sourcing-output" class="output-block"></div>
+        <div id="icp-summary" style="display:none;margin-bottom:.875rem;"></div>
+      <div style="margin-bottom:.875rem;">
+        <button class="btn-primary" onclick="generateSearchString()" style="width:100%;font-size:12px;padding:11px 16px;">Build full search string from JD + intake + ICP + title equivalents</button>
+        <div id="search-gen-container" style="display:none;margin-top:10px;"></div>
+      </div>
+      <div id="sourcing-output" class="output-block"></div>
       </div>
 
       <!-- ═══ STRATEGY ═══ -->
@@ -630,8 +635,8 @@ tr:last-child td{border-bottom:none;}
               <option value="mission">Mission — wants to work on something meaningful</option>
             </select>
           </div>
-          <div id="strategy-output" class="output-block"></div>
         </div>
+        <div id="strategy-output" class="output-block"></div>
       </div>
 
       <!-- ═══ COMPETITIVE ═══ -->
@@ -688,6 +693,58 @@ tr:last-child td{border-bottom:none;}
           <div class="stat-card"><span class="stat-label">Most Common Level</span><span class="stat-val" id="stat-top-level" style="font-size:12px;margin-top:3px;">—</span></div>
         </div>
         <div id="placement-list" class="placement-list"></div>
+
+        <!-- Calibration History -->
+        <div class="card" style="margin-top:.875rem;">
+          <div class="section-label">Calibration History — What's Worked</div>
+          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Log what worked and what didn't. This surfaces as sourcing intelligence — the tool will tell you which backgrounds have historically converted for this company and role.</p>
+          <div class="form-2col">
+            <div class="field"><label>Role Family</label>
+              <select id="cal-role">
+                <option value="">— Select —</option>
+                <option value="pm">Product Management</option>
+                <option value="swe">Software Engineering (IC)</option>
+                <option value="em">Engineering Management</option>
+                <option value="ds">Data Science / ML</option>
+                <option value="de">Data Engineering</option>
+                <option value="sre">SRE / DevOps</option>
+                <option value="sec">Security Engineering</option>
+                <option value="se">Solutions Engineering</option>
+                <option value="qa">QA / SDET</option>
+                <option value="hw">Hardware Engineering</option>
+              </select>
+            </div>
+            <div class="field"><label>Candidate Background Type</label>
+              <select id="cal-co-type">
+                <option value="">— Select —</option>
+                <option value="bigtech">Big Tech (Google, Meta, Amazon, Apple, Microsoft)</option>
+                <option value="ai_native">AI-Native (OpenAI, Anthropic, etc.)</option>
+                <option value="midtech">Mid-size Tech (Stripe, Airbnb, Uber, etc.)</option>
+                <option value="startup_late">Late-stage / Pre-IPO Startup</option>
+                <option value="startup_early">Early-stage Startup (Seed–Series B)</option>
+                <option value="fintech">Fintech</option>
+                <option value="enterprise">Enterprise Tech (Oracle, IBM, Cisco)</option>
+                <option value="finance">Finance / Banking</option>
+                <option value="consulting">Consulting</option>
+                <option value="defense">Defense / Gov Tech</option>
+                <option value="academia">Academia / Research</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Outcome</label>
+            <div style="display:flex;gap:10px;margin-top:4px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;"><input type="radio" name="cal-outcome" value="worked" style="accent-color:var(--primary);width:16px;height:16px;"/> Hired and performed well</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;"><input type="radio" name="cal-outcome" value="didnt" style="accent-color:#e24b4a;width:16px;height:16px;"/> Didn't work out</label>
+            </div>
+          </div>
+          <div class="field"><label>Notes (optional)</label>
+            <input type="text" id="cal-note" placeholder="e.g. Strong on systems design but struggled with product sense, moved too slowly"/>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="addCalibrationFromUI()">Add to Calibration</button>
+          </div>
+          <div id="calibration-list" style="margin-top:1rem;"></div>
+        </div>
       </div>
 
     
@@ -1684,15 +1741,40 @@ function runSourcing(){
   // Title equivalency section
   h += buildTitleEquivalency(role);
 
+  // Calibration insights for this role
+  if(typeof getCalibrationInsights === 'function'){
+    var calI = getCalibrationInsights(role);
+    if(calI && (calI.worked + calI.didnt) > 0){
+      h += '<div class="output-section" style="background:var(--success-light);border-color:#6ee7b7;">';
+      h += '<div class="output-section-label" style="color:#065f46;">Calibration Signal — Based on Past Placements</div>';
+      h += '<p style="color:#065f46;font-size:13px;margin-bottom:6px;"><strong>'+calI.worked+' placements worked</strong> · <strong>'+calI.didnt+' did not</strong> for this role family at '+coName+'.</p>';
+      if(calI.topWorked.length) h += '<p style="color:#065f46;font-size:12px;margin-bottom:4px;"><strong>Best performing backgrounds:</strong> '+calI.topWorked.join(', ')+'</p>';
+      if(calI.recent.length){
+        h += '<div style="margin-top:8px;">';
+        for(var ci2=0;ci2<Math.min(calI.recent.length,3);ci2++){
+          var ce=calI.recent[ci2];
+          var coTypeL={'bigtech':'Big Tech','ai_native':'AI-Native','midtech':'Mid-size Tech','startup_late':'Late-stage Startup','startup_early':'Early Startup','fintech':'Fintech','enterprise':'Enterprise','finance':'Finance','consulting':'Consulting','defense':'Defense','academia':'Academia'};
+          h += '<div style="font-size:11px;color:#065f46;padding:4px 0;border-bottom:1px solid #6ee7b7;">';
+          h += '<span style="font-weight:600;">'+(coTypeL[ce.coType]||ce.coType)+'</span>';
+          h += ' · <span style="background:'+(ce.outcome==='worked'?'#bbf7d0':'#fecaca')+';color:'+(ce.outcome==='worked'?'#166534':'#991b1b')+';padding:1px 6px;border-radius:20px;font-size:10px;font-weight:700;">'+(ce.outcome==='worked'?'Worked':'Did not work')+'</span>';
+          if(ce.note) h += ' <span style="font-style:italic;">— '+ce.note+'</span>';
+          h += '</div>';
+        }
+        h += '</div>';
+      }
+      h += '</div>';
+    }
+  }
+
   outputEl.innerHTML=h; outputEl.classList.add('visible');
 }
 
 /* ══ STRATEGY ══ */
 var strategyData = {
   hooks:{
-    "bigtech":"Pitch scope gap and ownership. Engineers and PMs at Big Tech are often limited to one slice of a massive system. At "+( activeCompany ? activeCompany.name : 'your company')+" they'd own more.",
+    "bigtech":"Pitch scope gap and ownership. Engineers and PMs at Big Tech are often limited to one slice of a massive system. At [company] they would own more.",
     "midtech":"Pitch resources and scale. Mid-size tech employees are often bottlenecked by infrastructure or team size. Pitch the tooling, data, and compute resources available.",
-    "startup":"Pitch stability and scale. Startup employees often want to see what engineering or product 'done right' looks like with proper infrastructure and data.",
+    "startup":"Pitch stability and scale. Startup employees often want to see what engineering or product done right looks like with proper infrastructure and data.",
     "ai_native":"Pitch scope and real-world impact at scale. AI-native employees are often working on cutting-edge research but want to see it deployed to millions of users.",
     "consulting":"Pitch ownership and execution. Consultants crave real decision-making authority and the ability to ship products, not decks.",
     "fintech":"Pitch technical challenge and culture. Fintech engineers often want harder systems problems and a stronger engineering culture.",
@@ -1742,7 +1824,7 @@ function updateStrategy(){
   var outputEl = document.getElementById('strategy-output');
   if(!coType||!level||!motivation){ outputEl.classList.remove('visible'); return; }
   var coName = activeCompany ? activeCompany.name : 'your company';
-  var hookText = strategyData.hooks[coType].replace(/your company/g, coName);
+  var hookText = strategyData.hooks[coType].replace(/\[company\]/g, coName).replace(/your company/g, coName);
   var h = '';
   h+='<div class="output-section"><div class="output-section-label">Opening Hook</div><p>'+hookText+'</p></div>';
   h+='<div class="output-section"><div class="output-section-label">Outreach Message</div>';
@@ -1803,6 +1885,7 @@ var placements = [];
 function loadPlacements(){
   try{ var s=localStorage.getItem('rih_universal_placements'); if(s) placements=JSON.parse(s); }catch(e){ placements=[]; }
   renderPlacements();
+  if(typeof renderCalibrationList === 'function') renderCalibrationList();
 }
 function savePlacements(){ try{ localStorage.setItem('rih_universal_placements',JSON.stringify(placements)); }catch(e){} }
 function addPlacement(){
@@ -2579,6 +2662,13 @@ function buildSCPrescreenSection(role, intake) {
   return h;
 }
 
+function copyNarrative(id){
+  var ta=document.getElementById(id);
+  if(!ta) return;
+  if(navigator.clipboard){ navigator.clipboard.writeText(ta.value).then(function(){alert('Narrative copied.');}).catch(function(){var t=document.createElement('textarea');t.value=ta.value;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);alert('Copied.');}); }
+  else{ta.select();document.execCommand('copy');alert('Copied.');}
+}
+
 function getRoleLabel(role) {
   var labels = {"pm":"Product Management","swe":"Software Engineering","em":"Engineering Management","ds":"Data Science / ML","de":"Data Engineering","sre":"SRE / DevOps","sec":"Security Engineering","se":"Solutions Engineering","qa":"QA / SDET","hw":"Hardware Engineering"};
   return labels[role] || role;
@@ -2651,6 +2741,7 @@ function generateSearchString(){
     '<button class="copy-btn" style="margin-top:8px;" onclick="copyGenSearch()">Copy search string</button>';
   outEl.classList.add('visible');
 }
+function copySearchString(){ copyGenSearch(); }
 function copyGenSearch(){
   var boxes=document.querySelectorAll('#search-gen-container div[style*="monospace"]');
   if(!boxes.length)return;
@@ -2858,6 +2949,49 @@ function runSourcing(){
     btn.onclick=generateSearchString;
     outEl.appendChild(btn);
   }
+}
+
+function addCalibrationFromUI(){
+  var role = document.getElementById('cal-role').value;
+  var coType = document.getElementById('cal-co-type').value;
+  var outcome = document.querySelector('input[name="cal-outcome"]:checked');
+  var note = document.getElementById('cal-note').value.trim();
+  if(!role||!coType||!outcome){ alert('Please select role, background type, and outcome.'); return; }
+  addCalibrationEntry(role, coType, outcome.value, note);
+  document.getElementById('cal-role').value='';
+  document.getElementById('cal-co-type').value='';
+  document.querySelectorAll('input[name="cal-outcome"]').forEach(function(r){r.checked=false;});
+  document.getElementById('cal-note').value='';
+  renderCalibrationList();
+}
+
+function renderCalibrationList(){
+  var el = document.getElementById('calibration-list');
+  if(!el) return;
+  if(!calibrationLog.length){ el.innerHTML='<div class="empty" style="margin-top:0;">No calibration entries yet. Add your first one above.</div>'; return; }
+  var coTypeLabels={'bigtech':'Big Tech','ai_native':'AI-Native','midtech':'Mid-size Tech','startup_late':'Late-stage Startup','startup_early':'Early-stage Startup','fintech':'Fintech','enterprise':'Enterprise Tech','finance':'Finance / Banking','consulting':'Consulting','defense':'Defense / Gov Tech','academia':'Academia'};
+  var roleLabels={'pm':'Product Management','swe':'Software Engineering','em':'Engineering Management','ds':'Data Science / ML','de':'Data Engineering','sre':'SRE / DevOps','sec':'Security Engineering','se':'Solutions Engineering','qa':'QA / SDET','hw':'Hardware Engineering'};
+  var html='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--primary);margin-bottom:8px;">Logged entries ('+calibrationLog.length+')</div>';
+  for(var i=0;i<calibrationLog.length;i++){
+    var e=calibrationLog[i];
+    html+='<div class="cal-entry">';
+    html+='<div style="flex:1;">';
+    html+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">';
+    html+='<span class="cal-tag '+(e.outcome==='worked'?'cal-tag-worked':'cal-tag-didnt')+'">'+(e.outcome==='worked'?'Worked':'Did not work')+'</span>';
+    html+='<span style="font-size:11px;font-weight:600;color:var(--text);">'+(roleLabels[e.role]||e.role)+' · '+(coTypeLabels[e.coType]||e.coType)+'</span>';
+    html+='<span style="font-size:10px;color:var(--text-3);">'+e.date+'</span>';
+    html+='</div>';
+    if(e.note) html+='<div style="font-size:11px;color:var(--text-2);line-height:1.5;font-style:italic;">'+e.note+'</div>';
+    html+='</div>';
+    html+='<button onclick="deleteCalibration('+e.id+')" style="background:none;border:none;color:var(--text-3);font-size:16px;cursor:pointer;padding:0;width:auto;line-height:1;">&#x2715;</button>';
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
+
+function deleteCalibration(id){
+  calibrationLog=calibrationLog.filter(function(e){return e.id!==id;});
+  saveCalibration();renderCalibrationList();
 }
 
 loadCalibration();
