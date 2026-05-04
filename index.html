@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Technical Researcher Intelligence Hub</title>
 <style>
 :root {
@@ -41,11 +41,76 @@ header{margin-bottom:.875rem;display:flex;align-items:center;gap:.75rem;}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 @media(max-width:640px){
+  /* Layout */
   .tab-layout{flex-direction:column;gap:0;}
-  .tab-sidebar{width:100%;position:static;border-radius:12px;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:3px;padding:4px;}
+  body{padding:.75rem .75rem 6rem;}
+
+  /* Disclaimer — collapse to one line with toggle */
+  .disclaimer-bar{padding:7px 11px;cursor:pointer;}
+  .disclaimer-bar p{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .disclaimer-bar.expanded p{white-space:normal;overflow:visible;}
+
+  /* Tab sidebar → bottom nav bar fixed at bottom */
+  .tab-sidebar{
+    position:fixed;bottom:0;left:0;right:0;
+    width:100%;border-radius:0;border:none;border-top:1px solid var(--border);
+    display:flex;flex-wrap:nowrap;gap:0;padding:0;
+    background:var(--surface);box-shadow:0 -2px 16px rgba(108,71,255,.08);
+    z-index:100;margin-bottom:0;
+  }
   .sidebar-section-label,.tab-divider{display:none;}
-  .tab-btn{width:auto;flex:1;min-width:65px;padding:8px 4px;margin-bottom:0;justify-content:center;font-size:10px;}
-  .tab-icon{display:none;}
+  .tab-btn{
+    flex:1;padding:10px 4px 8px;margin-bottom:0;
+    flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;font-size:9px;font-weight:700;letter-spacing:.02em;
+    border-radius:0;min-width:0;
+  }
+  .tab-icon{display:block;font-size:18px;line-height:1;}
+  .tab-btn.active{background:var(--primary-light);color:var(--primary);box-shadow:none;}
+  .tab-btn.active .tab-icon{filter:none;}
+
+  /* Main content — account for bottom nav */
+  .tab-main{width:100%;}
+  body{padding-bottom:calc(74px + env(safe-area-inset-bottom, 0px));}
+
+  /* Cards */
+  .card{padding:1rem;border-radius:12px;}
+
+  /* Intake form — full width single col always */
+  .form-2col{grid-template-columns:1fr !important;}
+
+  /* Stat grid — 2 col always */
+  .insight-grid{grid-template-columns:1fr 1fr;}
+
+  /* Placement stats */
+  .placement-stats{grid-template-columns:1fr 1fr;}
+  .placement-form-grid{grid-template-columns:1fr;}
+
+  /* Output sections — tighter padding */
+  .output-section{padding:10px 11px;}
+
+  /* Prescreen questions — more readable */
+  .prescreen-q{padding:10px 11px;}
+
+  /* Comp grid — always single col on mobile */
+  .comp-grid{grid-template-columns:1fr !important;}
+
+  /* Table — reduce font on very small screens */
+  td,th{padding:8px 9px;font-size:12px;}
+
+  /* Chips wrap more aggressively */
+  .chip-row{gap:4px;}
+  .chip{font-size:10px;padding:2px 7px;}
+
+  /* Copy button full width */
+  .copy-btn{width:100%;justify-content:center;}
+}
+
+/* Safe area for iPhone X+ */
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  @media(max-width:640px){
+    .tab-sidebar{padding-bottom:env(safe-area-inset-bottom);}
+  }
 }
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.125rem;margin-bottom:.875rem;box-shadow:var(--shadow);}
@@ -178,9 +243,9 @@ tr:last-child td{border-bottom:none;}
   </div>
 </header>
 
-<div class="disclaimer-bar">
+<div class="disclaimer-bar" id="disclaimer-bar" onclick="toggleDisclaimer()">
   <div class="disclaimer-dot"></div>
-  <p><strong>Data transparency:</strong> All talent intel is curated from public sources — Levels.fyi, LinkedIn Salary, Glassdoor, recruiter community knowledge, and AI training data (calibrated mid-2025). Inflow percentages and threat ratings are <strong>estimates</strong>, not live data. Layer in <a href="https://www.linkedin.com/talent/" target="_blank">LinkedIn Talent Insights</a> and your ATS source-of-hire reports for live signal.</p>
+  <p id="disclaimer-text"><strong>Data transparency:</strong> All talent intel is curated from public sources — Levels.fyi, LinkedIn Salary, Glassdoor, recruiter community knowledge, and AI training data (calibrated mid-2025). Inflow percentages and threat ratings are <strong>estimates</strong>, not live data. Layer in <a href="https://www.linkedin.com/talent/" target="_blank">LinkedIn Talent Insights</a> and your ATS source-of-hire reports for live signal.</p>
 </div>
 
 <div class="tab-layout">
@@ -473,7 +538,24 @@ function openTab(btn,id){
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  window.scrollTo(0,0);
+  // On mobile, scroll tab-main content to top
+  var main = document.querySelector('.tab-main');
+  if(main) main.scrollTop = 0;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══ MOBILE DISCLAIMER TOGGLE ══ */
+function toggleDisclaimer(){
+  var bar = document.getElementById('disclaimer-bar');
+  if(bar) bar.classList.toggle('expanded');
+}
+
+/* ══ MOBILE: auto-collapse disclaimer on load ══ */
+function initMobile(){
+  if(window.innerWidth <= 640){
+    var bar = document.getElementById('disclaimer-bar');
+    if(bar) bar.style.cursor = 'pointer';
+  }
 }
 
 /* ══ MARKET INTEL DATA ══ */
@@ -728,7 +810,24 @@ function openTab(btn,id){
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  window.scrollTo(0,0);
+  // On mobile, scroll tab-main content to top
+  var main = document.querySelector('.tab-main');
+  if(main) main.scrollTop = 0;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══ MOBILE DISCLAIMER TOGGLE ══ */
+function toggleDisclaimer(){
+  var bar = document.getElementById('disclaimer-bar');
+  if(bar) bar.classList.toggle('expanded');
+}
+
+/* ══ MOBILE: auto-collapse disclaimer on load ══ */
+function initMobile(){
+  if(window.innerWidth <= 640){
+    var bar = document.getElementById('disclaimer-bar');
+    if(bar) bar.style.cursor = 'pointer';
+  }
 }
 
 /* ══ MARKET INTEL ══ */
@@ -1262,6 +1361,7 @@ function renderPlacements(){
 /* Init */
 loadPlacements();
 renderCompetitive();
+initMobile();
 </script>
 </body>
 </html>
