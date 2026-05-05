@@ -3145,9 +3145,11 @@ function generateSearchString(){
     var div=document.createElement('div');div.id='search-gen-container';div.className='output-section';
     outEl.insertBefore(div,outEl.firstChild);
   }
-  document.getElementById('search-gen-container').innerHTML=
+  var container = document.getElementById('search-gen-container');
+  container.style.display = 'block';
+  container.innerHTML =
     '<div class="output-section-label">Generated Search String</div>'+
-    '<p style="font-size:12px;color:var(--text-2);margin-bottom:8px;">Built from JD keywords + intake + ICP + title equivalents + adjacent functions + exclusions.</p>'+
+    '<p style="font-size:12px;color:var(--text-2);margin-bottom:8px;">Built from JD keywords + intake + ICP + title equivalents + adjacent functions + exclusions. Copy and paste directly into LinkedIn Recruiter.</p>'+
     '<div style="background:var(--bg);border:1.5px solid var(--primary);border-radius:10px;padding:11px 13px;font-size:12px;font-family:monospace;color:var(--text);line-height:1.8;word-break:break-word;">'+str+'</div>'+
     '<button class="copy-btn" style="margin-top:8px;" onclick="copyGenSearch()">Copy search string</button>';
   outEl.classList.add('visible');
