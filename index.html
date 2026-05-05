@@ -616,25 +616,35 @@ tr:last-child td{border-bottom:none;}
         </div>
         <button class="ob-back" onclick="obBack(2)">&#8592; Back</button>
         <h2>Which company are you hiring for?</h2>
-        <p class="ob-sub">This personalizes your market intel, competitive landscape, attraction strategy, and search brief. You can switch companies any time from the sidebar.</p>
+        <p class="ob-sub">Personalizes your entire experience. Type to search or enter any company name.</p>
+
+        <!-- Search input -->
+        <div style="position:relative;margin-bottom:.75rem;">
+          <input class="ob-search" id="ob-co-search" placeholder="Search or type a company name..."
+            oninput="obFilterCompanies()" autocomplete="off" spellcheck="false"
+            style="width:100%;box-sizing:border-box;font-size:14px;padding:12px 14px 12px 40px;"
+            onkeydown="obHandleCoKey(event)"/>
+          <!-- Dropdown suggestions -->
+          <div id="ob-co-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1.5px solid #e8e4f0;border-top:none;border-radius:0 0 12px 12px;max-height:220px;overflow-y:auto;z-index:50;box-shadow:0 8px 24px rgba(108,71,255,.1);"></div>
+        </div>
+
+        <!-- Selected company chip -->
         <div id="ob-selected-co-banner" style="display:none;" class="ob-selected-co">
           <span id="ob-selected-co-emoji" style="font-size:18px;"></span>
-          <div>
+          <div style="flex:1;">
             <div id="ob-selected-co-name" class="ob-selected-co-name"></div>
             <div id="ob-selected-co-type" class="ob-selected-co-type"></div>
           </div>
+          <button onclick="obClearCompany()" style="background:none;border:none;color:#9a8fb8;cursor:pointer;font-size:16px;padding:0;line-height:1;" title="Clear">&#x2715;</button>
         </div>
-        <input class="ob-search" id="ob-co-search" placeholder="Search by company name..." oninput="obFilterCompanies()" autocomplete="off" spellcheck="false"/>
-        <div class="ob-co-list" id="ob-co-list"></div>
-        <div class="ob-custom-row">
-          <input class="ob-custom-input" id="ob-custom-input" placeholder="Not listed? Type your company name..."/>
-          <button class="ob-custom-btn" onclick="obSelectCustom()">Use this</button>
-        </div>
-        <div style="margin-top:1.25rem;">
-          <button class="ob-start-btn" id="ob-co-next-btn" onclick="obNext(2)" disabled>Select a company to continue</button>
-        </div>
+
+        <button class="ob-start-btn" id="ob-co-next-btn" onclick="obNext(2)" disabled style="margin-top:1rem;">
+          Select a company to continue
+        </button>
       </div>
-    </div>
+    
+        <div id="ob-co-list" style="display:none;"></div>
+        <input id="ob-custom-input" style="display:none;" /></div>
   </div>
 
   <!-- Step 3: Goal -->
@@ -1112,6 +1122,7 @@ tr:last-child td{border-bottom:none;}
             </div>
           </div>
           <div id="strategy-output" class="output-block"></div>
+          <div id="strategy-ai-output"></div>
         </div>
 
         <!-- HM Partner -->
@@ -4739,6 +4750,7 @@ function toggleHMCheck(id){
 }
 
 function renderHMActionPlan(){
+  if(!document.getElementById('hm-action-plan')) return;
   var hm = document.getElementById('hm-name').value.trim() || 'the HM';
   var role = document.getElementById('hm-role-title').value.trim() || 'this role';
   var team = document.getElementById('hm-team').value.trim() || 'the team';
@@ -4998,7 +5010,7 @@ function obBack(from){
 
 
 function obBuildCompanyList(q){
-  var list = document.getElementById('ob-co-list');
+  var list = document.getElementById('ob-co-list'); if(!list) return;
   var html = '';
   var filter = (q||'').toLowerCase().trim();
   var grouped = {};
@@ -5033,9 +5045,93 @@ function obBuildCompanyList(q){
 
 
 function obFilterCompanies(){
-  var q = document.getElementById('ob-co-search').value;
-  obBuildCompanyList(q);
+  var q = document.getElementById('ob-co-search').value.trim();
+  var dropdown = document.getElementById('ob-co-dropdown');
+  if(!q){ dropdown.style.display='none'; return; }
+  var ql = q.toLowerCase();
+
+  var matches = COMPANIES.filter(function(co){
+    return co.name.toLowerCase().indexOf(ql)!==-1 || co.type.toLowerCase().indexOf(ql)!==-1;
+  }).slice(0,8);
+
+  dropdown.innerHTML = '';
+  dropdown.style.display = 'block';
+
+  if(!matches.length){
+    var noMatch = document.createElement('div');
+    noMatch.style.cssText = 'padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;';
+    noMatch.innerHTML = '<span style="font-size:15px;">&#127970;</span><div><div style="font-size:13px;font-weight:600;color:#1a1523;">'+q+'</div><div style="font-size:11px;color:#9a8fb8;">Use this company name</div></div>';
+    noMatch.addEventListener('click', obSelectCustomFromSearch);
+    noMatch.addEventListener('mouseover', function(){ this.style.background='#f7f5f2'; });
+    noMatch.addEventListener('mouseout', function(){ this.style.background=''; });
+    dropdown.appendChild(noMatch);
+    return;
+  }
+
+  matches.forEach(function(co){
+    var item = document.createElement('div');
+    item.style.cssText = 'padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0edf8;';
+    item.dataset.coid = co.id;
+    item.innerHTML = '<span style="font-size:15px;">'+co.emoji+'</span><div><div style="font-size:13px;font-weight:600;color:#1a1523;">'+co.name+'</div><div style="font-size:11px;color:#9a8fb8;">'+co.type+'</div></div>';
+    item.addEventListener('click', function(){ obSelectCompany(this.dataset.coid); });
+    item.addEventListener('mouseover', function(){ this.style.background='#f7f5f2'; });
+    item.addEventListener('mouseout', function(){ this.style.background=''; });
+    dropdown.appendChild(item);
+  });
+
+  var exactMatch = matches.find(function(co){ return co.name.toLowerCase()===ql; });
+  if(!exactMatch){
+    var custom = document.createElement('div');
+    custom.style.cssText = 'padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:#faf9ff;border-top:1px solid #f0edf8;';
+    custom.innerHTML = '<span style="font-size:15px;">&#127970;</span><div><div style="font-size:12px;font-weight:600;color:#6c47ff;">Use &ldquo;'+q+'&rdquo;</div><div style="font-size:11px;color:#9a8fb8;">Not listed? Use this name</div></div>';
+    custom.addEventListener('click', obSelectCustomFromSearch);
+    custom.addEventListener('mouseover', function(){ this.style.background='#ede9ff'; });
+    custom.addEventListener('mouseout', function(){ this.style.background='#faf9ff'; });
+    dropdown.appendChild(custom);
+  }
 }
+
+
+function obHandleCoKey(e){
+  if(e.key === 'Enter'){
+    var dropdown = document.getElementById('ob-co-dropdown');
+    var first = dropdown.querySelector('[data-coid]');
+    if(first) { obSelectCompany(first.dataset.coid); }
+    else { obSelectCustomFromSearch(); }
+  }
+  if(e.key === 'Escape'){
+    document.getElementById('ob-co-dropdown').style.display = 'none';
+  }
+}
+
+function obSelectCustomFromSearch(){
+  var q = document.getElementById('ob-co-search').value.trim();
+  if(!q) return;
+  var co = {id:'custom',name:q,emoji:'&#127970;',type:'Custom',levels:{swe:['Junior','Mid-level','Senior','Staff','Principal'],em:['EM','Senior EM','Director','VP'],pm:['PM','Senior PM','Staff PM','Director PM']}};
+  window._obCompany = co;
+  activeCompany = co;
+  document.getElementById('ob-co-dropdown').style.display = 'none';
+  document.getElementById('ob-co-search').value = '';
+  document.getElementById('ob-selected-co-banner').style.display = 'flex';
+  document.getElementById('ob-selected-co-emoji').innerHTML = '&#127970;';
+  document.getElementById('ob-selected-co-name').textContent = q;
+  document.getElementById('ob-selected-co-type').textContent = 'Custom';
+  var btn = document.getElementById('ob-co-next-btn');
+  btn.disabled = false;
+  btn.textContent = 'Continue with ' + q + ' →';
+}
+
+function obClearCompany(){
+  window._obCompany = null;
+  activeCompany = null;
+  document.getElementById('ob-selected-co-banner').style.display = 'none';
+  document.getElementById('ob-co-search').value = '';
+  document.getElementById('ob-co-search').focus();
+  var btn = document.getElementById('ob-co-next-btn');
+  btn.disabled = true;
+  btn.textContent = 'Select a company to continue';
+}
+
 
 
 function obSelectCompany(id){
@@ -5043,17 +5139,22 @@ function obSelectCompany(id){
   if(!co) return;
   window._obCompany = co;
   activeCompany = co;
-  // Update banner
+  // Hide dropdown and clear search
+  var dropdown = document.getElementById('ob-co-dropdown');
+  if(dropdown) dropdown.style.display = 'none';
+  var search = document.getElementById('ob-co-search');
+  if(search) search.value = '';
+  // Show selected banner
   document.getElementById('ob-selected-co-banner').style.display='flex';
   document.getElementById('ob-selected-co-emoji').textContent=co.emoji;
   document.getElementById('ob-selected-co-name').textContent=co.name;
   document.getElementById('ob-selected-co-type').textContent=co.type;
   // Enable next button
   var btn = document.getElementById('ob-co-next-btn');
-  btn.disabled=false; btn.textContent='Continue with '+co.name+' →';
-  // Rebuild list to show checkmark
-  obBuildCompanyList(document.getElementById('ob-co-search').value);
+  btn.disabled=false;
+  btn.textContent='Continue with '+co.name+' →';
 }
+
 
 
 function obSelectCustom(){
@@ -5548,6 +5649,7 @@ var _aiChatHistory = [];
 function toggleAIChat() {
   _aiChatOpen = !_aiChatOpen;
   var panel = document.getElementById('ai-chat-panel');
+  if(!panel) return;
   if(_aiChatOpen) {
     panel.classList.remove('hidden');
     document.getElementById('ai-chat-input').focus();
@@ -5561,6 +5663,7 @@ function toggleAIChat() {
 
 function addChatMessage(role, text) {
   var msgs = document.getElementById('ai-chat-messages');
+  if(!msgs) return;
   var div = document.createElement('div');
   div.className = 'ai-msg ' + role;
   div.innerHTML = text.replace(/\n/g, '<br>');
@@ -5581,6 +5684,7 @@ function sendStarter(btn) {
 
 function sendAIMessage() {
   var input = document.getElementById('ai-chat-input');
+  if(!input) return;
   var msg = input.value.trim();
   if(!msg) return;
   input.value = '';
@@ -5589,6 +5693,7 @@ function sendAIMessage() {
   _aiChatHistory.push({ role: 'user', content: msg });
 
   var sendBtn = document.getElementById('ai-chat-send-btn');
+  if(!sendBtn) return;
   sendBtn.disabled = true;
 
   var thinkingEl = addChatMessage('thinking', '&#8226;&#8226;&#8226;');
@@ -5803,6 +5908,7 @@ function generatePDFReport() {
 
   // Inject and print
   var reportEl = document.getElementById('print-report');
+  if(!reportEl) return;
   reportEl.innerHTML = h;
   reportEl.style.display = 'block';
 
@@ -5813,6 +5919,15 @@ function generatePDFReport() {
     }, 1000);
   }, 200);
 }
+
+// Close company dropdown when clicking outside
+document.addEventListener('click', function(e){
+  var dropdown = document.getElementById('ob-co-dropdown');
+  var search = document.getElementById('ob-co-search');
+  if(dropdown && search && !dropdown.contains(e.target) && e.target !== search){
+    dropdown.style.display = 'none';
+  }
+});
 
 </script>
 
