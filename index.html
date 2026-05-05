@@ -629,66 +629,35 @@ tr:last-child td{border-bottom:none;}
       <div id="tab-strategy" class="tab-content">
         <div class="card">
           <div class="field"><label>Candidate name (optional)</label>
-            <input type="text" id="strat-cand-name" placeholder="e.g. Alex M. — personalizes the close strategy" oninput="updateStrategy()"/>
+            <input type="text" id="strat-cand-name" placeholder="e.g. Alex M. — personalizes the strategy" oninput="updateStrategy()"/>
+          </div>
+          <div class="field"><label>Candidate current company</label>
+            <select id="strat-co-company" onchange="updateStrategy()">
+              <option value="">— Select company —</option>
+            </select>
           </div>
           <div class="form-2col">
-            <div class="field"><label>Unvested equity remaining</label>
-              <select id="strat-equity" onchange="updateStrategy()">
+            <div class="field"><label>Candidate seniority</label>
+              <select id="strat-level" onchange="updateStrategy()">
                 <option value="">— Select —</option>
-                <option value="none">None / fully vested</option>
-                <option value="low">Under $100K</option>
-                <option value="mid">$100K – $300K</option>
-                <option value="high">$300K – $600K</option>
-                <option value="very_high">$600K+</option>
+                <option value="junior">Junior / Mid-level (0–4 yrs)</option>
+                <option value="senior">Senior IC (4–8 yrs)</option>
+                <option value="staff">Staff / Principal (8–12 yrs)</option>
+                <option value="director">Director / VP (12+ yrs)</option>
               </select>
             </div>
-            <div class="field"><label>Months until next vest cliff</label>
-              <select id="strat-vest-timing" onchange="updateStrategy()">
+            <div class="field"><label>Candidate motivation</label>
+              <select id="strat-motivation" onchange="updateStrategy()">
                 <option value="">— Select —</option>
-                <option value="now">Vesting now / recently vested</option>
-                <option value="3mo">Within 3 months</option>
-                <option value="6mo">3–6 months away</option>
-                <option value="12mo">6–12 months away</option>
-                <option value="far">12+ months away</option>
+                <option value="scale">Scale & Impact — wants massive systems</option>
+                <option value="growth">Career Growth — wants to level up</option>
+                <option value="money">Compensation — driven by TC</option>
+                <option value="tech">Technical Challenge — wants harder problems</option>
+                <option value="brand">Brand / Prestige — values company name</option>
+                <option value="change">Change — unhappy at current company</option>
+                <option value="mission">Mission — wants meaningful work</option>
               </select>
             </div>
-          </div>
-          <div class="field"><label>Candidate's current company type</label>
-            <select id="strat-co-type" onchange="updateStrategy()">
-              <option value="">— Select type —</option>
-              <option value="bigtech">Big Tech (Google, Apple, Amazon, Microsoft, Meta)</option>
-              <option value="midtech">Mid-size Tech (Stripe, Airbnb, Uber, Databricks, etc.)</option>
-              <option value="startup">Startup (Seed – Series C)</option>
-              <option value="ai_native">AI-Native (OpenAI, Anthropic, Cohere, Mistral, etc.)</option>
-              <option value="consulting">Consulting (McKinsey, BCG, Deloitte, Accenture, etc.)</option>
-              <option value="fintech">Fintech (Plaid, Robinhood, Chime, Coinbase, etc.)</option>
-              <option value="finance">Finance / Banking (Goldman, JPMorgan, BlackRock, etc.)</option>
-              <option value="enterprise">Enterprise Tech (Oracle, IBM, Cisco, SAP, Workday)</option>
-              <option value="hardware">Hardware / Semiconductor (Intel, NVIDIA, Qualcomm, etc.)</option>
-              <option value="defense">Defense / Gov Tech (Palantir, Lockheed, Raytheon, etc.)</option>
-              <option value="academia">Academia / Research Lab</option>
-            </select>
-          </div>
-          <div class="field"><label>Candidate's Seniority</label>
-            <select id="strat-level" onchange="updateStrategy()">
-              <option value="">— Select —</option>
-              <option value="junior">Junior / Mid-level (0–4 yrs)</option>
-              <option value="senior">Senior IC (4–8 yrs)</option>
-              <option value="staff">Staff / Principal (8–12 yrs)</option>
-              <option value="director">Director / VP (12+ yrs)</option>
-            </select>
-          </div>
-          <div class="field"><label>Candidate's Likely Motivation</label>
-            <select id="strat-motivation" onchange="updateStrategy()">
-              <option value="">— Select —</option>
-              <option value="scale">Scale & Impact — wants to work on massive systems</option>
-              <option value="growth">Career Growth — wants to level up or get promoted</option>
-              <option value="money">Compensation — driven by TC and equity</option>
-              <option value="tech">Technical Challenge — wants harder problems</option>
-              <option value="brand">Brand / Prestige — values the company name</option>
-              <option value="change">Change — unhappy at current company</option>
-              <option value="mission">Mission — wants to work on something meaningful</option>
-            </select>
           </div>
         </div>
         <div id="strategy-output" class="output-block"></div>
@@ -1921,28 +1890,305 @@ var strategyData = {
   }
 };
 
+function initStrategyDropdown(){
+  var sel = document.getElementById('strat-co-company');
+  if(!sel || sel.options.length > 1) return;
+  var grouped = {};
+  COMPANIES.forEach(function(co){
+    if(!grouped[co.type]) grouped[co.type] = [];
+    grouped[co.type].push(co);
+  });
+  var groupOrder = ['Big Tech','AI-Native','Mid-size Tech','Data / Cloud','Security','Fintech',
+    'Finance / Banking','Enterprise Tech','Hardware','Consulting','Defense / Gov Tech',
+    'Academia / Research','Startup','Telecom / Other'];
+  groupOrder.forEach(function(g){
+    var items = grouped[g];
+    if(!items||!items.length) return;
+    var og = document.createElement('optgroup');
+    og.label = g;
+    items.forEach(function(co){
+      var opt = document.createElement('option');
+      opt.value = co.id;
+      opt.textContent = co.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
 function updateStrategy(){
-  var coType = document.getElementById('strat-co-type').value;
+  var coCompanyId = document.getElementById('strat-co-company') ? document.getElementById('strat-co-company').value : '';
   var level = document.getElementById('strat-level').value;
   var motivation = document.getElementById('strat-motivation').value;
-  var equity = document.getElementById('strat-equity') ? document.getElementById('strat-equity').value : '';
-  var vestTiming = document.getElementById('strat-vest-timing') ? document.getElementById('strat-vest-timing').value : '';
   var candName = document.getElementById('strat-cand-name') ? document.getElementById('strat-cand-name').value.trim() : '';
   var outputEl = document.getElementById('strategy-output');
-  if(!coType||!level||!motivation){ outputEl.classList.remove('visible'); return; }
-  var coName = activeCompany ? activeCompany.name : 'your company';
-  var hookText = strategyData.hooks[coType].replace(/\[company\]/g, coName).replace(/your company/g, coName);
+  if(!coCompanyId||!level||!motivation){ outputEl.classList.remove('visible'); return; }
+
+  var co = COMPANIES.find(function(c){ return c.id === coCompanyId; });
+  if(!co){ outputEl.classList.remove('visible'); return; }
+
+  var typeMap = {
+    'Big Tech':'bigtech','AI-Native':'ai_native','Mid-size Tech':'midtech',
+    'Data / Cloud':'midtech','Security':'midtech','Fintech':'fintech',
+    'Finance / Banking':'finance','Enterprise Tech':'enterprise','Hardware':'hardware',
+    'Consulting':'consulting','Defense / Gov Tech':'defense','Academia / Research':'academia',
+    'Startup':'startup','Telecom / Other':'enterprise'
+  };
+  var coType = typeMap[co.type] || 'midtech';
+  var coName = co.name;
+  var targetCoName = activeCompany ? activeCompany.name : 'your company';
+  var name = candName || 'this candidate';
+
+  var compIntel = compData ? compData.find(function(c){ return c.name === coName; }) : null;
+
+  // Company-specific attraction hooks
+  var attractionHooks = {
+    google:{
+      headline: 'Pitch the ownership gap',
+      hook: 'Google engineers are typically constrained to one narrow surface of a very large system. They contribute to something massive but rarely own an outcome end-to-end. The most effective pitch is not about what '+targetCoName+' is — it is about what they would own here that they cannot own there.',
+      angles: [
+        'Broader product ownership — at '+targetCoName+' they would drive decisions that at Google would require 3 levels of sign-off',
+        'Shipping velocity — Google is famously slow to ship externally. Contrast the pace of iteration at '+targetCoName+' with the quarterly release cycles they are used to',
+        'Visibility and attribution — at Google, individual contribution disappears into the team. At '+targetCoName+' their work is visible and attributable'
+      ]
+    },
+    apple:{
+      headline: 'Pitch openness and product voice',
+      hook: 'Apple engineers are proud of their work but often frustrated by secrecy, top-down product direction, and the inability to talk publicly about anything they build. The most effective pitch is about autonomy, visibility, and the ability to own a product direction.',
+      angles: [
+        'Talk about your work publicly — at '+targetCoName+' they can present at conferences, write engineering blogs, and discuss their work openly',
+        'Product voice — Apple is eng-led with limited PM autonomy. At '+targetCoName+' they would have more say over what gets built and why',
+        'Faster feedback loops — shipping to internal users and then waiting years for a product launch is demoralizing. Contrast with '+targetCoName+' release cadence'
+      ]
+    },
+    amazon:{
+      headline: 'Pitch pace, ownership, and simplicity',
+      hook: 'Amazon engineers deal with 6-pager culture, process overhead, and a compensation structure that back-loads equity in a way that creates golden handcuffs. The pitch is about a faster, cleaner environment where their decisions matter more immediately.',
+      angles: [
+        'Faster decision cycles — no 6-pagers, no 3-week alignment meetings. Decisions happen at the team level at '+targetCoName,
+        'Broader scope — Amazon PMs and engineers are often siloed into narrow service ownership. At '+targetCoName+' they would own a bigger surface',
+        'Cleaner comp structure — if '+targetCoName+' comp is competitive, the transparency and linearity of the structure is itself a pitch vs. Amazon equity cliff math'
+      ]
+    },
+    microsoft:{
+      headline: 'Pitch technical challenge and pace',
+      hook: 'Microsoft engineers outside the AI division are often working on legacy products at a slow pace. The pitch is about a more challenging technical environment and a team moving with more urgency. Engineers on Copilot are harder to move — find out where they sit first.',
+      angles: [
+        'Harder technical problems — be specific about the engineering challenge at '+targetCoName+' and why it is more interesting than what they are working on',
+        'Pace and iteration — Microsoft ships slowly. Contrast with the iteration cadence at '+targetCoName,
+        'AI-adjacent opportunity — if the role has an AI dimension, lean into it. Microsoft AI engineers are harder to move but non-AI engineers often feel left behind'
+      ]
+    },
+    openai:{
+      headline: 'Pitch scale of deployment and career structure',
+      hook: 'OpenAI employees are mission-driven and believe in the equity upside. Do not try to compete on mission — you will lose. Pitch what they cannot get at OpenAI: deployment at consumer scale, career path clarity, and the chance to work on a broader product surface.',
+      angles: [
+        'Deployment scale — OpenAI builds models; '+targetCoName+' deploys them to billions of people. The real-world impact story is compelling if the role connects to it',
+        'Career structure — OpenAI is a small org with limited management layers and unclear promotion paths. '+targetCoName+' has more defined growth opportunities',
+        'Product breadth — OpenAI engineers often work on one model or one capability. At '+targetCoName+' they would touch a broader product surface'
+      ]
+    },
+    anthropic:{
+      headline: 'Pitch deployment scale and resources',
+      hook: 'Anthropic employees care deeply about safety and responsible AI. The pitch is not about mission — it is about scale of impact and access to resources to do the work properly. They want to see their research matter.',
+      angles: [
+        'Scale of deployment — Anthropic research is important but limited in reach. At '+targetCoName+' they would see their work touch a much larger user base',
+        'Engineering resources — Anthropic is lean. '+targetCoName+' offers more infrastructure, tooling, and compute to do the work at higher quality',
+        'Complementary mission — if '+targetCoName+' has a safety or responsible AI angle, connect it directly. If not, focus on the real-world impact of deploying AI thoughtfully at scale'
+      ]
+    },
+    stripe:{
+      headline: 'Pitch consumer scale and product breadth',
+      hook: 'Stripe engineers value craft and developer empathy highly. They are used to working on products used by developers — a smaller and more technical audience. The pitch is about what it means to work on something used by billions of non-technical people, and the engineering challenges that creates.',
+      angles: [
+        'Consumer scale — Stripe serves millions of businesses. '+targetCoName+' likely serves hundreds of millions of end users. The engineering problems are categorically different',
+        'Product surface breadth — Stripe engineers often work on a focused vertical (payments, billing, identity). At '+targetCoName+' the surface is broader',
+        'Engineering culture continuity — Stripe has a high craft bar. Make clear that '+targetCoName+' matches that — bring evidence, not assertions'
+      ]
+    },
+    airbnb:{
+      headline: 'Pitch scale and resources',
+      hook: 'Airbnb engineers think deeply about design, cross-functional craft, and community impact. The pitch should connect to the quality of the engineering problem and the breadth of impact — and be honest about what '+targetCoName+' offers that Airbnb does not.',
+      angles: [
+        'Scale — Airbnb serves 150M users. If '+targetCoName+' is larger, that is a genuine pitch',
+        'Resources — Airbnb has been resource-constrained post-COVID. '+targetCoName+' may offer more compute, data, and headcount to do the work properly',
+        'Engineering challenge — connect specifically to something Airbnb does not offer: a particular technical domain, a new product area, or a harder infrastructure problem'
+      ]
+    },
+    uber:{
+      headline: 'Pitch stability and scope',
+      hook: 'Uber engineers have owned complex real-time marketplace systems and operated at genuine scale. They are moveable — the platform has had multiple reorgs and equity is less compelling than it once was. Pitch stability, cleaner culture, and a comparable or broader technical challenge.',
+      angles: [
+        'Stability — Uber has had years of turbulence. If '+targetCoName+' offers a more stable environment, say so directly',
+        'Comparable technical scale — do not pitch down. Uber engineers are proud of the systems they have built. Show them something equally interesting',
+        'Culture — Uber culture has improved but carries baggage. '+targetCoName+' being a cleaner environment is a genuine draw for many Uber engineers'
+      ]
+    },
+    nvidia:{
+      headline: 'Lead with technical ambition — comp will not move them',
+      hook: 'NVIDIA engineers are deeply vested and believe they are building the infrastructure layer for AI. The pitch cannot be about money — it almost certainly will not be competitive on a straight comparison. The pitch must be about a technical challenge that is genuinely more interesting or more impactful than GPU architecture.',
+      angles: [
+        'Technical specificity — be very precise about what they would work on and why it requires their specific skills. Vague pitches will get ignored',
+        'Real-world deployment — NVIDIA builds chips; at '+targetCoName+' they would see those chips used to build something that touches real users',
+        'Ownership model — NVIDIA is large and siloed. If the role offers broader technical ownership, that is worth stating'
+      ]
+    },
+    intel:{
+      headline: 'Pitch ambition and pace — Intel is demoralizing',
+      hook: 'Intel engineers are more moveable than they have been in a decade. Stock underperformance, strategic drift, and slow execution have eroded morale significantly. The pitch almost writes itself — lead with energy, technical ambition, and pace.',
+      angles: [
+        'Pace and momentum — Intel moves slowly and has lost strategic direction. '+targetCoName+' offers a faster, more energized environment',
+        'Technical investment — Intel has underinvested in key areas. If '+targetCoName+' is investing heavily in the domain they work in, make that visible',
+        'Equity upside — Intel stock has significantly underperformed. If '+targetCoName+' equity has better upside (especially pre-IPO), this is a real draw'
+      ]
+    },
+    mckinsey:{
+      headline: 'Pitch ownership and the chance to build',
+      hook: 'McKinsey consultants have spent years designing strategies that other people implement. The most powerful pitch is simple: at '+targetCoName+' they would own the outcome, not the recommendation. They would build and ship something, see it used, and have their name on it.',
+      angles: [
+        'Execution over advice — be explicit: at '+targetCoName+' they would make real decisions that stick, not recommendations that may or may not be implemented',
+        'Tangible output — they would ship a product, see a metric move, and know it was their work that caused it. That is not available in consulting',
+        'Learning acceleration — the first 2 years in a tech product role will teach them more about how businesses actually work than 5 more years of consulting'
+      ]
+    },
+    goldman:{
+      headline: 'Lead with comp — it is almost always better',
+      hook: 'Goldman engineers are technically strong but often underpaid relative to tech, working on internal systems with limited career mobility outside finance. The TC comparison is usually a positive surprise — lead with it. Then pitch the technical challenge and the career optionality that a tech role opens up.',
+      angles: [
+        'TC comparison — run the honest comparison before the first conversation. Goldman base is high but tech equity usually more than compensates. This is often the primary motivator',
+        'Career optionality — a tech engineering role opens doors that a Goldman engineering role does not. Be explicit about what '+targetCoName+' on their resume means vs. Goldman Technology',
+        'Technical challenge — Goldman engineers often work on internal systems with limited public visibility. At '+targetCoName+' they would work on products used at consumer scale'
+      ]
+    },
+    palantir:{
+      headline: 'Pitch consumer scale and the ability to talk about your work',
+      hook: 'Palantir engineers have broad ownership and strong data instincts, but their work is often classified, government-facing, or under NDA. The pitch is about consumer scale, the ability to discuss their work publicly, and a more diverse technical problem set.',
+      angles: [
+        'Public work — at '+targetCoName+' they can publish, speak at conferences, and build a public technical reputation. That is not available at Palantir',
+        'Consumer scale — Palantir serves governments and enterprises. '+targetCoName+' likely serves a much broader user base with different engineering challenges',
+        'Technical diversity — Palantir engineers work deeply in one domain. '+targetCoName+' may offer a broader technical surface or a different class of problem'
+      ]
+    },
+    databricks:{
+      headline: 'Pitch data problem scale and engineering culture',
+      hook: 'Databricks engineers have strong distributed systems and open source credentials. They are moveable if the data engineering or infrastructure problem is compelling enough. Lead with the scale and novelty of the technical problem at '+targetCoName+'.',
+      angles: [
+        'Data scale — be specific about the volume and complexity of the data problem at '+targetCoName+'. Databricks engineers will ask technical questions — have answers ready',
+        'Engineering culture — Databricks has a strong engineering culture. Make clear '+targetCoName+' matches it',
+        'Pre-IPO vs. public equity — if Databricks IPO timing is uncertain, '+targetCoName+' equity with better liquidity is a real draw'
+      ]
+    },
+    bytedance:{
+      headline: 'Lead with stability and long-term platform',
+      hook: 'ByteDance and TikTok engineers in the US face genuine regulatory uncertainty. The pitch almost writes itself: stability, a long-term platform not at risk of forced sale or shutdown, and the chance to work on something with a clear future.',
+      angles: [
+        'Platform certainty — '+targetCoName+' is not subject to the regulatory risk that TikTok faces in the US. That is a real and immediate concern for many of these engineers',
+        'Long-term career investment — the skills they build at TikTok may not translate cleanly if the platform is shut down or sold. At '+targetCoName+' their career investment compounds safely',
+        'Engineering scale — TikTok operates at massive scale. If '+targetCoName+' offers comparable scale, make that explicit'
+      ]
+    },
+    crowdstrike:{
+      headline: 'Pitch research depth and technical novelty',
+      hook: 'CrowdStrike engineers have strong threat detection and endpoint security skills. They are moveable if the security research problem is more interesting or the environment is more research-oriented. Pitch the novelty and depth of the security challenge at '+targetCoName+'.',
+      angles: [
+        'Research latitude — if '+targetCoName+' offers more time and space for original security research, that is a genuine draw',
+        'Attack surface breadth — '+targetCoName+' may have a more diverse or novel security surface than endpoint detection. Make that concrete',
+        'Engineering culture — CrowdStrike is primarily a product company. If '+targetCoName+' has a stronger engineering culture or more interesting systems problems, pitch that'
+      ]
+    },
+    salesforce:{
+      headline: 'Pitch pace and technical challenge',
+      hook: 'Salesforce engineers are moveable — morale has been dented by layoffs and the pace has always been slow. The pitch is simple: faster iteration, harder technical problems, and a more energized environment.',
+      angles: [
+        'Pace — Salesforce is known for slow execution. '+targetCoName+' offers faster decision cycles and shorter shipping cycles',
+        'Technical challenge — Salesforce systems are mature and often legacy. At '+targetCoName+' they would work on fresher, more interesting problems',
+        'Culture reset — post-restructure Salesforce culture has been uncertain. '+targetCoName+' offers a cleaner, more focused environment'
+      ]
+    }
+  };
+
+  var companyTimingNotes = {
+    google: 'Google refreshes RSUs annually after the 4-year cliff. The best sourcing window is 18–24 months in, when engineers have vested enough to feel comfortable but have not yet refreshed. Always ask which year they are in.',
+    amazon: 'Amazon RSUs vest on a 20/20/60 schedule. Year 2 is the single best sourcing window — they have cleared the first 40% and the 60% cliff is still 2 years away. Target candidates who joined 18–24 months ago.',
+    apple: 'Apple equity refreshes regularly and retention is strong. Move when a candidate signals frustration with direction or autonomy — do not try to pull engineers who are happy. The pull needs to come from them.',
+    openai: 'OpenAI will counter-offer aggressively and move fast. Assume a counter is coming. Run your process quickly and have the comp conversation early so you are not caught off-guard at the offer stage.',
+    nvidia: 'NVIDIA hardware search timelines are long by nature. Start conversations 6–12 months before you need to fill the role. Engineers plan career moves around project cycles — ask about where they are in the current roadmap.',
+    bytedance: 'Regulatory uncertainty has created a genuine sourcing window. Move now — engineers who are worried about TikTok stability are actively looking. First mover advantage matters.',
+    intel: 'Intel engineers are actively looking in a way they have not been in a decade. Do not overthink the pitch — the bar for interest is low. Move quickly before they find something else.',
+    mckinsey: 'MBA-track consultants move in cohort cycles — typically 2–3 years in, at the transition point between Associate and Engagement Manager. That is the optimal window. Senior partners and principals are much harder to move.'
+  };
+
+  var timingNote = companyTimingNotes[coCompanyId] || strategyData.timing[level];
+
+  var coAttraction = attractionHooks[coCompanyId];
+
   var h = '';
-  h+='<div class="output-section"><div class="output-section-label">Opening Hook</div><p>'+hookText+'</p></div>';
-  h+='<div class="output-section"><div class="output-section-label">Outreach Message</div>';
-  h+='<p style="background:var(--primary-light);border:1px solid var(--border-2);border-radius:8px;padding:11px 13px;font-size:13px;line-height:1.7;color:var(--text);">'+strategyData.outreach[motivation]+'</p></div>';
-  h+='<div class="output-section"><div class="output-section-label">Timing Guidance</div><p>'+strategyData.timing[level]+'</p></div>';
-  h+='<div class="output-section"><div class="output-section-label">Top Objections to Preempt</div><ul>';
-  var objs = strategyData.objections[coType]||[];
-  for(var i=0;i<objs.length;i++) h+='<li style="margin-bottom:9px;">'+objs[i]+'</li>';
-  h+='</ul></div>';
-  h += buildCloseIntel(coType, level, motivation, equity, vestTiming, candName);
-  outputEl.innerHTML=h; outputEl.classList.add('visible');
+
+  // Company context banner
+  h += '<div class="output-section">';
+  h += '<div class="output-section-label">Candidate Context</div>';
+  h += '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;">';
+  h += '<span class="chip">'+coName+'</span>';
+  h += '<span class="chip">'+co.type+'</span>';
+  h += '<span class="chip">'+(level==='junior'?'Junior / Mid':level==='senior'?'Senior IC':level==='staff'?'Staff / Principal':'Director / VP')+'</span>';
+  h += '<span class="chip">'+motivation+' motivation</span>';
+  if(name !== 'this candidate') h += '<span class="chip">'+name+'</span>';
+  h += '</div>';
+  if(compIntel && compIntel.retention) h += '<p style="font-size:12px;color:var(--text-2);line-height:1.6;"><strong>Retention at '+coName+':</strong> '+compIntel.retention+'</p>';
+  h += '</div>';
+
+  // Attraction strategy (main section)
+  if(coAttraction){
+    h += '<div class="output-section">';
+    h += '<div class="output-section-label">Attraction Strategy — '+coAttraction.headline+'</div>';
+    h += '<p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">'+coAttraction.hook+'</p>';
+    h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary);margin-bottom:8px;">Specific angles to use</div>';
+    for(var i=0;i<coAttraction.angles.length;i++){
+      h += '<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">';
+      h += '<span style="width:6px;height:6px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:5px;"></span>';
+      h += '<span style="font-size:13px;color:var(--text);line-height:1.6;">'+coAttraction.angles[i]+'</span>';
+      h += '</div>';
+    }
+    h += '</div>';
+  } else {
+    // Fallback to type-level hook
+    var hookText = strategyData.hooks[coType] || '';
+    hookText = hookText.replace(/\[target\]/g, targetCoName).replace(/your company/g, targetCoName);
+    h += '<div class="output-section"><div class="output-section-label">Attraction Strategy</div><p>'+hookText+'</p></div>';
+  }
+
+  // Motivation-aligned outreach message
+  var motivationAngles = {
+    scale: 'Lead with the scale of the problem. Be specific — number of users, data volume, system complexity. Abstract "big impact" language does not land with senior engineers. Give them a number they can picture.',
+    growth: 'Lead with the career path. Be explicit: what level are they joining, what does the next level look like, and what is the realistic timeline? Senior candidates evaluate growth trajectory carefully — vague answers lose them.',
+    money: 'Be transparent about comp early. Share the range before they ask. Candidates who are motivated by TC lose interest quickly if they have to chase the number. Give them something concrete to evaluate.',
+    tech: 'Lead with the technical problem, not the company. Describe the hardest engineering challenge they would work on, who they would work with, and what they could build here that they cannot build anywhere else.',
+    brand: 'The brand matters to them — acknowledge it. Then show them what the brand does for their career: the network they would build, the pedigree of the team, and the doors '+targetCoName+' opens that their current company does not.',
+    change: 'They are already looking — your job is to be the most compelling option, not to generate interest from scratch. Move fast. The window is short and competing processes are already in motion.',
+    mission: 'Find the genuine connection between their background and what '+targetCoName+' is building. Do not manufacture alignment — research their LinkedIn and GitHub for signals of what they actually care about, then connect it to the role specifically.'
+  };
+
+  h += '<div class="output-section"><div class="output-section-label">Outreach Angle — '+motivation+' motivated</div>';
+  h += '<p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:10px;">'+motivationAngles[motivation]+'</p>';
+  h += '<div style="background:var(--primary-light);border:1px solid var(--border-2);border-radius:9px;padding:11px 13px;">';
+  h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--primary);margin-bottom:6px;">Message template</div>';
+  h += '<p style="font-size:13px;color:var(--text);line-height:1.7;">'+strategyData.outreach[motivation]+'</p>';
+  h += '</div></div>';
+
+  // Timing and sourcing window
+  h += '<div class="output-section"><div class="output-section-label">Sourcing Window — When to engage</div>';
+  h += '<p style="font-size:13px;color:var(--text);line-height:1.7;">'+timingNote+'</p></div>';
+
+  // Researcher intel (from compData) — brief, no close strategy
+  if(compIntel && compIntel.intel){
+    h += '<div class="output-section"><div class="output-section-label">Researcher Intel — '+coName+'</div>';
+    h += '<div style="background:var(--warning-light);border:1px solid #fcd34d;border-radius:9px;padding:10px 12px;">';
+    h += '<p style="font-size:12px;color:#92400e;line-height:1.6;">'+compIntel.intel+'</p>';
+    h += '</div></div>';
+  }
+
+  outputEl.innerHTML = h;
+  outputEl.classList.add('visible');
 }
 
 /* ══ COMPETITIVE ══ */
@@ -1994,6 +2240,8 @@ function loadPlacements(){
   renderPlacements();
   if(typeof renderCalibrationList === 'function') renderCalibrationList();
   if(typeof initCompCandidateDropdown === 'function') initCompCandidateDropdown();
+initStrategyDropdown();
+  if(typeof initStrategyDropdown === 'function') initStrategyDropdown();
   if(typeof renderHMActionPlan === 'function') renderHMActionPlan();
 }
 function savePlacements(){ try{ localStorage.setItem('rih_universal_placements',JSON.stringify(placements)); }catch(e){} }
@@ -3305,6 +3553,32 @@ function generateNarratives(){
 
 /* ══ CLOSE INTELLIGENCE (added to updateStrategy) ══ */
 var _origUpdateStrategy = updateStrategy;
+function initStrategyDropdown(){
+  var sel = document.getElementById('strat-co-company');
+  if(!sel || sel.options.length > 1) return;
+  var grouped = {};
+  COMPANIES.forEach(function(co){
+    if(!grouped[co.type]) grouped[co.type] = [];
+    grouped[co.type].push(co);
+  });
+  var groupOrder = ['Big Tech','AI-Native','Mid-size Tech','Data / Cloud','Security','Fintech',
+    'Finance / Banking','Enterprise Tech','Hardware','Consulting','Defense / Gov Tech',
+    'Academia / Research','Startup','Telecom / Other'];
+  groupOrder.forEach(function(g){
+    var items = grouped[g];
+    if(!items||!items.length) return;
+    var og = document.createElement('optgroup');
+    og.label = g;
+    items.forEach(function(co){
+      var opt = document.createElement('option');
+      opt.value = co.id;
+      opt.textContent = co.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
 function updateStrategy(){
   var coType=document.getElementById('strat-co-type').value;
   var level=document.getElementById('strat-level').value;
@@ -4755,6 +5029,32 @@ var strategyData = {
   }
 };
 
+function initStrategyDropdown(){
+  var sel = document.getElementById('strat-co-company');
+  if(!sel || sel.options.length > 1) return;
+  var grouped = {};
+  COMPANIES.forEach(function(co){
+    if(!grouped[co.type]) grouped[co.type] = [];
+    grouped[co.type].push(co);
+  });
+  var groupOrder = ['Big Tech','AI-Native','Mid-size Tech','Data / Cloud','Security','Fintech',
+    'Finance / Banking','Enterprise Tech','Hardware','Consulting','Defense / Gov Tech',
+    'Academia / Research','Startup','Telecom / Other'];
+  groupOrder.forEach(function(g){
+    var items = grouped[g];
+    if(!items||!items.length) return;
+    var og = document.createElement('optgroup');
+    og.label = g;
+    items.forEach(function(co){
+      var opt = document.createElement('option');
+      opt.value = co.id;
+      opt.textContent = co.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
 function updateStrategy(){
   var coType = document.getElementById('strat-co-type').value;
   var level = document.getElementById('strat-level').value;
@@ -4828,6 +5128,8 @@ function loadPlacements(){
   renderPlacements();
   if(typeof renderCalibrationList === 'function') renderCalibrationList();
   if(typeof initCompCandidateDropdown === 'function') initCompCandidateDropdown();
+initStrategyDropdown();
+  if(typeof initStrategyDropdown === 'function') initStrategyDropdown();
   if(typeof renderHMActionPlan === 'function') renderHMActionPlan();
 }
 function savePlacements(){ try{ localStorage.setItem('rih_universal_placements',JSON.stringify(placements)); }catch(e){} }
@@ -5872,6 +6174,32 @@ function generateNarratives(){
 
 /* ══ CLOSE INTELLIGENCE (added to updateStrategy) ══ */
 var _origUpdateStrategy = updateStrategy;
+function initStrategyDropdown(){
+  var sel = document.getElementById('strat-co-company');
+  if(!sel || sel.options.length > 1) return;
+  var grouped = {};
+  COMPANIES.forEach(function(co){
+    if(!grouped[co.type]) grouped[co.type] = [];
+    grouped[co.type].push(co);
+  });
+  var groupOrder = ['Big Tech','AI-Native','Mid-size Tech','Data / Cloud','Security','Fintech',
+    'Finance / Banking','Enterprise Tech','Hardware','Consulting','Defense / Gov Tech',
+    'Academia / Research','Startup','Telecom / Other'];
+  groupOrder.forEach(function(g){
+    var items = grouped[g];
+    if(!items||!items.length) return;
+    var og = document.createElement('optgroup');
+    og.label = g;
+    items.forEach(function(co){
+      var opt = document.createElement('option');
+      opt.value = co.id;
+      opt.textContent = co.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
 function updateStrategy(){
   var coType=document.getElementById('strat-co-type').value;
   var level=document.getElementById('strat-level').value;
