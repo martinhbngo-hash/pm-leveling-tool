@@ -348,634 +348,115 @@ tr:last-child td{border-bottom:none;}
 .linkedin-guide ol { padding-left: 1.1rem; }
 .linkedin-guide li { font-size: 11px; color: var(--primary-dark); line-height: 1.7; }
 .linkedin-guide li strong { color: var(--primary); }
-</style>
-</head>
-<body>
 
-<!-- ══════════════════════════════════════════════
-     WELCOME SCREEN
-══════════════════════════════════════════════ -->
-<div id="welcome-screen">
-  <div class="welcome-card">
-    <div class="welcome-logo">
-      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    </div>
-    <h1>Talent Researcher Intelligence Hub</h1>
-    <p>Select your company to personalize all talent intel, leveling maps, competitive landscape, and sourcing strategy to your organization.</p>
+/* ══ ONBOARDING FLOW ══ */
+#onboarding{position:fixed;inset:0;z-index:1000;background:#f8f7ff;display:flex;flex-direction:column;overflow-y:auto;}
 
-    <span class="welcome-label">Search or select your company</span>
-    <input class="company-search" id="co-search" placeholder="Type to search — e.g. Google, Stripe, McKinsey..." oninput="filterCompanies()" autocomplete="off" autocorrect="off" spellcheck="false"/>
+/* ── ONBOARDING ── */
+#onboarding{font-family:'DM Sans',system-ui,sans-serif;}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Instrument+Serif:ital@0;1&display=swap');
 
-    <div class="company-list" id="co-list"></div>
+.ob-step{display:none;min-height:100vh;}
+.ob-step.active{display:flex;flex-direction:column;}
 
-    <div style="margin-top:10px;">
-      <span class="welcome-label">Or enter a custom company</span>
-      <div class="custom-company-row">
-        <input class="custom-company-input" id="custom-co-input" placeholder="e.g. Acme Corp, Series B startup..." />
-        <button class="custom-company-btn" onclick="selectCustomCompany()">Use this →</button>
-      </div>
-    </div>
+/* ── Step 1: Welcome ── */
+.ob-welcome{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+@media(max-width:780px){.ob-welcome{grid-template-columns:1fr;}}
+.ob-left{background:#f7f5f2;padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;}
+.ob-right{background:#1a1523;padding:4rem 3rem;display:flex;flex-direction:column;justify-content:center;gap:1.25rem;}
+.ob-wordmark{display:flex;align-items:center;gap:10px;margin-bottom:3rem;}
+.ob-wordmark-icon{width:36px;height:36px;background:#1a1523;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.ob-wordmark-icon svg{width:18px;height:18px;stroke:white;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ob-wordmark-text{font-size:13px;font-weight:600;color:#1a1523;letter-spacing:.02em;}
+.ob-headline{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;line-height:1.15;color:#1a1523;margin-bottom:1.25rem;}
+.ob-headline em{font-style:italic;color:#6c47ff;}
+.ob-tagline{font-size:15px;color:#5a5565;line-height:1.7;max-width:420px;margin-bottom:2rem;font-weight:400;}
+.ob-feature-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2.5rem;}
+.ob-feature-item{display:flex;align-items:flex-start;gap:10px;}
+.ob-feature-check{width:20px;height:20px;background:#ede9ff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.ob-feature-check svg{width:11px;height:11px;stroke:#6c47ff;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ob-feature-label{font-size:14px;color:#2d2640;font-weight:500;line-height:1.5;}
+.ob-feature-label span{font-size:12px;font-weight:400;color:#7a7388;display:block;margin-top:1px;}
+.ob-cta{background:#1a1523;color:white;border:none;border-radius:12px;padding:15px 32px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.01em;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.ob-cta:hover{background:#2d2047;transform:translateY(-1px);}
+.ob-cta svg{width:16px;height:16px;stroke:white;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ob-private{font-size:11px;color:#9a93a8;margin-top:1rem;display:flex;align-items:center;gap:5px;}
+.ob-private svg{width:11px;height:11px;stroke:#9a93a8;stroke-width:2;fill:none;}
 
-    <button class="welcome-btn" id="launch-btn" onclick="launchApp()" disabled>Select a company to continue</button>
-  </div>
-</div>
+/* Right panel: feature cards */
+.ob-right-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#6c5a8e;margin-bottom:.5rem;}
+.ob-right-title{font-family:'Instrument Serif',Georgia,serif;font-size:1.5rem;font-weight:400;color:white;line-height:1.3;margin-bottom:2rem;}
+.ob-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ob-mini-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;}
+.ob-mini-card-icon{font-size:18px;margin-bottom:8px;}
+.ob-mini-card-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.95);margin-bottom:3px;}
+.ob-mini-card-desc{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5;}
 
-<!-- ══════════════════════════════════════════════
-     MAIN APP
-══════════════════════════════════════════════ -->
-<div id="app">
-<div class="app-inner">
+/* ── Steps 2-4: card flow ── */
+.ob-card-step{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;background:#f7f5f2;min-height:100vh;}
+.ob-card{background:white;border:1px solid #e8e4f0;border-radius:20px;padding:2.25rem 2rem;max-width:540px;width:100%;box-shadow:0 4px 32px rgba(108,71,255,.06);}
+.ob-progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
+.ob-progress-pills{display:flex;gap:6px;}
+.ob-progress-pill{height:4px;border-radius:20px;background:#e8e4f0;transition:all .3s;}
+.ob-progress-pill.done{background:#6c47ff;width:36px;}
+.ob-progress-pill.active{background:#6c47ff;opacity:.4;width:28px;}
+.ob-progress-pill.pending{width:20px;}
+.ob-step-label{font-size:11px;font-weight:600;color:#9a8fb8;letter-spacing:.06em;text-transform:uppercase;}
+.ob-back{background:none;border:none;color:#9a8fb8;font-size:12px;cursor:pointer;font-family:inherit;padding:0;margin-bottom:1.5rem;display:flex;align-items:center;gap:4px;letter-spacing:.01em;font-weight:500;}
+.ob-back:hover{color:#2d2640;}
+.ob-card h2{font-family:'Instrument Serif',Georgia,serif;font-size:1.75rem;font-weight:400;color:#1a1523;margin-bottom:.5rem;line-height:1.25;}
+.ob-sub{font-size:13px;color:#7a7388;line-height:1.65;margin-bottom:1.5rem;}
 
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="logo-mark"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      <div class="header-text">
-        <h1>Talent Researcher Intelligence Hub</h1>
-        <p id="topbar-subtitle">Market Intel · Leveling · Sourcing · Strategy</p>
-      </div>
-    </div>
-    <div class="company-switcher" onclick="switchCompany()">
-      
-      <div>
-        <div class="co-badge" id="topbar-co-name">—</div>
-        <div class="switch-label">Switch company</div>
-      </div>
-    </div>
-  </div>
+/* Company search */
+.ob-search{width:100%;padding:11px 14px 11px 38px;background:#f7f5f2;border:1.5px solid #e8e4f0;border-radius:10px;font-size:14px;color:#1a1523;font-family:inherit;outline:none;box-sizing:border-box;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239a8fb8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;}
+.ob-search:focus{border-color:#6c47ff;background-color:white;}
+.ob-co-list{max-height:240px;overflow-y:auto;border:1px solid #e8e4f0;border-radius:12px;background:white;margin-top:10px;margin-bottom:12px;}
+.ob-co-group{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#b0a8c4;padding:9px 13px 4px;border-top:1px solid #f0edf8;}
+.ob-co-group:first-child{border-top:none;}
+.ob-co-opt{display:flex;align-items:center;gap:10px;padding:9px 13px;cursor:pointer;border-bottom:1px solid #f7f5f2;transition:background .12s;}
+.ob-co-opt:last-child{border-bottom:none;}
+.ob-co-opt:hover{background:#f7f5f2;}
+.ob-co-opt.selected{background:#f0edf8;}
+.ob-co-emoji{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
+.ob-co-name{font-size:13px;font-weight:600;color:#1a1523;}
+.ob-co-type{font-size:11px;color:#9a8fb8;margin-top:1px;}
+.ob-co-check{margin-left:auto;color:#6c47ff;font-size:14px;opacity:0;}
+.ob-co-opt.selected .ob-co-check{opacity:1;}
+.ob-custom-row{display:flex;gap:8px;margin-top:2px;}
+.ob-custom-input{flex:1;padding:10px 13px;background:#f7f5f2;border:1.5px solid #e8e4f0;border-radius:10px;font-size:13px;color:#1a1523;font-family:inherit;outline:none;}
+.ob-custom-input:focus{border-color:#6c47ff;background:white;}
+.ob-custom-btn{padding:10px 16px;background:#1a1523;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.ob-custom-btn:hover{background:#2d2047;}
+.ob-selected-co{background:#f0edf8;border:1.5px solid #d4c9f5;border-radius:10px;padding:9px 13px;display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+.ob-selected-co-name{font-size:13px;font-weight:600;color:#2d2047;}
+.ob-selected-co-type{font-size:11px;color:#7c5cfc;}
 
-  <div class="disclaimer-bar">
-    <div class="disclaimer-dot"></div>
-    <p><strong>Data transparency:</strong> All talent intel is curated from public sources — Levels.fyi, LinkedIn Salary, Glassdoor, recruiter community knowledge, and AI training data (calibrated mid-2025). Inflow percentages and competitive threat ratings are <strong>estimates</strong>, not live data. Layer in <a href="https://www.linkedin.com/talent/" target="_blank">LinkedIn Talent Insights</a> and your ATS for live signal.</p>
-  </div>
+/* Goal cards */
+.ob-goal-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;}
+.ob-goal-card{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border:1.5px solid #e8e4f0;border-radius:12px;cursor:pointer;transition:all .15s;background:white;}
+.ob-goal-card:hover{border-color:#b09aed;background:#faf9ff;}
+.ob-goal-card.selected{border-color:#6c47ff;background:#f0edf8;}
+.ob-goal-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.ob-goal-title{font-size:13px;font-weight:600;color:#1a1523;margin-bottom:2px;}
+.ob-goal-desc{font-size:12px;color:#7a7388;line-height:1.5;}
 
-  <div class="tab-layout">
-    <nav class="tab-sidebar">
-      <div class="sidebar-section-label">Intelligence</div>
-      <button class="tab-btn active" onclick="openTab(this,'tab-intel')"><span class="tab-icon">📊</span>Market Intel</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-leveling')"><span class="tab-icon">⚖️</span>Leveling</button>
-      <div class="tab-divider"></div>
-      <div class="sidebar-section-label">Workflow</div>
-      <button class="tab-btn" onclick="openTab(this,'tab-sourcing')"><span class="tab-icon">🔍</span>Sourcing</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-scorecard')"><span class="tab-icon">📝</span>Scorecard</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-strategy')"><span class="tab-icon">💬</span>Strategy</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-hmpartner')"><span class="tab-icon">🤝</span>HM Partner</button>
-      <div class="tab-divider"></div>
-      <div class="sidebar-section-label">Reference</div>
-      <button class="tab-btn" onclick="openTab(this,'tab-competitive')"><span class="tab-icon">🏆</span>Competitive</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-candidates')"><span class="tab-icon">👤</span>Candidates</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-comp')"><span class="tab-icon">💰</span>Comp</button>
-      <button class="tab-btn" onclick="openTab(this,'tab-placements')"><span class="tab-icon">📋</span>Placements</button>
-      <div class="sidebar-footer"></div>
-      <div class="sidebar-footer" id="sidebar-footer-wrap" style="display:none;">
-        <div class="sidebar-co-chip" onclick="switchCompany()">
-          <div class="sidebar-co-avatar" id="sidebar-avatar">?</div>
-          <div>
-            <div class="sidebar-co-name" id="sidebar-co-name">—</div>
-            <div class="sidebar-co-sub">Switch company</div>
-          </div>
-        </div>
-      </div>
-    </nav>
+/* Tip card */
+.ob-tip-hero{background:linear-gradient(135deg,#1a1523 0%,#2d1f5e 100%);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem;position:relative;overflow:hidden;}
+.ob-tip-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(108,71,255,.4) 0%,transparent 60%);pointer-events:none;}
+.ob-tip-tab{display:inline-flex;align-items:center;gap:6px;background:rgba(108,71,255,.3);border:1px solid rgba(108,71,255,.5);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:#c4b5fd;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;}
+.ob-tip-where{font-size:1.1rem;font-weight:600;color:white;margin-bottom:.4rem;font-family:'Instrument Serif',Georgia,serif;}
+.ob-tip-why{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;}
+.ob-tip-signals{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;}
+.ob-tip-signal{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;background:#f7f5f2;border-radius:9px;}
+.ob-tip-signal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.ob-tip-signal-text{font-size:12px;color:#3d3550;line-height:1.55;}
 
-    <div class="tab-main">
-
-      <!-- ═══ MARKET INTEL ═══ -->
-      <div id="tab-intel" class="tab-content active">
-        <div class="card">
-          <div class="field">
-            <label>Role Family</label>
-            <select id="intel-domain" onchange="updateIntel()">
-              <option value="">— Select role family —</option>
-              <option value="pm">Product Management</option>
-              <option value="swe">Software Engineering (IC)</option>
-              <option value="em">Engineering Management</option>
-              <option value="ds">Data Science / ML Engineering</option>
-              <option value="de">Data Engineering</option>
-              <option value="sre">Site Reliability / DevOps</option>
-              <option value="sec">Security Engineering</option>
-              <option value="se">Solutions / Sales Engineering</option>
-              <option value="qa">QA / SDET</option>
-              <option value="hw">Hardware Engineering</option>
-            </select>
-          </div>
-          <div id="intel-results" style="display:none;">
-            <div class="insight-grid">
-              <div class="stat-card"><span class="stat-label">Talent Scarcity</span><span class="stat-val" id="scarcity-val">—</span></div>
-              <div class="stat-card"><span class="stat-label">Avg Tenure</span><span class="stat-val" id="tenure-val">—</span></div>
-              <div class="stat-card"><span class="stat-label">Top Donors</span><span class="stat-val" id="donor-val" style="font-size:12px;line-height:1.4;margin-top:3px;">—</span></div>
-              <div class="stat-card"><span class="stat-label">Market Trend</span><span class="stat-val" id="trend-val" style="font-size:12px;line-height:1.4;margin-top:3px;">—</span></div>
-            </div>
-            <div class="banner banner-yellow" style="margin-top:.875rem;" id="market-alert"></div>
-            <div id="intel-flow"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══ LEVELING ═══ -->
-      <div id="tab-leveling" class="tab-content">
-        <div class="card">
-          <p id="lev-context-note" style="font-size:13px;color:var(--text-2);margin-bottom:1rem;padding:10px 13px;background:var(--primary-light);border-radius:10px;border:1px solid var(--border-2);line-height:1.6;"></p>
-          <div class="field">
-            <label>Role Family</label>
-            <select id="lev-role-family" onchange="onLevFamilyChange()">
-              <option value="">— Select role family —</option>
-              <option value="pm">Product Management</option>
-              <option value="swe">Software Engineering (IC)</option>
-              <option value="em">Engineering Management</option>
-              <option value="ds">Data Science / ML Engineering</option>
-              <option value="de">Data Engineering</option>
-              <option value="sre">Site Reliability / DevOps</option>
-              <option value="sec">Security Engineering</option>
-              <option value="se">Solutions / Sales Engineering</option>
-              <option value="qa">QA / SDET</option>
-              <option value="hw">Hardware Engineering</option>
-            </select>
-          </div>
-          <div class="form-3col">
-            <div class="field">
-              <label>Source Company</label>
-              <select id="lev-company"><option value="">— Select company —</option></select>
-            </div>
-            <div class="field">
-              <label>Current Title / Level</label>
-              <select id="lev-title"><option value="">— Select company first —</option></select>
-            </div>
-            <div class="field">
-              <label>Years of Experience</label>
-              <select id="lev-yoe">
-                <option value="">— Select —</option>
-                <option>0–1</option><option>1–2</option><option>2–4</option>
-                <option>4–6</option><option>6–9</option><option>9–12</option><option>12+</option>
-              </select>
-            </div>
-          </div>
-          <div class="btn-row">
-            <button class="btn-primary" onclick="computeLevel()">Show Level Mapping</button>
-            <button class="btn-ghost" onclick="resetLeveling()">Clear</button>
-          </div>
-        </div>
-        <div id="leveling-results"><div class="empty">Select a role family, source company, title, and years of experience to see the level mapping.</div></div>
-      </div>
-
-      <!-- ═══ SOURCING ═══ -->
-      <div id="tab-sourcing" class="tab-content">
-        <div class="card">
-          <div class="section-label">Option 1 — Paste a Job Description</div>
-          <div class="field">
-            <textarea id="jd-input" placeholder="Paste the job description here. The tool will detect role family and level automatically..."></textarea>
-          </div>
-          <div class="btn-row" style="margin-bottom:4px;">
-            <button class="btn-primary" onclick="parseJD()">Analyze JD</button>
-          </div>
-          <div id="jd-note" class="parsed-note" style="display:none;"></div>
-          <div class="divider">or select manually</div>
-          <div class="section-label">Option 2 — Select role and level</div>
-          <div class="form-2col">
-            <div class="field">
-              <label>Role Family</label>
-              <select id="sourcing-role" onchange="runSourcing()">
-                <option value="">— Select role —</option>
-                <option value="pm">Product Management</option>
-                <option value="swe">Software Engineering (IC)</option>
-                <option value="em">Engineering Management</option>
-                <option value="ds">Data Science / ML Engineering</option>
-                <option value="de">Data Engineering</option>
-                <option value="sre">Site Reliability / DevOps</option>
-                <option value="sec">Security Engineering</option>
-                <option value="se">Solutions / Sales Engineering</option>
-                <option value="qa">QA / SDET</option>
-                <option value="hw">Hardware Engineering</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Seniority Target</label>
-              <select id="sourcing-level" onchange="runSourcing()">
-                <option value="">— Select level —</option>
-                <option value="junior">Junior / Mid-level (0–4 yrs)</option>
-                <option value="senior">Senior (4–8 yrs)</option>
-                <option value="staff">Staff / Principal (8–12 yrs)</option>
-                <option value="director">Director / VP (12+ yrs)</option>
-              </select>
-            </div>
-          </div>
-          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-            <label class="intake-toggle-row">
-              <input type="checkbox" id="icp-cb" onchange="toggleICP()"/>
-              <span>Define Ideal Candidate Profile (ICP)</span>
-            </label>
-            <div class="intake-fields" id="icp-fields">
-              <div class="form-2col" style="margin-top:1rem;">
-                <div class="field"><label>Must come from</label><input type="text" id="icp-co-types" placeholder="e.g. Big Tech, AI-Native, Series B+" oninput="updateICP()"/></div>
-                <div class="field"><label>Must NOT come from</label><input type="text" id="icp-co-exclude" placeholder="e.g. Consulting, Defense" oninput="updateICP()"/></div>
-                <div class="field"><label>Minimum scale signal</label>
-                  <select id="icp-scale" onchange="updateICP()">
-                    <option value="">— Any scale —</option>
-                    <option value="100M+">100M+ users</option><option value="10M+">10M+ users</option>
-                    <option value="1M+">1M+ users</option><option value="enterprise">Enterprise / B2B at scale</option>
-                    <option value="any">Any — scale not critical</option>
-                  </select>
-                </div>
-                <div class="field"><label>Years experience (min)</label>
-                  <select id="icp-yoe" onchange="updateICP()">
-                    <option value="">— Any —</option>
-                    <option value="2">2+</option><option value="4">4+</option>
-                    <option value="6">6+</option><option value="8">8+</option><option value="12">12+</option>
-                  </select>
-                </div>
-                <div class="field"><label>Non-negotiable skills</label><input type="text" id="icp-skills" placeholder="e.g. Go, Kubernetes, distributed systems" oninput="updateICP()"/></div>
-                <div class="field"><label>Hard no backgrounds</label><input type="text" id="icp-hard-no" placeholder="e.g. no pure frontend, no non-tech" oninput="updateICP()"/></div>
-              </div>
-              <div class="field"><label>What good looks like</label><textarea id="icp-good" style="min-height:60px;" placeholder="Describe the profile that would make the HM say yes immediately..." oninput="updateICP()"></textarea></div>
-              <div class="field"><label>What has failed before on this role type</label><textarea id="icp-fail" style="min-height:55px;" placeholder="Backgrounds or signals that looked good but didn't work out..." oninput="updateICP()"></textarea></div>
-            </div>
-          </div>
-          <div class="intake-section">
-            <label class="intake-toggle-row">
-              <input type="checkbox" id="intake-cb" onchange="toggleIntake()"/>
-              <span>Add intake meeting context (optional)</span>
-            </label>
-            <div class="intake-fields" id="intake-fields">
-              <div class="form-2col" style="margin-top:1rem;">
-                <div class="field"><label>Hiring Manager Name</label><input type="text" id="intake-hm" placeholder="e.g. Jane Smith" oninput="runSourcing()"/></div>
-                <div class="field"><label>Team / Org</label><input type="text" id="intake-team" placeholder="e.g. Infrastructure, Platform" oninput="runSourcing()"/></div>
-                <div class="field"><label>Must-Have Skills</label><input type="text" id="intake-musthave" placeholder="e.g. distributed systems, Go, Kubernetes" oninput="runSourcing()"/></div>
-                <div class="field"><label>Nice-to-Have</label><input type="text" id="intake-nicetohave" placeholder="e.g. open source, PhD" oninput="runSourcing()"/></div>
-                <div class="field"><label>Deal-Breakers</label><input type="text" id="intake-dealbreakers" placeholder="e.g. no frontend only" oninput="runSourcing()"/></div>
-                <div class="field"><label>Interview Timeline</label>
-                  <select id="intake-timeline" onchange="runSourcing()">
-                    <option value="">— Select urgency —</option>
-                    <option value="asap">ASAP — 3–4 weeks</option>
-                    <option value="standard">Standard — 6–8 weeks</option>
-                    <option value="flexible">Flexible</option>
-                    <option value="backfill">Backfill — urgent</option>
-                  </select>
-                </div>
-                <div class="field"><label>HM Preferences</label><textarea id="intake-hm-prefs" style="min-height:65px;" oninput="runSourcing()" placeholder="e.g. prefers ex-FAANG, values open source..."></textarea></div>
-                <div class="field"><label>Red Flags to Screen For</label><textarea id="intake-redflags" style="min-height:65px;" oninput="runSourcing()" placeholder="e.g. job hoppers, no production systems..."></textarea></div>
-              </div>
-              <div class="field"><label>Additional Intake Notes</label><textarea id="intake-notes" style="min-height:70px;" oninput="runSourcing()" placeholder="Why is the role open? What was missing in last hire? Team dynamics..."></textarea></div>
-            </div>
-          </div>
-        </div>
-        <div id="icp-summary" style="display:none;margin-bottom:.875rem;"></div>
-      <div id="sourcing-output" class="output-block"></div>
-      <div style="margin-top:.875rem;">
-        <button class="btn-primary" onclick="generateSearchString()" style="width:100%;font-size:12px;padding:11px 16px;">&#128269; Build full search string from JD + intake + ICP + title equivalents</button>
-        <div id="search-gen-container" style="display:none;margin-top:10px;"></div>
-      </div>
-      </div>
-
-      <!-- ═══ STRATEGY ═══ -->
-      <div id="tab-strategy" class="tab-content">
-        <div class="card">
-          <div class="field"><label>Candidate name (optional)</label>
-            <input type="text" id="strat-cand-name" placeholder="e.g. Alex M. — personalizes the strategy" oninput="updateStrategy()"/>
-          </div>
-          <div class="field"><label>Candidate current company</label>
-            <select id="strat-co-company" onchange="updateStrategy()">
-              <option value="">— Select company —</option>
-            </select>
-          </div>
-          <div class="form-2col">
-            <div class="field"><label>Candidate seniority</label>
-              <select id="strat-level" onchange="updateStrategy()">
-                <option value="">— Select —</option>
-                <option value="junior">Junior / Mid-level (0–4 yrs)</option>
-                <option value="senior">Senior IC (4–8 yrs)</option>
-                <option value="staff">Staff / Principal (8–12 yrs)</option>
-                <option value="director">Director / VP (12+ yrs)</option>
-              </select>
-            </div>
-            <div class="field"><label>Candidate motivation</label>
-              <select id="strat-motivation" onchange="updateStrategy()">
-                <option value="">— Select —</option>
-                <option value="scale">Scale & Impact — wants massive systems</option>
-                <option value="growth">Career Growth — wants to level up</option>
-                <option value="money">Compensation — driven by TC</option>
-                <option value="tech">Technical Challenge — wants harder problems</option>
-                <option value="brand">Brand / Prestige — values company name</option>
-                <option value="change">Change — unhappy at current company</option>
-                <option value="mission">Mission — wants meaningful work</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div id="strategy-output" class="output-block"></div>
-      </div>
-
-      <!-- ═══ COMPETITIVE ═══ -->
-      <div id="tab-competitive" class="tab-content">
-        <div class="card">
-          <div class="field"><label>Filter by Role Family</label>
-            <select id="comp-filter" onchange="renderCompetitive()">
-              <option value="all">All roles</option>
-              <option value="pm">Product Management</option>
-              <option value="swe">Software Engineering</option>
-              <option value="em">Engineering Management</option>
-              <option value="ds">Data Science / ML</option>
-              <option value="de">Data Engineering</option>
-              <option value="sre">SRE / DevOps</option>
-              <option value="sec">Security Engineering</option>
-              <option value="hw">Hardware Engineering</option>
-            </select>
-          </div>
-        </div>
-        <div id="comp-output"></div>
-      </div>
-
-      <!-- ═══ PLACEMENTS ═══ -->
-      <div id="tab-placements" class="tab-content">
-        <div class="card">
-          <div class="section-label">Log a Placement</div>
-          <div style="background:var(--warning-light);border:1px solid #fcd34d;border-radius:10px;padding:9px 13px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px;">
-            <span style="font-size:14px;flex-shrink:0;">&#9888;</span>
-            <p style="font-size:11px;color:#92400e;line-height:1.5;"><strong>Privacy note:</strong> Depending on your jurisdiction (GDPR, CCPA, etc.), storing candidate names alongside employment history may constitute personal data. Consider using <strong>initials or a reference code</strong> instead of a full name. Data is stored locally in your browser and should be cleared periodically.</p>
-          </div>
-          <div class="placement-form-grid">
-            <div class="field"><label>Candidate Reference <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-3);font-size:10px;">(initials or ID recommended)</span></label><input type="text" id="p-name" placeholder="e.g. A.M. or Ref-042"/></div>
-            <div class="field"><label>Previous Company</label><input type="text" id="p-prev-co" placeholder="e.g. Google"/></div>
-            <div class="field"><label>Previous Title</label><input type="text" id="p-prev-title" placeholder="e.g. Senior SWE"/></div>
-            <div class="field"><label>Role Family</label>
-              <select id="p-role-family">
-                <option value="">— Select —</option>
-                <option>Product Management</option><option>Software Engineering (IC)</option>
-                <option>Engineering Management</option><option>Data Science / ML Engineering</option>
-                <option>Data Engineering</option><option>Site Reliability / DevOps</option>
-                <option>Security Engineering</option><option>Solutions / Sales Engineering</option>
-                <option>QA / SDET</option><option>Hardware Engineering</option>
-              </select>
-            </div>
-            <div class="field"><label>Level Placed</label><input type="text" id="p-meta-level" placeholder="e.g. E5, Senior SWE, IC5"/></div>
-            <div class="field"><label>Team / Org</label><input type="text" id="p-team" placeholder="e.g. Infrastructure, Platform"/></div>
-            <div class="field"><label>Date</label><input type="text" id="p-date" placeholder="e.g. Mar 2025"/></div>
-            <div class="field"><label>Notes</label><input type="text" id="p-notes" placeholder="e.g. referral, 2 competing offers"/></div>
-          </div>
-          <div class="btn-row">
-            <button class="btn-primary" onclick="addPlacement()">Log Placement</button>
-            <button class="btn-ghost" onclick="clearPlacementForm()">Clear</button>
-          </div>
-        </div>
-        <div id="placement-stats-row" style="display:none;" class="placement-stats">
-          <div class="stat-card"><span class="stat-label">Total Placed</span><span class="stat-val" id="stat-total">0</span></div>
-          <div class="stat-card"><span class="stat-label">Top Source</span><span class="stat-val" id="stat-top-source" style="font-size:12px;margin-top:3px;">—</span></div>
-          <div class="stat-card"><span class="stat-label">Most Common Level</span><span class="stat-val" id="stat-top-level" style="font-size:12px;margin-top:3px;">—</span></div>
-        </div>
-        <div id="placement-list" class="placement-list"></div>
-
-        <!-- Calibration History -->
-        <div class="card" style="margin-top:.875rem;">
-          <div class="section-label">Calibration History — What's Worked</div>
-          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Log what worked and what didn't. This surfaces as sourcing intelligence — the tool will tell you which backgrounds have historically converted for this company and role.</p>
-          <div class="form-2col">
-            <div class="field"><label>Role Family</label>
-              <select id="cal-role">
-                <option value="">— Select —</option>
-                <option value="pm">Product Management</option>
-                <option value="swe">Software Engineering (IC)</option>
-                <option value="em">Engineering Management</option>
-                <option value="ds">Data Science / ML</option>
-                <option value="de">Data Engineering</option>
-                <option value="sre">SRE / DevOps</option>
-                <option value="sec">Security Engineering</option>
-                <option value="se">Solutions Engineering</option>
-                <option value="qa">QA / SDET</option>
-                <option value="hw">Hardware Engineering</option>
-              </select>
-            </div>
-            <div class="field"><label>Candidate Background Type</label>
-              <select id="cal-co-type">
-                <option value="">— Select —</option>
-                <option value="bigtech">Big Tech (Google, Meta, Amazon, Apple, Microsoft)</option>
-                <option value="ai_native">AI-Native (OpenAI, Anthropic, etc.)</option>
-                <option value="midtech">Mid-size Tech (Stripe, Airbnb, Uber, etc.)</option>
-                <option value="startup_late">Late-stage / Pre-IPO Startup</option>
-                <option value="startup_early">Early-stage Startup (Seed–Series B)</option>
-                <option value="fintech">Fintech</option>
-                <option value="enterprise">Enterprise Tech (Oracle, IBM, Cisco)</option>
-                <option value="finance">Finance / Banking</option>
-                <option value="consulting">Consulting</option>
-                <option value="defense">Defense / Gov Tech</option>
-                <option value="academia">Academia / Research</option>
-              </select>
-            </div>
-          </div>
-          <div class="field"><label>Outcome</label>
-            <div style="display:flex;gap:10px;margin-top:4px;">
-              <label style="display:flex;align-items:center;gap:6px;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;"><input type="radio" name="cal-outcome" value="worked" style="accent-color:var(--primary);width:16px;height:16px;"/> Hired and performed well</label>
-              <label style="display:flex;align-items:center;gap:6px;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;"><input type="radio" name="cal-outcome" value="didnt" style="accent-color:#e24b4a;width:16px;height:16px;"/> Didn't work out</label>
-            </div>
-          </div>
-          <div class="field"><label>Notes (optional)</label>
-            <input type="text" id="cal-note" placeholder="e.g. Strong on systems design but struggled with product sense, moved too slowly"/>
-          </div>
-          <div class="btn-row">
-            <button class="btn-primary" onclick="addCalibrationFromUI()">Add to Calibration</button>
-          </div>
-          <div id="calibration-list" style="margin-top:1rem;"></div>
-        </div>
-      </div>
-
-    
-      <!-- ═══ SCORECARD ═══ -->
-      <div id="tab-scorecard" class="tab-content">
-
-        <!-- Step 1: JD -->
-        <div class="card">
-          <div class="section-label">Step 1 — Job Description</div>
-          <div id="sc-intake-banner" class="sc-intake-banner" style="display:none;">
-            <span style="font-size:15px;flex-shrink:0;">&#9432;</span>
-            <span><strong>Intake context loaded.</strong> Must-have skills, deal-breakers, and HM preferences from your intake have been applied to scoring signals. Fill in the Sourcing tab intake form to add more signal.</span>
-          </div>
-          <div class="field">
-            <textarea id="sc-jd-input" style="min-height:90px;" placeholder="Paste the job description here. The tool will extract required skills, seniority signals, and role context automatically..." oninput="parseScJD()"></textarea>
-          </div>
-          <div id="sc-jd-parsed" style="display:none;margin-top:6px;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);margin-bottom:6px;">Detected signals</div>
-            <div id="sc-required-chips" class="chip-row"></div>
-          </div>
-        </div>
-
-        <!-- Step 2: Scoring dimensions -->
-        <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
-            <div class="section-label" style="margin-bottom:0;">Step 2 — Scoring dimensions</div>
-            <button class="btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="resetDimensions()">Reset to defaults</button>
-          </div>
-          <div id="sc-dimensions"></div>
-          <div style="display:flex;justify-content:flex-end;margin-top:8px;">
-            <span id="sc-weight-total" class="dim-weight-total" style="color:var(--text-2);">Total: 100%</span>
-          </div>
-          <p style="font-size:11px;color:var(--text-3);margin-top:6px;line-height:1.5;">Adjust dimension names and weights to match the role. Weights must add up to 100.</p>
-        </div>
-
-        <!-- Step 3: Candidates -->
-        <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
-            <div class="section-label" style="margin-bottom:0;">Step 3 — Candidates (up to 5)</div>
-            <div style="display:flex;gap:8px;">
-              <button class="btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="addCandidate()" id="sc-add-btn">+ Add candidate</button>
-              <button class="btn-primary" style="font-size:11px;padding:6px 14px;" onclick="scoreAll()">Score all</button>
-            </div>
-          </div>
-          <div id="sc-candidates" class="sc-cands-grid"></div>
-        </div>
-
-        <!-- Step 4: Prescreen -->
-        <div id="sc-prescreen-section" style="display:none;"></div>
-
-        <!-- Step 5: Results -->
-        <div id="sc-results" style="display:none;">
-          <div class="card">
-            <div class="section-label" style="margin-bottom:1rem;">Results — ranked by fit</div>
-            <div id="sc-results-content"></div>
-          </div>
-        </div>
-
-      </div>
-
-
-      <!-- ═══ CANDIDATES TAB ═══ -->
-      <div id="tab-candidates" class="tab-content">
-        <div class="card">
-          <div class="section-label" style="margin-bottom:.5rem;">Candidate Fit Narratives</div>
-          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Auto-drafted from Scorecard signals. Edit before sharing with the hiring manager. Scores candidates in Scorecard tab first.</p>
-          <div class="btn-row" style="margin-bottom:0;">
-            <button class="btn-primary" onclick="generateNarratives()">Generate from Scorecard</button>
-          </div>
-        </div>
-        <div id="narratives-output"><div class="empty">Score candidates in the Scorecard tab first, then click Generate above.</div></div>
-      </div>
-
-      <!-- ═══ COMP TAB ═══ -->
-      <div id="tab-comp" class="tab-content">
-        <div class="card">
-          <div class="section-label">Compensation Benchmarking</div>
-          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Estimated total compensation ranges calibrated to mid-2025 market data. Sources: Levels.fyi, Glassdoor, Blind, and recruiter community surveys. All figures are USD annual TC (base + equity + bonus). Treat as directional — individual comp varies based on interview performance, competing offers, and negotiation.</p>
-          <div class="form-2col">
-            <div class="field"><label>Role Family</label>
-              <select id="comp-role" onchange="updateCompBenchmark()">
-                <option value="">— Select role —</option>
-                <option value="swe">Software Engineering (IC)</option>
-                <option value="pm">Product Management</option>
-                <option value="em">Engineering Management</option>
-                <option value="ds">Data Science / ML Engineering</option>
-                <option value="de">Data Engineering</option>
-                <option value="sre">Site Reliability / DevOps</option>
-                <option value="sec">Security Engineering</option>
-                <option value="se">Solutions / Sales Engineering</option>
-                <option value="qa">QA / SDET</option>
-                <option value="hw">Hardware Engineering</option>
-              </select>
-            </div>
-            <div class="field"><label>Company Type</label>
-              <select id="comp-co-type" onchange="updateCompBenchmark()">
-                <option value="">— Select type —</option>
-                <option value="bigtech">Big Tech (Google, Meta, Amazon, Apple, Microsoft, Netflix)</option>
-                <option value="ai_native">AI-Native (OpenAI, Anthropic, xAI, Mistral)</option>
-                <option value="midtech">Mid-size Tech (Stripe, Airbnb, Uber, Databricks, etc.)</option>
-                <option value="startup_late">Late-stage / Pre-IPO Startup</option>
-                <option value="startup_b">Series B Startup</option>
-                <option value="startup_a">Series A Startup</option>
-                <option value="fintech">Fintech (Plaid, Robinhood, Coinbase, Klarna)</option>
-                <option value="enterprise">Enterprise Tech (Salesforce, Oracle, Cisco, SAP)</option>
-                <option value="finance">Finance / Banking (Goldman, JPMorgan, Citadel)</option>
-                <option value="consulting">Consulting (McKinsey, Deloitte, Accenture)</option>
-                <option value="defense">Defense / Gov Tech (Palantir, Lockheed, Booz Allen)</option>
-              </select>
-            </div>
-          </div>
-          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-            <div class="section-label" style="margin-bottom:.5rem;">Calibration History</div>
-            <p style="font-size:12px;color:var(--text-2);margin-bottom:.75rem;line-height:1.5;">Log what has worked and what hasn't. Auto-enriches from Placements tab and surfaces patterns when you run comp benchmarks.</p>
-            <div class="form-2col">
-              <div class="field"><label>Role family</label>
-                <select id="cal-role">
-                  <option value="">— Select —</option>
-                  <option value="swe">Software Engineering</option><option value="pm">Product Management</option>
-                  <option value="em">Engineering Management</option><option value="ds">Data Science / ML</option>
-                  <option value="de">Data Engineering</option><option value="sre">SRE / DevOps</option>
-                  <option value="sec">Security Engineering</option><option value="se">Solutions Engineering</option>
-                  <option value="qa">QA / SDET</option><option value="hw">Hardware Engineering</option>
-                </select>
-              </div>
-              <div class="field"><label>Company type of hire</label>
-                <select id="cal-co-type">
-                  <option value="">— Select —</option>
-                  <option value="Big Tech">Big Tech</option><option value="AI-Native">AI-Native</option>
-                  <option value="Mid-size Tech">Mid-size Tech</option><option value="Startup">Startup</option>
-                  <option value="Fintech">Fintech</option><option value="Finance">Finance / Banking</option>
-                  <option value="Enterprise">Enterprise Tech</option><option value="Consulting">Consulting</option>
-                  <option value="Defense">Defense / Gov Tech</option>
-                </select>
-              </div>
-            </div>
-            <div class="field"><label>Outcome</label>
-              <select id="cal-outcome">
-                <option value="">— Select —</option>
-                <option value="worked">Worked — placed and performed well</option>
-                <option value="didnt">Did not work — failed interview or exited early</option>
-              </select>
-            </div>
-            <div class="field"><label>Notes (optional)</label><input type="text" id="cal-note" placeholder="e.g. Google L5 → strong performer, consulting → failed systems design"/></div>
-            <div class="btn-row"><button class="btn-primary" onclick="addCalibrationEntry(document.getElementById('cal-role').value, document.getElementById('cal-co-type').value, document.getElementById('cal-outcome').value, document.getElementById('cal-note').value)">Log calibration entry</button></div>
-            <div id="cal-log" style="margin-top:.875rem;"></div>
-          </div>
-        </div>
-        <div id="comp-benchmark-output" class="output-block"></div>
-      </div>
-
-
-      <!-- ═══ HM PARTNER TAB ═══ -->
-      <div id="tab-hmpartner" class="tab-content">
-
-        <!-- Req setup card -->
-        <div class="card">
-          <div class="section-label">Requisition Context</div>
-          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Fill in the req details once. The action plan below will reference them throughout.</p>
-          <div class="hm-input-row">
-            <div class="field"><label>Hiring Manager Name</label><input type="text" id="hm-name" placeholder="e.g. Jane Smith" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Role Title</label><input type="text" id="hm-role-title" placeholder="e.g. Staff SWE — Infrastructure" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Team / Org</label><input type="text" id="hm-team" placeholder="e.g. Core Infrastructure" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Date Req Opened</label><input type="text" id="hm-date-opened" placeholder="e.g. May 1, 2025" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Target Start Date</label><input type="text" id="hm-target-start" placeholder="e.g. July 2025" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Number of Profiles to Present</label>
-              <select id="hm-profiles-target" onchange="updateHMContext()">
-                <option value="3">3 profiles</option>
-                <option value="5" selected>5 profiles</option>
-                <option value="8">8 profiles</option>
-                <option value="10">10+</option>
-              </select>
-            </div>
-          </div>
-          <div id="hm-context-banner" style="display:none;" class="hm-callout">
-            <div class="hm-callout-label">Active Req</div>
-            <p id="hm-context-text"></p>
-          </div>
-        </div>
-
-        <!-- Stage selector -->
-        <div class="card">
-          <div class="section-label" style="margin-bottom:.75rem;">Where are you in the search?</div>
-          <div class="stage-selector">
-            <div class="stage-pill active" onclick="selectHMStage(this,'present')" id="stage-pill-present">Presenting profiles</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'screen')" id="stage-pill-screen">Prescreens underway</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'loop')" id="stage-pill-loop">Interview loop</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'offer')" id="stage-pill-offer">Offer & close</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'stalled')" id="stage-pill-stalled">Search stalled</div>
-          </div>
-          <div class="hm-progress-bar"><div class="hm-progress-fill" id="hm-progress-fill" style="width:20%;"></div></div>
-          <div style="font-size:10px;color:var(--text-3);text-align:right;" id="hm-progress-label">Stage 1 of 5</div>
-        </div>
-
-        <!-- Action plan output -->
-        <div id="hm-action-plan"></div>
-
-      </div>
-
-    </div><!-- /tab-main -->
-  </div><!-- /tab-layout -->
-</div><!-- /app-inner -->
-</div><!-- /app -->
+/* Buttons */
+.ob-start-btn{width:100%;padding:14px;background:#6c47ff;color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.01em;transition:all .2s;}
+.ob-start-btn:hover:not([disabled]){background:#5535e0;transform:translateY(-1px);}
+.ob-start-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.ob-ghost-btn{width:100%;margin-top:8px;padding:12px;background:none;border:1.5px solid #e8e4f0;border-radius:12px;font-size:13px;color:#7a7388;cursor:pointer;font-family:inherit;transition:all .15s;}
+.ob-ghost-btn:hover{border-color:#b09aed;color:#2d2640;}
 
 <script>
 /* ══════════════════════════════════════════════
@@ -1190,24 +671,11 @@ function updateLaunchBtn(){
 
 function launchApp(){
   if(!activeCompany) return;
-  document.getElementById('welcome-screen').style.display = 'none';
+  if(document.getElementById('welcome-screen')) document.getElementById('welcome-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   initApp();
 }
 
-function switchCompany(){
-  document.getElementById('welcome-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('co-search').value = '';
-  buildCompanyList('');
-  // Restore previous selection highlight
-  if(activeCompany && activeCompany.id !== 'custom'){
-    setTimeout(function(){
-      var opt = document.getElementById('co-opt-'+activeCompany.id);
-      if(opt){ opt.classList.add('selected'); opt.scrollIntoView({block:'center'}); }
-    }, 100);
-  }
-}
 
 function initApp(){
   // Update topbar
@@ -1359,7 +827,7 @@ function updateIntel(){
   var d = document.getElementById('intel-domain').value;
   if(!d) return;
   var md = marketData[d];
-  document.getElementById('intel-results').style.display = 'block';
+  document.getElementById('intel-results').style.display='block';
   document.getElementById('scarcity-val').textContent = md.scarcity;
   document.getElementById('tenure-val').textContent = md.tenure;
   document.getElementById('donor-val').textContent = md.donors;
@@ -1652,7 +1120,60 @@ var titleEquivalency = {
       {title:"Robotics Engineer (hardware-focused)", overlap:"78%", note:"Strong mechanical and embedded systems background. Good for sensing, actuation, and mechatronics roles. Gap: pure silicon design.", probes:["How much of your work has been at the silicon level vs. the system and firmware level?","Walk me through your experience with hardware specification and bring-up."]},
       {title:"Computer Architecture Engineer", overlap:"85%", note:"Deep processor design and performance analysis. Strong for CPU, GPU, and AI accelerator roles. Often PhD-level.", probes:["Walk me through the last microarchitectural performance optimisation you designed and validated.","What simulation and modeling tools have you used to evaluate architectural trade-offs?"]}
     ]
-  }
+  },
+  "tpm":{scarcity:"Moderate",tenure:"2.9 yrs",donors:"Google, Amazon, Microsoft",trend:"Demand growing as orgs scale. TPMs who can code are at a significant premium.",alert:"TPM scope varies wildly — some own execution at the team level, others run company-wide programs. Validate span of control, headcount influenced, and whether they have any technical background.",
+    inflow:[{company:"Google",pct:32,note:"Strong TL/TLM pipeline. Google TPMs own complex cross-functional programs at scale."},{company:"Amazon",pct:26,note:"Amazon Program Manager and PMT pipeline. Excellent execution bar."},{company:"Microsoft",pct:14,note:"Strong systems-level TPM bar. Azure and Office TPMs are well-structured."},{company:"Startups",pct:16,note:"Founding PMs and ops leads who transitioned to program management."},{company:"Other Big Tech",pct:12,note:"Meta, Apple, LinkedIn TPMs. Strong cross-functional operating model."}],
+    topPaths:["Google Senior TPM → Staff TPM equivalent","Amazon Senior PMT → Sr TPM equivalent","Startup Founding PM → Sr TPM equivalent"],
+    watchout:"Many candidates blur the line between PM and TPM. A TPM drives execution and cross-team coordination — they do not own the roadmap. Validate whether they have owned delivery timelines, not product strategy."},
+  "ux":{scarcity:"High",tenure:"2.4 yrs",donors:"Apple, Google, Meta, Airbnb",trend:"Demand for senior IC designers with systems thinking rising sharply. Principal/Staff Design bar is extremely rare.",alert:"Design levels are highly inconsistent across companies. A 'Senior Designer' at a startup may be equivalent to a mid-level IC at Apple or Google. Always validate portfolio depth and system design thinking.",
+    inflow:[{company:"Apple",pct:28,note:"Apple has the highest craft bar in the industry. Apple designers are exceptionally rare and exceptionally sought-after."},{company:"Airbnb",pct:18,note:"Strong product design culture. Airbnb designers think deeply about systems and user experience."},{company:"Google",pct:16,note:"Material Design alumni. Strong systems-level design thinking."},{company:"Meta",pct:12,note:"High-scale consumer design experience."},{company:"Startups",pct:14,note:"Founding designers who built design systems from scratch. Validate whether they have systems depth or just execution breadth."},{company:"Other",pct:12,note:"Figma, Notion, Linear — product-led companies with strong design cultures."}],
+    topPaths:["Apple Senior Designer → Staff Design equivalent","Airbnb Senior Designer → Staff Design equivalent","Startup Head of Design → Senior Design equivalent"],
+    watchout:"UI-only designers without UX research or systems design experience are very different profiles. Validate whether they have run user research, not just delivered visual specs."},
+  "mlinfra":{scarcity:"Extreme",tenure:"1.8 yrs",donors:"Google, Meta, OpenAI, Anthropic",trend:"ML infrastructure is the fastest-growing and scarcest role family in the market. LLM serving, training infra, and feature stores at scale are all in extreme demand.",alert:"ML Infra is distinct from both ML Engineering and SRE. These engineers own training pipelines, model serving, feature stores, and ML platforms — not models themselves. Validate depth in distributed training, CUDA/GPU optimization, and inference serving.",
+    inflow:[{company:"Google (TF/JAX infra)",pct:28,note:"Deep distributed training and serving infra at the highest scale in the industry."},{company:"Meta (PyTorch/AI Infra)",pct:22,note:"PyTorch core and AI infrastructure team alumni. Extremely strong signal."},{company:"OpenAI",pct:14,note:"Training infra at frontier model scale. Rare and highly sought-after."},{company:"Anthropic",pct:10,note:"Small team, high quality. Candidates often leaving for deployment scale."},{company:"NVIDIA",pct:12,note:"CUDA and GPU optimization depth. Strong for inference optimization roles."},{company:"Other AI labs",pct:14,note:"Mistral, xAI, Cohere, Databricks ML platform teams."}],
+    topPaths:["Google Senior SWE (ML Infra) → Staff ML Infra Engineer equivalent","Meta PyTorch Engineer → Senior ML Infra equivalent","OpenAI Training Infra Engineer → Staff ML Infra equivalent"],
+    watchout:"Many SWEs claim ML infra experience because they deployed a model once. Validate: have they owned training pipelines at scale (1000+ GPU runs), inference serving SLAs, or built a feature store used by multiple teams?"},
+  "quant":{scarcity:"Extreme",tenure:"3.6 yrs",donors:"Citadel, Two Sigma, Jane Street, DE Shaw",trend:"Extremely tight market. Quant devs and researchers sit at the intersection of finance and systems engineering. The top firms pay dramatically above the tech market.",alert:"Quant Developer and Quant Researcher are very different profiles. Quant Devs build trading systems; Quant Researchers build models. Know which you need before sourcing. Both require elite credentials — typically top-10 university CS, math, or physics.",
+    inflow:[{company:"Citadel / Citadel Securities",pct:28,note:"The single largest source of experienced quant talent. Elite bar — any Citadel alumni is worth a call."},{company:"Two Sigma",pct:18,note:"Research-heavy quant shop. Strong data science and systems depth."},{company:"Jane Street",pct:14,note:"Exceptional algorithmic depth. Jane Street alumni are rare and rarely move."},{company:"DE Shaw",pct:12,note:"Strong systematic trading and data infrastructure depth."},{company:"Jump Trading / Virtu",pct:12,note:"HFT background. Strong low-latency systems depth."},{company:"Academia",pct:16,note:"PhD mathematicians and physicists transitioning from academia. Strong modeling background but may lack systems depth."}],
+    topPaths:["Citadel Quant Dev → Senior Quant Dev equivalent","Jane Street Trader/Dev → Quant Researcher equivalent","PhD Math/Physics → Junior Quant Researcher"],
+    watchout:"Quant compensation is dramatically above tech norms. Citadel senior quants earn $1M+. If you cannot get close to that, you will not move most of these candidates. Be honest about comp early."},
+  "mobile":{scarcity:"Moderate",tenure:"2.5 yrs",donors:"Apple, Google, Meta, Snap",trend:"Mobile engineering demand is stable but the iOS/Android gap is real — iOS engineers are rarer and typically command a premium. Cross-platform (React Native, Flutter) is growing but still viewed as a secondary skill at top companies.",alert:"iOS and Android are distinct pipelines. Do not assume an iOS engineer wants an Android role or vice versa. Always validate platform preference early.",
+    inflow:[{company:"Apple",pct:26,note:"Deep UIKit and SwiftUI expertise. Apple mobile engineers have the highest platform fluency in the industry."},{company:"Google (Android)",pct:20,note:"Android framework and Jetpack Compose depth. Strong for Android-heavy roles."},{company:"Meta",pct:16,note:"Instagram and Messenger mobile teams. High-scale consumer mobile experience."},{company:"Snap",pct:12,note:"Camera and AR-heavy mobile engineering. Strong for companies with media or real-time features."},{company:"Startups",pct:14,note:"Mobile leads who owned the full app. Often lighter on platform depth but stronger on product ownership."},{company:"Other",pct:12,note:"Airbnb, Uber, Lyft mobile teams. Strong for marketplace and map-heavy applications."}],
+    topPaths:["Apple Senior iOS Engineer → Senior Mobile equivalent","Google Senior Android Engineer → Senior Mobile equivalent","Startup Mobile Lead → Senior/Staff Mobile equivalent"],
+    watchout:"React Native and Flutter experience does not substitute for native depth at most top companies. If the role requires platform-native performance, validate that candidates have written native code, not just cross-platform wrappers."},
+  "embedded":{scarcity:"High",tenure:"3.8 yrs",donors:"Apple, NVIDIA, Qualcomm, Tesla",trend:"Embedded and firmware engineering demand is growing with AI at the edge, robotics, and automotive. Very low voluntary turnover — most embedded engineers are deeply embedded in hardware programs.",alert:"Embedded engineers are very slow to move — they think in hardware timelines. Ask about project milestones before pitching. Someone mid-bringup will not move regardless of comp.",
+    inflow:[{company:"Apple",pct:24,note:"Sensing, Silicon bringup, and firmware for Apple Silicon. Deep embedded/firmware bar."},{company:"NVIDIA",pct:18,note:"GPU firmware and CUDA driver stack. Strong for AI accelerator-adjacent roles."},{company:"Qualcomm",pct:16,note:"Modem firmware and SoC bringup. Strong wireless and embedded depth."},{company:"Tesla / Autopilot",pct:12,note:"Vehicle firmware and real-time control systems. Strong for automotive and robotics roles."},{company:"Defense contractors",pct:14,note:"RTOS and mission-critical embedded systems. Validate for security clearance and tech stack currency."},{company:"Semiconductor startups",pct:16,note:"AI edge chip and IoT device firmware engineers."}],
+    topPaths:["Apple Firmware Engineer → Senior Embedded equivalent","Qualcomm Sr Embedded Engineer → Senior Embedded equivalent","Startup Embedded Lead → Senior Embedded equivalent"],
+    watchout:"Embedded engineers often work in C and RTOS environments that are far from modern cloud stacks. Validate tech stack alignment carefully. RTOS experience does not imply Linux BSP depth, and vice versa."},
+  "chip":{scarcity:"Extreme",tenure:"4.2 yrs",donors:"Apple, NVIDIA, AMD, Intel, ARM",trend:"Custom silicon demand is at an all-time high. Every major tech company is building chips — Apple, Google, Amazon, Microsoft, Meta. Chip architects are extraordinarily rare and have extremely long tenure.",alert:"Chip architecture searches are the slowest in the industry — 6-12 months is normal. Start sourcing early. Candidates mid-architecture cycle cannot move. Ask about where they are in their current project before anything else.",
+    inflow:[{company:"Apple Silicon",pct:30,note:"The deepest custom silicon bench in consumer tech. Apple chip architects are among the most sought-after engineers in the world."},{company:"NVIDIA",pct:22,note:"GPU architecture at the frontier of AI compute. Strong for AI accelerator roles."},{company:"AMD",pct:14,note:"CPU and GPU architecture depth. More moveable than NVIDIA post-2023."},{company:"Intel",pct:12,note:"More moveable than in previous years. Strong for CPU/SoC architecture roles."},{company:"ARM",pct:12,note:"ISA design and microarchitecture depth. Strong signal for processor design roles."},{company:"Academic research labs",pct:10,note:"PhD researchers transitioning from RISC-V or domain-specific accelerator research."}],
+    topPaths:["Apple Silicon Architect → Principal Chip Architect equivalent","NVIDIA GPU Architect → Staff Chip Architect equivalent","PhD Computer Architecture → Senior Chip Architect (research-to-industry)"],
+    watchout:"Chip architecture is the longest and most specialized search in tech. Compensation must be extraordinary to move these candidates — they have deep equity, long project investment, and few career risks staying where they are."},
+  "robotics":{scarcity:"Extreme",tenure:"2.8 yrs",donors:"Boston Dynamics, Waymo, Tesla, Figure",trend:"Robotics engineering is surging with humanoid robot programs at Figure, Physical Intelligence, 1X, and Tesla Optimus. The talent pool is tiny relative to demand — expect aggressive competition.",alert:"Robotics is highly specialized — a robot software engineer, a controls engineer, and a perception engineer are very different profiles with minimal overlap. Know which stack you need before sourcing.",
+    inflow:[{company:"Waymo / Cruise",pct:22,note:"AV perception, planning, and controls engineers. Strong for mobile robotics and autonomous systems."},{company:"Boston Dynamics",pct:16,note:"Manipulation, locomotion, and controls depth. Elite signal for physical robotics roles."},{company:"Tesla Optimus",pct:14,note:"Growing humanoid program. Engineers leaving are often seeking more research-oriented work."},{company:"Figure / Physical Intelligence",pct:12,note:"Early-stage humanoid programs. Engineers with strong ML+robotics hybrid profiles."},{company:"Academia (CMU, MIT, Stanford)",pct:20,note:"PhD roboticists transitioning from research. Strong theoretical depth, validate production systems experience."},{company:"Other",pct:16,note:"Agility Robotics, 1X, Apptronik, and automotive OEM robotics teams."}],
+    topPaths:["Waymo Senior SWE (Robotics) → Senior Robotics Engineer equivalent","CMU/MIT PhD Robotics → Research Engineer equivalent","Boston Dynamics Controls Engineer → Senior Controls Engineer equivalent"],
+    watchout:"Robotics talent is being hoarded by well-funded startups with equity upside. Comp-only pitches will lose. Lead with the technical challenge and the scale of the real-world deployment."},
+  "arvr":{scarcity:"High",tenure:"2.3 yrs",donors:"Meta Reality Labs, Apple Vision Pro, Unity",trend:"AR/VR is heavily dependent on Apple Vision Pro adoption trajectory and Meta's continued investment. Talent is available but easily spooked by platform risk questions. Lead with the technical challenge.",alert:"AR/VR engineering spans graphics, computer vision, spatial computing, and real-time systems — these are very different specializations. Know which layer you need before sourcing.",
+    inflow:[{company:"Meta Reality Labs",pct:32,note:"The largest AR/VR engineering team in the world. Engineers leaving are often frustrated by slow consumer adoption."},{company:"Apple Vision Pro",pct:18,note:"Small team, extremely high bar. visionOS engineers are rare and high quality."},{company:"Unity / Epic",pct:14,note:"Game engine depth with real-time rendering expertise. Strong for spatial computing roles."},{company:"Magic Leap / Snap",pct:10,note:"Waveguide and optical depth from Magic Leap. AR camera stack from Snap."},{company:"Game studios",pct:14,note:"Real-time rendering engineers transitioning to spatial computing."},{company:"Academic",pct:12,note:"Computer vision and HCI researchers from CMU, Stanford, MIT."}],
+    topPaths:["Meta Reality Labs Senior SWE → Senior AR/VR Engineer equivalent","Apple visionOS Engineer → Senior Spatial Computing Engineer equivalent","Unity/Unreal Senior Graphics Engineer → Senior AR/VR Engineer equivalent"],
+    watchout:"Platform risk is a genuine concern for candidates. Be prepared to address questions about long-term AR/VR adoption directly. Engineers who have left Meta Reality Labs often cite uncertainty about platform timeline."},
+  "game":{scarcity:"Moderate",tenure:"2.9 yrs",donors:"Epic, Unity, Riot, Activision-Blizzard",trend:"Game engineering talent is more transferable than commonly assumed — especially graphics, networking, and real-time systems engineers. Mobile gaming engineers are highly sought-after for consumer app roles.",alert:"Game engineers often self-filter out of traditional tech roles due to imposter syndrome. Actively pitch the transferability of their skills — real-time systems, graphics optimization, and low-latency networking are all premium skills outside gaming.",
+    inflow:[{company:"Epic Games",pct:22,note:"Unreal Engine engineers have elite real-time rendering and systems depth. Highly transferable."},{company:"Riot Games",pct:16,note:"Backend and platform engineering at scale. Strong for distributed systems roles."},{company:"Unity",pct:14,note:"Game engine and runtime engineers. Strong for AR/VR and spatial computing roles."},{company:"Activision-Blizzard / EA",pct:14,note:"Large-scale game backend and live services engineering."},{company:"Mobile game studios",pct:18,note:"iOS/Android game engineers with strong performance optimization depth."},{company:"Indie / startup studios",pct:16,note:"Full-stack game engineers with broad ownership. Validate depth in specific areas."}],
+    topPaths:["Epic Senior Graphics Engineer → Senior Graphics/AR Engineer equivalent","Riot Senior Backend Engineer → Senior SWE (distributed) equivalent","Mobile Game Lead Engineer → Senior Mobile Engineer equivalent"],
+    watchout:"Game engineers are often paid below market — comp comparison is usually a positive surprise. Lead with compensation and then the technical challenge. Many are actively looking for a change but haven't explored traditional tech roles."},
+  "compiler":{scarcity:"Extreme",tenure:"4.1 yrs",donors:"Google, Apple, LLVM community, Meta",trend:"Compiler and programming languages engineering is one of the rarest and most specialized roles in the industry. Demand is growing with AI accelerator backends, WebAssembly, and domain-specific languages.",alert:"This is a PhD-heavy field. Most strong compiler engineers have graduate-level CS backgrounds in programming language theory, formal verification, or computer architecture. Non-PhD candidates exist but are exceptional.",
+    inflow:[{company:"Google (MLIR/XLA)",pct:28,note:"MLIR, XLA, and TensorFlow compiler stack. The deepest compiler bench outside academia."},{company:"Apple (Swift/LLVM)",pct:20,note:"Swift compiler and LLVM backend. Rare — Apple compiler engineers almost never leave."},{company:"Meta (PyTorch compiler)",pct:14,note:"torch.compile and TorchInductor backend. Growing compiler team with strong Python+C++ depth."},{company:"LLVM open source community",pct:18,note:"Active LLVM/Clang contributors. Strong signal — check GitHub commit history."},{company:"Academic labs",pct:14,note:"PL theory and compiler researchers from CMU, MIT, UW, Cornell, EPFL."},{company:"Semiconductor companies",pct:6,note:"AI chip compiler backends from NVIDIA, AMD, and startups like Groq and Tenstorrent."}],
+    topPaths:["Google MLIR Engineer → Principal Compiler Engineer equivalent","PhD PL/Compilers → Research Engineer (compiler) equivalent","Apple Swift Compiler Engineer → Senior Compiler Engineer equivalent"],
+    watchout:"Compiler engineers are almost impossible to pitch with broad claims. They respond to specific technical problems — what IR are you building, what optimization passes, what target architecture. Vague pitches get ignored."},
+  "bio":{scarcity:"High",tenure:"2.6 yrs",donors:"Illumina, 23andMe, Genentech, Broad Institute",trend:"Bioinformatics demand is growing rapidly with AI protein folding, genomics pipelines, and drug discovery ML. The intersection of ML and biology is one of the most exciting and underserved talent markets.",alert:"Bioinformatics spans very different profiles — pipeline engineers who process genomic data, computational biologists who build models, and ML engineers who apply deep learning to biology. These require different sourcing strategies.",
+    inflow:[{company:"Broad Institute / Sanger",pct:22,note:"The deepest academic bioinformatics pipeline. Broad alumni are highly sought-after in both biotech and tech."},{company:"23andMe",pct:14,note:"Consumer genomics and population genetics pipeline experience."},{company:"Illumina",pct:12,note:"Sequencing pipeline and genomics data infrastructure depth."},{company:"Genentech / Roche",pct:14,note:"Drug discovery and clinical genomics pipeline engineering."},{company:"DeepMind / Google Bio",pct:12,note:"AlphaFold and genomics ML. Strong for AI-in-biology roles."},{company:"Academic labs",pct:26,note:"PhD bioinformaticians and computational biologists transitioning to industry. Strong modeling depth — validate production systems experience."}],
+    topPaths:["Broad Institute Staff Scientist → Senior Bioinformatics Engineer equivalent","23andMe Senior Bioinformatics Engineer → Senior equivalent","PhD Computational Biology → Research Engineer (bio) equivalent"],
+    watchout:"Bioinformatics engineers often come from academic environments with limited software engineering discipline. Validate production pipeline ownership, version control practices, and comfort with cloud-scale data processing."},
+  "devrel":{scarcity:"Moderate",tenure:"2.1 yrs",donors:"Stripe, Twilio, AWS, GitHub",trend:"Developer Relations is professionalizing. The bar for senior DevRel is rising — companies want engineers who can build, not just present. Technical depth is increasingly non-negotiable.",alert:"DevRel and Developer Marketing are often confused. A Developer Advocate who writes production-quality sample code and contributes to open source is a very different profile from one who primarily attends conferences. Validate the technical depth.",
+    inflow:[{company:"Stripe",pct:22,note:"Strong technical DevRel culture. Stripe advocates build real integrations and write high-quality documentation."},{company:"Twilio",pct:16,note:"API-focused DevRel with strong developer empathy."},{company:"AWS",pct:14,note:"Large DevRel program with deep cloud infrastructure knowledge."},{company:"GitHub",pct:12,note:"Developer tooling advocacy. Strong open source community depth."},{company:"Open source projects",pct:18,note:"Maintainers of popular open source projects. Strong technical credibility and existing community relationships."},{company:"Other SaaS",pct:18,note:"Vercel, Supabase, Cloudflare, PlanetScale — developer-first companies with strong technical advocacy cultures."}],
+    topPaths:["Stripe Senior Developer Advocate → Staff DevRel equivalent","Open source maintainer → Senior Developer Advocate equivalent","SWE who transitioned to DevRel → Senior Developer Advocate equivalent"],
+    watchout:"The best DevRel candidates are engineers first. If a candidate cannot write production-quality code in at least one language, they will struggle to build credibility with a technical audience. Require a code sample or portfolio."}
+
 };
 
 function buildTitleEquivalency(role) {
@@ -4060,148 +3581,250 @@ function extractPDFText(raw){
   text=text.replace(/\s{3,}/g,' ').replace(/([a-z])([A-Z])/g,'$1 $2').trim();
   return text||'[Could not extract text — try a text-based PDF or paste the text manually in the Paste text tab.]';
 }
+/* ══ ONBOARDING ══ */
+var obSelectedGoal = null;
+var obTargetTab = 'tab-intel';
+
+function obNext(from){
+  if(from===1){
+    document.getElementById('ob-step-1').classList.remove('active');
+    document.getElementById('ob-step-2').classList.add('active');
+    obBuildCompanyList('');
+    setTimeout(function(){ document.getElementById('ob-co-search').focus(); }, 100);
+  } else if(from===2){
+    if(!window._obCompany) return;
+    document.getElementById('ob-step-2').classList.remove('active');
+    document.getElementById('ob-step-3').classList.add('active');
+  } else if(from===3){
+    if(!window._obGoal) return;
+    document.getElementById('ob-step-3').classList.remove('active');
+    document.getElementById('ob-step-4').classList.add('active');
+    obBuildTip();
+  }
+}
+
+
+function obBack(from){
+  document.getElementById('ob-step-'+from).classList.remove('active');
+  document.getElementById('ob-step-'+(from-1)).classList.add('active');
+}
+
+
+function obBuildCompanyList(q){
+  var list = document.getElementById('ob-co-list');
+  var html = '';
+  var filter = (q||'').toLowerCase().trim();
+  var grouped = {};
+  COMPANIES.forEach(function(co){
+    if(filter && co.name.toLowerCase().indexOf(filter)===-1 && co.type.toLowerCase().indexOf(filter)===-1) return;
+    if(!grouped[co.type]) grouped[co.type]=[];
+    grouped[co.type].push(co);
+  });
+  var groupOrder=['Big Tech','AI-Native','Mid-size Tech','Data / Cloud','Security','Fintech','Finance / Banking','Enterprise Tech','Hardware','Consulting','Defense / Gov Tech','Academia / Research','Startup','Telecom / Other'];
+  var selected = window._obCompany ? window._obCompany.id : null;
+  groupOrder.forEach(function(g){
+    var items=grouped[g]; if(!items||!items.length) return;
+    html+='<div class="ob-co-group">'+g+'</div>';
+    items.forEach(function(co){
+      var isSel = selected===co.id;
+      var cls = 'ob-co-opt' + (isSel ? ' selected' : '');
+      html += '<div class="'+cls+'" data-coid="'+co.id+'">';
+      html += '<span class="ob-co-emoji">'+co.emoji+'</span>';
+      html += '<div><div class="ob-co-name">'+co.name+'</div><div class="ob-co-type">'+co.type+'</div></div>';
+      html += '<span class="ob-co-check">&#10003;</span>';
+      html += '</div>';
+    });
+  });
+  if(!html) html='<div style="padding:1.5rem;text-align:center;color:#b0a8c4;font-size:13px;">No companies found — use the custom input below.</div>';
+  list.innerHTML = html;
+  // Attach click handlers after render to avoid quote nesting in HTML strings
+  list.querySelectorAll('.ob-co-opt').forEach(function(el){
+    el.addEventListener('click', function(){ obSelectCompany(this.dataset.coid); });
+  });
+}
+
+
+
+function obFilterCompanies(){
+  var q = document.getElementById('ob-co-search').value;
+  obBuildCompanyList(q);
+}
+
+
+function obSelectCompany(id){
+  var co = COMPANIES.find(function(c){ return c.id===id; });
+  if(!co) return;
+  window._obCompany = co;
+  activeCompany = co;
+  // Update banner
+  document.getElementById('ob-selected-co-banner').style.display='flex';
+  document.getElementById('ob-selected-co-emoji').textContent=co.emoji;
+  document.getElementById('ob-selected-co-name').textContent=co.name;
+  document.getElementById('ob-selected-co-type').textContent=co.type;
+  // Enable next button
+  var btn = document.getElementById('ob-co-next-btn');
+  btn.disabled=false; btn.textContent='Continue with '+co.name+' →';
+  // Rebuild list to show checkmark
+  obBuildCompanyList(document.getElementById('ob-co-search').value);
+}
+
+
+function obSelectCustom(){
+  var name = document.getElementById('ob-custom-input').value.trim();
+  if(!name) return;
+  var co = {id:'custom',name:name,emoji:'🏢',type:'Custom',levels:{
+    swe:['Junior SWE','SWE','Senior SWE','Staff SWE','Principal SWE'],
+    em:['Engineering Manager','Director','VP Engineering'],
+    pm:['PM','Senior PM','Staff PM','Director PM']
+  }};
+  window._obCompany = co;
+  activeCompany = co;
+  document.getElementById('ob-selected-co-banner').style.display='flex';
+  document.getElementById('ob-selected-co-emoji').textContent='🏢';
+  document.getElementById('ob-selected-co-name').textContent=name;
+  document.getElementById('ob-selected-co-type').textContent='Custom';
+  var btn = document.getElementById('ob-co-next-btn');
+  btn.disabled=false; btn.textContent='Continue with '+name+' →';
+}
+
+
+function obEnableNextBtn(){
+  var btn = document.getElementById('ob-co-next-btn');
+  if(btn && activeCompany){
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.textContent = 'Continue with '+activeCompany.name+' →';
+  }
+}
+
+function obSelectGoal(goal){
+  window._obGoal = goal;
+  document.querySelectorAll('.ob-goal-card').forEach(function(c){ c.classList.remove('selected'); });
+  var el = document.getElementById('goal-'+goal);
+  if(el) el.classList.add('selected');
+  setTimeout(function(){ obNext(3); }, 280);
+}
+
+
+function obBuildTip(){
+  var goal = window._obGoal || 'new';
+  var co = window._obCompany || activeCompany;
+  var coName = co ? co.name : 'your company';
+  var tips = {
+    new:{
+      tab:'Market Intel',
+      tabKey:'intel',
+      icon:'📊',
+      headline:'Start with Market Intel',
+      why:'The best way to get oriented is to pull market data for a role you know well. You will immediately see the kind of depth this tool offers — scarcity, tenure, inflow percentages, and researcher watch-outs.',
+      signals:[
+        {color:'#6c47ff',text:'Select any role from the Market Intel dropdown to see a full market breakdown'},
+        {color:'#0f766e',text:'Then try the Sourcing tab — paste a JD to get a full analysis card with skills, seniority signals, and a sourcing brief'},
+        {color:'#d97706',text:'Everything in the sidebar is yours to explore — all data is personalized to '+coName}
+      ]
+    },
+    sourcing:{
+      tab:'Sourcing',
+      tabKey:'sourcing',
+      icon:'🔍',
+      headline:'Start with the Sourcing tab',
+      why:'Paste your JD into the Analyze JD field. The tool will detect the role family, extract required and nice-to-have skills, surface seniority signals, flag any JD red flags, and generate a sourcing brief — all in one click.',
+      signals:[
+        {color:'#6c47ff',text:'Paste your JD → click Analyze JD → get a full analysis card with skills, seniority signals, interview angles, and a one-paragraph sourcing brief'},
+        {color:'#0f766e',text:'Scroll down to see title equivalency — same-function titles and adjacent roles with skills overlap percentages'},
+        {color:'#d97706',text:'Click "Build full search string" to generate a Boolean string from your JD, intake, ICP, and title equivalents'}
+      ]
+    },
+    market:{
+      tab:'Market Intel',
+      tabKey:'intel',
+      icon:'📊',
+      headline:'Start with Market Intel',
+      why:'Select the role family you want to research. You will get scarcity rating, average tenure, top donor companies, inflow percentages with researcher notes, common career paths, and a researcher watch-out.',
+      signals:[
+        {color:'#6c47ff',text:'Select a role from the dropdown — '+coName+'-specific competitive landscape is in the Competitive tab'},
+        {color:'#0f766e',text:'The Sourcing tab goes deeper on specific clusters, donor companies, and title equivalency for any role'},
+        {color:'#d97706',text:'Comp benchmarking for the role is in the Comp tab — including TC ranges by company type'}
+      ]
+    },
+    scoring:{
+      tab:'Scorecard',
+      tabKey:'scorecard',
+      icon:'📝',
+      headline:'Start with the Scorecard tab',
+      why:'Paste a JD to extract required skills and set up dimensions. Then add candidates — paste their resume, upload a PDF, or paste LinkedIn text. The tool auto-scores each dimension and generates prescreen questions.',
+      signals:[
+        {color:'#6c47ff',text:'Step 1: paste the JD → skills are extracted automatically as scoreable chips'},
+        {color:'#0f766e',text:'Step 2: add up to 5 candidates — paste text, upload a PDF resume, or use the LinkedIn guided paste'},
+        {color:'#d97706',text:'Click Score All to rank candidates and generate company-aware prescreen questions'}
+      ]
+    },
+    strategy:{
+      tab:'Strategy',
+      tabKey:'strategy',
+      icon:'🎯',
+      headline:'Start with Strategy + Comp',
+      why:'The Strategy tab gives you company-specific attraction hooks and motivation-aligned outreach for the candidate you are trying to move. The Comp tab gives you TC benchmarks and a close likelihood score based on their current company and unvested equity.',
+      signals:[
+        {color:'#6c47ff',text:'Strategy tab: select the candidate current company → get specific attraction angles and an outreach message template'},
+        {color:'#0f766e',text:'Comp tab: add candidate current company + TC + unvested equity → get a close likelihood score with close strategy'},
+        {color:'#d97706',text:'Both tabs are fully personalized to '+coName+' as the target company'}
+      ]
+    }
+  };
+  var tip = tips[goal] || tips['new'];
+  var h = '';
+  h += '<div class="ob-tip-hero">';
+  h += '<div class="ob-tip-tab">'+tip.icon+' Suggested start</div>';
+  h += '<div class="ob-tip-where">'+tip.headline+'</div>';
+  h += '<div class="ob-tip-why">'+tip.why+'</div>';
+  h += '</div>';
+  h += '<div class="ob-tip-signals">';
+  for(var i=0;i<tip.signals.length;i++){
+    h += '<div class="ob-tip-signal">';
+    h += '<div class="ob-tip-signal-dot" style="background:'+tip.signals[i].color+';"></div>';
+    h += '<div class="ob-tip-signal-text">'+tip.signals[i].text+'</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+  document.getElementById('ob-tip-content').innerHTML = h;
+  window._obLaunchTab = tip.tabKey;
+}
+
+
+function obLaunch(){
+  document.getElementById('onboarding').style.display='none';
+  document.getElementById('app').style.display='block';
+  initApp();
+  var tabKey = window._obLaunchTab || 'intel';
+  var tabMap = {
+    intel:'tab-intel', sourcing:'tab-sourcing', scorecard:'tab-scorecard',
+    strategy:'tab-strategy', comp:'tab-comp', competitive:'tab-competitive'
+  };
+  var tabId = tabMap[tabKey] || 'tab-intel';
+  var btn = document.querySelector('[onclick*="'+tabId+'"]');
+  if(btn) btn.click();
+}
+
+
+function obLaunchDefault(){
+  document.getElementById('onboarding').style.display='none';
+  document.getElementById('app').style.display='block';
+  initApp();
+}
+
+
+// Also keep legacy welcome screen hidden (it no longer exists but initApp may reference it)
+function switchCompany(){
+  document.getElementById('onboarding').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  // Jump to step 2
+  document.querySelectorAll('.ob-step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('ob-step-2').classList.add('active');
+  obBuildCompanyList('');
+}
+
 </script>
-</body>
-</html      <!-- ═══ COMP BENCHMARKING TAB ═══ -->
-      <div id="tab-comp" class="tab-content">
-        <div class="card">
-          <div class="section-label">Compensation Benchmarking + Close Likelihood</div>
-          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Select a role and target company to see market TC ranges. Add the candidate current company and current TC to unlock a <strong>close likelihood score</strong> and full close strategy — equity gap analysis, timing recommendation, and outreach angle.</p>
-          <p style="font-size:11px;color:var(--text-3);margin-bottom:1rem;">All figures USD annual TC (base + equity + bonus). Ranges reflect 25th–75th percentile. Source: Levels.fyi, Glassdoor, Blind, recruiter surveys, calibrated mid-2025.</p>
-
-          <div class="form-2col">
-            <div class="field"><label>Role Family</label>
-              <select id="comp-role" onchange="updateCompBenchmark()">
-                <option value="">— Select role —</option>
-                <option value="swe">Software Engineering (IC)</option>
-                <option value="pm">Product Management</option>
-                <option value="em">Engineering Management</option>
-                <option value="ds">Data Science / ML Engineering</option>
-                <option value="de">Data Engineering</option>
-                <option value="sre">Site Reliability / DevOps</option>
-                <option value="sec">Security Engineering</option>
-                <option value="se">Solutions / Sales Engineering</option>
-                <option value="qa">QA / SDET</option>
-                <option value="hw">Hardware Engineering</option>
-              </select>
-            </div>
-            <div class="field"><label>Target Company (hiring into)</label>
-              <select id="comp-co-type" onchange="updateCompBenchmark()">
-                <option value="">— Select type —</option>
-                <option value="bigtech">Big Tech (Google, Meta, Amazon, Apple, Microsoft, Netflix)</option>
-                <option value="ai_native">AI-Native (OpenAI, Anthropic, xAI, Mistral)</option>
-                <option value="midtech">Mid-size Tech (Stripe, Airbnb, Uber, Databricks, etc.)</option>
-                <option value="startup_late">Late-stage / Pre-IPO Startup</option>
-                <option value="startup_b">Series B Startup</option>
-                <option value="startup_a">Series A Startup</option>
-                <option value="fintech">Fintech (Plaid, Robinhood, Coinbase, Klarna)</option>
-                <option value="enterprise">Enterprise Tech (Salesforce, Oracle, Cisco, SAP)</option>
-                <option value="finance">Finance / Banking (Goldman, JPMorgan, Citadel)</option>
-                <option value="consulting">Consulting (McKinsey, Deloitte, Accenture)</option>
-                <option value="defense">Defense / Gov Tech (Palantir, Lockheed, Booz Allen)</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-            <div class="section-label" style="margin-bottom:.75rem;">Candidate Comp Context — Unlocks Close Likelihood</div>
-            <div class="form-2col">
-              <div class="field"><label>Candidate Current Company</label>
-                <select id="comp-cand-company" onchange="updateCompBenchmark()">
-                  <option value="">— Unknown / skip —</option>
-                </select>
-              </div>
-              <div class="field"><label>Candidate Current TC (approx)</label>
-                <select id="comp-cand-tc" onchange="updateCompBenchmark()">
-                  <option value="">— Unknown / skip —</option>
-                  <option value="under150">Under $150K</option>
-                  <option value="150_250">$150K – $250K</option>
-                  <option value="250_400">$250K – $400K</option>
-                  <option value="400_600">$400K – $600K</option>
-                  <option value="600_900">$600K – $900K</option>
-                  <option value="900_1200">$900K – $1.2M</option>
-                  <option value="over1200">$1.2M+</option>
-                </select>
-              </div>
-              <div class="field"><label>Unvested Equity at Current Company</label>
-                <select id="comp-cand-equity" onchange="updateCompBenchmark()">
-                  <option value="">— Unknown / skip —</option>
-                  <option value="none">None / fully vested</option>
-                  <option value="under100">Under $100K unvested</option>
-                  <option value="100_300">$100K – $300K unvested</option>
-                  <option value="300_600">$300K – $600K unvested</option>
-                  <option value="over600">$600K+ unvested</option>
-                </select>
-              </div>
-              <div class="field"><label>Vest Cliff Timing</label>
-                <select id="comp-vest-timing" onchange="updateCompBenchmark()">
-                  <option value="">— Unknown / skip —</option>
-                  <option value="now">Vesting now — optimal window</option>
-                  <option value="3mo">Within 3 months</option>
-                  <option value="6mo">3–6 months away</option>
-                  <option value="12mo">6–12 months away</option>
-                  <option value="far">12+ months away</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="comp-benchmark-output" class="output-block"></div>
-      </div>
-
-
-      <!-- ═══ HM PARTNER TAB ═══ -->
-      <div id="tab-hmpartner" class="tab-content">
-
-        <!-- Req setup card -->
-        <div class="card">
-          <div class="section-label">Requisition Context</div>
-          <p style="font-size:12px;color:var(--text-2);margin-bottom:1rem;line-height:1.5;">Fill in the req details once. The action plan below will reference them throughout.</p>
-          <div class="hm-input-row">
-            <div class="field"><label>Hiring Manager Name</label><input type="text" id="hm-name" placeholder="e.g. Jane Smith" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Role Title</label><input type="text" id="hm-role-title" placeholder="e.g. Staff SWE — Infrastructure" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Team / Org</label><input type="text" id="hm-team" placeholder="e.g. Core Infrastructure" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Date Req Opened</label><input type="text" id="hm-date-opened" placeholder="e.g. May 1, 2025" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Target Start Date</label><input type="text" id="hm-target-start" placeholder="e.g. July 2025" oninput="updateHMContext()"/></div>
-            <div class="field"><label>Number of Profiles to Present</label>
-              <select id="hm-profiles-target" onchange="updateHMContext()">
-                <option value="3">3 profiles</option>
-                <option value="5" selected>5 profiles</option>
-                <option value="8">8 profiles</option>
-                <option value="10">10+</option>
-              </select>
-            </div>
-          </div>
-          <div id="hm-context-banner" style="display:none;" class="hm-callout">
-            <div class="hm-callout-label">Active Req</div>
-            <p id="hm-context-text"></p>
-          </div>
-        </div>
-
-        <!-- Stage selector -->
-        <div class="card">
-          <div class="section-label" style="margin-bottom:.75rem;">Where are you in the search?</div>
-          <div class="stage-selector">
-            <div class="stage-pill active" onclick="selectHMStage(this,'present')" id="stage-pill-present">Presenting profiles</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'screen')" id="stage-pill-screen">Prescreens underway</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'loop')" id="stage-pill-loop">Interview loop</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'offer')" id="stage-pill-offer">Offer & close</div>
-            <div class="stage-pill" onclick="selectHMStage(this,'stalled')" id="stage-pill-stalled">Search stalled</div>
-          </div>
-          <div class="hm-progress-bar"><div class="hm-progress-fill" id="hm-progress-fill" style="width:20%;"></div></div>
-          <div style="font-size:10px;color:var(--text-3);text-align:right;" id="hm-progress-label">Stage 1 of 5</div>
-        </div>
-
-        <!-- Action plan output -->
-        <div id="hm-action-plan"></div>
-
-      </div>
-
-    </div><!-- /tab-main -->
-  </div><!-- /tab-layout -->
-</div><!-- /app-inner -->
-</div><!-- /app -->
-
-
 </body>
 </html>
