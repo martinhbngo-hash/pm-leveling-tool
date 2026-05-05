@@ -3122,43 +3122,38 @@ function updateICP(){
 /* ══ SEARCH STRING GENERATOR ══ */
 function generateSearchString(){
   var role=document.getElementById('sourcing-role').value;
-  // If no role selected, try to run sourcing first then get role
   if(!role){
-    var jdText = document.getElementById('jd-input') ? document.getElementById('jd-input').value.trim() : '';
-    if(jdText){ parseJD(); role=document.getElementById('sourcing-role').value; }
-    if(!role){ alert('Please paste a JD or select a role family first — then click Build Search String.'); return; }
+    var jdText=document.getElementById('jd-input')?document.getElementById('jd-input').value.trim():'';
+    if(jdText){parseJD();role=document.getElementById('sourcing-role').value;}
+    if(!role){alert('Please paste a JD or select a role family first, then click Build Search String.');return;}
   }
   var teData=titleEquivalency[role];
   var titles=[];
-  if(teData){for(var i=0;i<Math.min(teData.same.length,5);i++)titles.push('"'+teData.same[i].title+'"');}
+  if(teData){for(var i=0;i<Math.min(teData.same.length,6);i++)titles.push('"'+teData.same[i].title+'"');}
   var skills=[];
   if(window._scRequiredSkills)skills=skills.concat(window._scRequiredSkills);
   var intake=getIntake();
   if(intake&&intake.musthave){intake.musthave.split(',').forEach(function(s){var t=s.trim().toLowerCase();if(t&&skills.indexOf(t)===-1)skills.push(t);});}
-  if(icpData&&icpData.skills){icpData.skills.split(',').forEach(function(s){var t=s.trim().toLowerCase();if(t&&skills.indexOf(t)===-1)skills.push(t);});}
+  if(typeof icpData!=='undefined'&&icpData&&icpData.skills){icpData.skills.split(',').forEach(function(s){var t=s.trim().toLowerCase();if(t&&skills.indexOf(t)===-1)skills.push(t);});}
   var adjTitles=[];
   if(teData&&teData.adjacent){for(var i=0;i<Math.min(teData.adjacent.length,4);i++)adjTitles.push('"'+teData.adjacent[i].title+'"');}
   var parts=[];
   if(titles.length)parts.push('('+titles.join(' OR ')+')');
   if(skills.length)parts.push('AND ('+(skills.map(function(s){return '"'+s+'"';}).join(' OR '))+')');
   if(adjTitles.length)parts.push('OR ('+adjTitles.join(' OR ')+')');
-  if(icpData&&icpData.hardNo){var e=icpData.hardNo.split(',').map(function(s){return 'NOT "'+s.trim()+'"';});parts=parts.concat(e);}
+  if(typeof icpData!=='undefined'&&icpData&&icpData.hardNo){var e=icpData.hardNo.split(',').map(function(s){return 'NOT "'+s.trim()+'"';});parts=parts.concat(e);}
   if(intake&&intake.dealbreakers){var e2=intake.dealbreakers.split(',').map(function(s){return 'NOT "'+s.trim()+'"';});parts=parts.concat(e2);}
-  var str=parts.join(' ');
-  var outEl=document.getElementById('sourcing-output');
-  var existing=document.getElementById('search-gen-container');
-  if(!existing){
-    var div=document.createElement('div');div.id='search-gen-container';div.className='output-section';
-    outEl.insertBefore(div,outEl.firstChild);
+  var str=parts.length?parts.join(' '):'(No role or JD data found — paste a JD or select a role first)';
+  // Write into the dedicated container OUTSIDE sourcing-output
+  var container=document.getElementById('search-gen-container');
+  if(container){
+    container.style.display='block';
+    container.innerHTML=
+      '<div class="output-section-label">Generated Search String</div>'+
+      '<p style="font-size:12px;color:var(--text-2);margin-bottom:8px;line-height:1.5;">Built from role title equivalents + JD keywords + intake must-haves + ICP skills + adjacent functions + exclusions. Copy and paste directly into LinkedIn Recruiter.</p>'+
+      '<div style="background:var(--bg);border:1.5px solid var(--primary);border-radius:10px;padding:11px 13px;font-size:12px;font-family:monospace;color:var(--text);line-height:1.8;word-break:break-word;">'+str+'</div>'+
+      '<button class="copy-btn" style="margin-top:8px;" onclick="copyGenSearch()">Copy search string</button>';
   }
-  var container = document.getElementById('search-gen-container');
-  container.style.display = 'block';
-  container.innerHTML =
-    '<div class="output-section-label">Generated Search String</div>'+
-    '<p style="font-size:12px;color:var(--text-2);margin-bottom:8px;">Built from JD keywords + intake + ICP + title equivalents + adjacent functions + exclusions. Copy and paste directly into LinkedIn Recruiter.</p>'+
-    '<div style="background:var(--bg);border:1.5px solid var(--primary);border-radius:10px;padding:11px 13px;font-size:12px;font-family:monospace;color:var(--text);line-height:1.8;word-break:break-word;">'+str+'</div>'+
-    '<button class="copy-btn" style="margin-top:8px;" onclick="copyGenSearch()">Copy search string</button>';
-  outEl.classList.add('visible');
 }
 function copySearchString(){ copyGenSearch(); }
 function copyGenSearch(){
