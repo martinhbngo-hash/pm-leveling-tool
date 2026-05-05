@@ -476,6 +476,62 @@ tr:last-child td{border-bottom:none;}
 .ai-chat-send{padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;align-self:flex-end;}
 .ai-chat-send:hover{background:#5535e0;}
 .ai-chat-send:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ── Field sync indicators ── */
+.field-synced{position:relative;}
+.field-synced select,.field-synced input,.field-synced textarea{border-color:var(--primary)!important;background-image:none;}
+.sync-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--primary);font-weight:600;margin-top:3px;}
+.sync-badge::before{content:'↑';font-size:9px;}
+
+/* ── PRINT / PDF REPORT ── */
+@media print {
+  body > *:not(#print-report){ display:none!important; }
+  #print-report{ display:block!important; }
+  @page{ margin:1.8cm 1.8cm; size:A4; }
+}
+#print-report{ display:none; font-family:'DM Sans',system-ui,sans-serif; color:#1a1523; font-size:13px; line-height:1.6; }
+.pr-cover{ padding:2.5rem 0 2rem; border-bottom:3px solid #6c47ff; margin-bottom:2rem; }
+.pr-logo{ display:flex;align-items:center;gap:10px;margin-bottom:1.5rem; }
+.pr-logo-icon{ width:36px;height:36px;background:#6c47ff;border-radius:9px;display:flex;align-items:center;justify-content:center; }
+.pr-wordmark{ font-size:13px;font-weight:700;color:#1a1523; }
+.pr-title{ font-size:2rem;font-weight:700;color:#1a1523;margin-bottom:.4rem; }
+.pr-meta{ font-size:12px;color:#7a7388;display:flex;gap:1.5rem;flex-wrap:wrap; }
+.pr-meta span{ display:flex;align-items:center;gap:5px; }
+.pr-section{ margin-bottom:2rem;break-inside:avoid; }
+.pr-section-title{ font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6c47ff;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1.5px solid #ede9ff; }
+.pr-h2{ font-size:1.1rem;font-weight:700;color:#1a1523;margin-bottom:.5rem; }
+.pr-p{ font-size:13px;color:#3d3550;line-height:1.65;margin-bottom:.5rem; }
+.pr-grid3{ display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem; }
+.pr-grid2{ display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1rem; }
+.pr-stat{ background:#f7f5f2;border-radius:8px;padding:.65rem .85rem; }
+.pr-stat-label{ font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#9a8fb8;margin-bottom:2px; }
+.pr-stat-val{ font-size:14px;font-weight:700;color:#1a1523; }
+.pr-alert{ background:#fff8ed;border:1.5px solid #fcd34d;border-radius:8px;padding:.65rem .85rem;margin-bottom:1rem;font-size:12px;color:#92400e; }
+.pr-alert strong{ font-weight:700; }
+.pr-donor{ display:flex;align-items:flex-start;gap:.65rem;padding:.55rem 0;border-bottom:1px solid #f0edf8; }
+.pr-donor:last-child{ border-bottom:none; }
+.pr-donor-rank{ width:20px;height:20px;border-radius:50%;background:#ede9ff;color:#6c47ff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px; }
+.pr-donor-co{ font-size:12px;font-weight:700;color:#1a1523; }
+.pr-donor-note{ font-size:11px;color:#7a7388;line-height:1.5; }
+.pr-chip{ display:inline-block;background:#ede9ff;color:#6c47ff;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:600;margin:2px; }
+.pr-chip.adj{ background:#f7f5f2;color:#5a5565; }
+.pr-bool{ background:#f7f5f2;border:1.5px solid #6c47ff;border-radius:8px;padding:.65rem .85rem;font-family:monospace;font-size:11px;color:#1a1523;line-height:1.7;word-break:break-all;margin-bottom:.75rem; }
+.pr-q{ padding:.55rem 0;border-bottom:1px solid #f0edf8; }
+.pr-q:last-child{ border-bottom:none; }
+.pr-q-text{ font-size:12px;font-weight:600;color:#1a1523;margin-bottom:3px; }
+.pr-q-signal{ font-size:11px;color:#065f46;line-height:1.5; }
+.pr-q-flag{ font-size:11px;color:#991b1b;line-height:1.5; }
+.pr-obj{ margin-bottom:.65rem;border-radius:8px;overflow:hidden;border:1px solid #e8e4f0; }
+.pr-obj-q{ background:#f7f5f2;padding:.5rem .75rem;font-size:12px;font-weight:600;color:#1a1523; }
+.pr-obj-a{ background:#ede9ff;padding:.5rem .75rem;font-size:12px;color:#2d2047;line-height:1.55; }
+.pr-pitch{ background:#ede9ff;border:1.5px solid #c4b5fd;border-radius:8px;padding:.75rem .9rem;margin-bottom:1rem; }
+.pr-pitch-label{ font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#6c47ff;margin-bottom:4px; }
+.pr-pitch-text{ font-size:13px;color:#1a1523;line-height:1.65; }
+.pr-page-break{ page-break-before:always; }
+.pr-footer{ margin-top:2.5rem;padding-top:1rem;border-top:1px solid #e8e4f0;font-size:10px;color:#9a8fb8;display:flex;justify-content:space-between; }
+.pr-company-banner{ background:linear-gradient(135deg,#1a1523,#2d1f5e);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem;color:white; }
+.pr-company-name{ font-size:1.25rem;font-weight:700;margin-bottom:3px; }
+.pr-company-type{ font-size:11px;opacity:.6; }
 </style>
 </head>
 <body>
@@ -682,6 +738,9 @@ tr:last-child td{border-bottom:none;}
         <button class="tab-btn" onclick="openTab(this,'tab-candidates')">&#128101; Candidates</button>
         <button class="tab-btn" onclick="openTab(this,'tab-placements')">&#128203; Placements</button>
 
+        <button onclick="generatePDFReport()" style="width:calc(100% - 16px);margin:4px 8px;padding:9px 12px;background:rgba(108,71,255,.15);border:1px solid rgba(108,71,255,.3);border-radius:10px;color:#c4b5fd;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.02em;transition:all .15s;" onmouseover="this.style.background='rgba(108,71,255,.25)'" onmouseout="this.style.background='rgba(108,71,255,.15)'">
+          &#128196; Download Search Report
+        </button>
         <div id="sidebar-footer-wrap" class="sidebar-footer" style="display:none;">
           <div class="sidebar-co-chip">
             <div class="sidebar-co-avatar" id="sidebar-avatar">—</div>
@@ -977,7 +1036,7 @@ tr:last-child td{border-bottom:none;}
             </div>
             <div class="form-2col">
               <div class="field"><label>Candidate current company</label>
-                <select id="strat-co-company" onchange="updateStrategy()">
+                <select id="strat-co-company" onchange="onStratCoChange()">
                   <option value="">&#8212; Select company &#8212;</option>
                 </select>
               </div>
@@ -1631,7 +1690,189 @@ function buildCloseIntel(coType,level,motivation,equity,vestTiming,candName){
 }
 
 /* ══ TABS ══ */
+
+/* ═══════════════════════════════════════════════
+   FIELD SYNC — pre-populate known fields across tabs
+═══════════════════════════════════════════════ */
+
+// Central state store for cross-tab field values
+var _fieldState = {
+  roleFamily: '',    // role family key e.g. 'pm', 'swe'
+  level: '',         // e.g. 'senior', 'staff'
+  jdText: '',        // JD text from search or scorecard
+  candCompanyId: '', // candidate current company
+  hmName: '',
+  hmRole: '',
+  hmTeam: ''
+};
+
+function syncFieldsForTab(tabId) {
+  // Collect current known state before syncing
+  _collectState();
+
+  if(tabId === 'tab-search') {
+    // If JD already in scorecard, mirror it
+    var scJD = document.getElementById('sc-jd-input');
+    var searchJD = document.getElementById('search-jd-input');
+    if(scJD && searchJD && !searchJD.value && scJD.value) {
+      searchJD.value = scJD.value;
+    }
+  }
+
+  if(tabId === 'tab-scorecard') {
+    // Mirror JD from search tab
+    var searchJD = document.getElementById('search-jd-input');
+    var scJD = document.getElementById('sc-jd-input');
+    if(searchJD && scJD && !scJD.value && searchJD.value) {
+      scJD.value = searchJD.value;
+    }
+  }
+
+  if(tabId === 'tab-strategy') {
+    // Pre-fill role from search brief
+    if(_fieldState.roleFamily) {
+      var roleEl = document.getElementById('strat-current-role');
+      if(roleEl && !roleEl.value) roleEl.value = _fieldState.roleFamily;
+    }
+    // Pre-fill level from search brief
+    if(_fieldState.level) {
+      var levelEl = document.getElementById('strat-level');
+      if(levelEl && !levelEl.value) levelEl.value = _fieldState.level;
+    }
+  }
+
+  if(tabId === 'tab-comp') {
+    // Pre-fill role from strategy or search
+    if(_fieldState.roleFamily) {
+      var compRole = document.getElementById('comp-role');
+      if(compRole && !compRole.value) compRole.value = _fieldState.roleFamily;
+    }
+    // Pre-fill candidate company from strategy tab
+    if(_fieldState.candCompanyId) {
+      var compCand = document.getElementById('comp-cand-company');
+      if(compCand && !compCand.value) compCand.value = _fieldState.candCompanyId;
+    }
+  }
+
+  if(tabId === 'tab-leveling') {
+    // Pre-fill role from search or strategy
+    if(_fieldState.roleFamily) {
+      var levRole = document.getElementById('lev-role-family');
+      if(levRole && !levRole.value) {
+        levRole.value = _fieldState.roleFamily;
+        if(typeof onLevFamilyChange === 'function') onLevFamilyChange();
+      }
+    }
+  }
+
+  if(tabId === 'tab-hmpartner') {
+    // Pre-fill HM partner from intake fields
+    if(_fieldState.hmName) {
+      var hmEl = document.getElementById('hm-name');
+      if(hmEl && !hmEl.value) hmEl.value = _fieldState.hmName;
+    }
+    if(_fieldState.hmRole) {
+      var hmRoleEl = document.getElementById('hm-role-title');
+      if(hmRoleEl && !hmRoleEl.value) hmRoleEl.value = _fieldState.hmRole;
+    }
+    if(_fieldState.hmTeam) {
+      var hmTeamEl = document.getElementById('hm-team');
+      if(hmTeamEl && !hmTeamEl.value) hmTeamEl.value = _fieldState.hmTeam;
+    }
+  }
+}
+
+function _collectState() {
+  // Role family — from search brief, strategy, or sourcing tab
+  if(window._searchBrief && window._searchBrief.titles && window._searchBrief.titles.same_function) {
+    // Try to infer role family from search brief context
+    if(window._searchContext) {
+      var ctx = window._searchContext.toLowerCase();
+      var roleMap = [
+        {keys:['product manager','product management',' pm ','head of product'], val:'pm'},
+        {keys:['software engineer','software engineering','swe','full stack','backend','frontend'], val:'swe'},
+        {keys:['engineering manager','eng manager',' em ','head of engineering'], val:'em'},
+        {keys:['data scientist','machine learning','ml engineer','data science'], val:'ds'},
+        {keys:['data engineer','data pipeline','data platform'], val:'de'},
+        {keys:['site reliability','devops','sre','platform engineer','infra'], val:'sre'},
+        {keys:['security engineer','appsec','infosec','security'], val:'sec'},
+        {keys:['mobile engineer','ios engineer','android engineer','mobile'], val:'mobile'},
+        {keys:['technical program','tpm','program manager'], val:'tpm'},
+        {keys:['product designer','ux designer','ui designer','design'], val:'ux'},
+        {keys:['ml infra','mlops','ml platform','ml infrastructure'], val:'mlinfra'},
+        {keys:['hardware engineer','chip','silicon'], val:'hw'},
+      ];
+      for(var i=0;i<roleMap.length;i++) {
+        for(var j=0;j<roleMap[i].keys.length;j++) {
+          if(ctx.indexOf(roleMap[i].keys[j]) !== -1) {
+            _fieldState.roleFamily = roleMap[i].val;
+            break;
+          }
+        }
+        if(_fieldState.roleFamily) break;
+      }
+    }
+  }
+
+  // Role from strategy dropdown (most explicit)
+  var stratRole = document.getElementById('strat-current-role');
+  if(stratRole && stratRole.value) _fieldState.roleFamily = stratRole.value;
+
+  // Role from sourcing tab
+  var sourRole = document.getElementById('sourcing-role');
+  if(sourRole && sourRole.value) _fieldState.roleFamily = sourRole.value;
+
+  // Level — from strategy or search
+  var stratLevel = document.getElementById('strat-level');
+  if(stratLevel && stratLevel.value) _fieldState.level = stratLevel.value;
+  var searchLevel = document.getElementById('search-level');
+  if(searchLevel && searchLevel.value) _fieldState.level = searchLevel.value;
+
+  // JD text
+  var searchJD = document.getElementById('search-jd-input');
+  if(searchJD && searchJD.value) _fieldState.jdText = searchJD.value;
+  var scJD = document.getElementById('sc-jd-input');
+  if(scJD && scJD.value && !_fieldState.jdText) _fieldState.jdText = scJD.value;
+
+  // Candidate company from strategy
+  var stratCo = document.getElementById('strat-co-company');
+  if(stratCo && stratCo.value) _fieldState.candCompanyId = stratCo.value;
+  var compCand = document.getElementById('comp-cand-company');
+  if(compCand && compCand.value) _fieldState.candCompanyId = compCand.value;
+
+  // HM fields from intake
+  var intakeHM = document.getElementById('intake-hm');
+  if(intakeHM && intakeHM.value) _fieldState.hmName = intakeHM.value;
+  var intakeTeam = document.getElementById('intake-team');
+  if(intakeTeam && intakeTeam.value) _fieldState.hmTeam = intakeTeam.value;
+
+  // HM role from search brief or role title input
+  if(window._searchContext) {
+    var lines = window._searchContext.split('\n');
+    if(lines[0] && lines[0].length < 80) _fieldState.hmRole = lines[0].trim();
+  }
+}
+
+// Also sync when strategy candidate company changes -> update comp tab
+function onStratCoChange() {
+  updateStrategy();
+  var stratCo = document.getElementById('strat-co-company');
+  if(stratCo && stratCo.value) {
+    _fieldState.candCompanyId = stratCo.value;
+    // If comp tab is visible, update it
+    var compCand = document.getElementById('comp-cand-company');
+    if(compCand && !compCand.value) compCand.value = stratCo.value;
+  }
+}
+
+// Also sync when search brief is generated
+function onSearchBriefGenerated(brief) {
+  window._searchBrief = brief;
+  _collectState();
+}
+
 function openTab(btn,id){
+  syncFieldsForTab(id);
   document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
   document.getElementById(id).classList.add('active');
@@ -5409,6 +5650,170 @@ function sendAIMessage() {
   });
 }
 
+/* ═══════════════════════════════════════════════
+   PDF REPORT GENERATOR
+═══════════════════════════════════════════════ */
+function generatePDFReport() {
+  var coName = activeCompany ? activeCompany.name : 'Unknown Company';
+  var coType = activeCompany ? activeCompany.type : '';
+  var today = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+  var brief = window._searchBrief;
+  var searchCtx = window._searchContext || '';
+
+  var h = '';
+
+  // ── Cover ──────────────────────────────────────────────────────────────
+  h += '<div class="pr-cover">';
+  h += '<div class="pr-logo"><div class="pr-logo-icon"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:white;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="pr-wordmark">Intelligence Hub</div></div>';
+  h += '<div class="pr-title">Search Brief Report</div>';
+  h += '<div class="pr-meta">';
+  h += '<span>&#127970; Hiring for: <strong>' + coName + '</strong></span>';
+  if(coType) h += '<span>&#128202; ' + coType + '</span>';
+  h += '<span>&#128197; Generated: ' + today + '</span>';
+  h += '</div></div>';
+
+  // ── Role context ───────────────────────────────────────────────────────
+  if(searchCtx) {
+    h += '<div class="pr-section">';
+    h += '<div class="pr-section-title">Role Context</div>';
+    var ctxLines = searchCtx.split('\n').filter(function(l){ return l.trim(); }).slice(0, 6);
+    h += '<div class="pr-p">' + ctxLines.join('<br>') + '</div>';
+    h += '</div>';
+  }
+
+  if(brief) {
+    // ── Market Snapshot ─────────────────────────────────────────────────
+    if(brief.snapshot) {
+      var s = brief.snapshot;
+      h += '<div class="pr-section">';
+      h += '<div class="pr-section-title">Market Snapshot</div>';
+      h += '<div class="pr-grid3">';
+      h += '<div class="pr-stat"><div class="pr-stat-label">Talent Scarcity</div><div class="pr-stat-val">' + (s.scarcity||'-') + '</div></div>';
+      h += '<div class="pr-stat"><div class="pr-stat-label">Avg Tenure</div><div class="pr-stat-val">' + (s.avg_tenure||'-') + '</div></div>';
+      h += '<div class="pr-stat"><div class="pr-stat-label">Trend</div><div class="pr-stat-val" style="font-size:11px;line-height:1.4;">' + (s.trend||'-') + '</div></div>';
+      h += '</div>';
+      if(s.alert) h += '<div class="pr-alert"><strong>Recruiter alert:</strong> ' + s.alert + '</div>';
+      h += '</div>';
+    }
+
+    // ── Where to Look ───────────────────────────────────────────────────
+    if(brief.where_to_look && brief.where_to_look.length) {
+      h += '<div class="pr-section">';
+      h += '<div class="pr-section-title">Where to Look</div>';
+      var primary = brief.where_to_look.filter(function(d){ return d.type==='Primary'; });
+      var secondary = brief.where_to_look.filter(function(d){ return d.type==='Secondary'; });
+      var avoid = brief.where_to_look.filter(function(d){ return d.type==='Avoid'; });
+      function renderDonors(arr, label, color) {
+        if(!arr.length) return '';
+        var out = '<div style="margin-bottom:.75rem;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:'+color+';margin-bottom:.4rem;">'+label+'</div>';
+        arr.forEach(function(d,i){
+          out += '<div class="pr-donor"><div class="pr-donor-rank">'+(i+1)+'</div><div><div class="pr-donor-co">'+d.company+'</div><div class="pr-donor-note">'+d.note+'</div></div></div>';
+        });
+        out += '</div>';
+        return out;
+      }
+      h += renderDonors(primary, 'Primary Sources', '#065f46');
+      h += renderDonors(secondary, 'Secondary Sources', '#92400e');
+      if(avoid.length) {
+        h += '<div style="margin-bottom:.75rem;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#991b1b;margin-bottom:.4rem;">Avoid</div>';
+        avoid.forEach(function(d){
+          h += '<div class="pr-donor"><div class="pr-donor-rank" style="background:#fee2e2;color:#991b1b;">x</div><div><div class="pr-donor-co" style="color:#991b1b;">'+d.company+'</div><div class="pr-donor-note">'+d.note+'</div></div></div>';
+        });
+        h += '</div>';
+      }
+      h += '</div>';
+    }
+
+    // ── Titles + Boolean ────────────────────────────────────────────────
+    if(brief.titles || brief.search_string) {
+      h += '<div class="pr-section pr-page-break">';
+      h += '<div class="pr-section-title">What to Search</div>';
+      if(brief.titles) {
+        if(brief.titles.same_function && brief.titles.same_function.length) {
+          h += '<div style="margin-bottom:.75rem;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6c47ff;margin-bottom:.4rem;">Target Titles</div>';
+          brief.titles.same_function.forEach(function(t){ h += '<span class="pr-chip">'+t+'</span>'; });
+          h += '</div>';
+        }
+        if(brief.titles.adjacent && brief.titles.adjacent.length) {
+          h += '<div style="margin-bottom:.75rem;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a7388;margin-bottom:.4rem;">Adjacent Titles</div>';
+          brief.titles.adjacent.forEach(function(t){
+            var label = typeof t === 'string' ? t : (t.title + (t.overlap_pct ? ' ('+t.overlap_pct+')' : ''));
+            h += '<span class="pr-chip adj">'+label+'</span>';
+          });
+          h += '</div>';
+        }
+      }
+      if(brief.search_string) {
+        h += '<div style="margin-bottom:.5rem;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a7388;">Boolean Search String</div>';
+        h += '<div class="pr-bool">'+brief.search_string+'</div>';
+      }
+      h += '</div>';
+    }
+
+    // ── How to Qualify ──────────────────────────────────────────────────
+    if(brief.qualify && brief.qualify.length) {
+      h += '<div class="pr-section">';
+      h += '<div class="pr-section-title">First Call Qualification Questions</div>';
+      brief.qualify.forEach(function(q){
+        h += '<div class="pr-q">';
+        h += '<div class="pr-q-text">'+q.question+'</div>';
+        if(q.strong_signal) h += '<div class="pr-q-signal">&#9989; Strong: '+q.strong_signal+'</div>';
+        if(q.red_flag) h += '<div class="pr-q-flag">&#9888; Flag: '+q.red_flag+'</div>';
+        h += '</div>';
+      });
+      h += '</div>';
+    }
+
+    // ── Pitch ───────────────────────────────────────────────────────────
+    if(brief.pitch) {
+      var p = brief.pitch;
+      h += '<div class="pr-section">';
+      h += '<div class="pr-section-title">Outreach & Pitch</div>';
+      if(p.hook) {
+        h += '<div class="pr-pitch"><div class="pr-pitch-label">Opening hook for '+coName+'</div><div class="pr-pitch-text">'+p.hook+'</div></div>';
+      }
+      if(p.key_angle) {
+        h += '<div class="pr-p"><strong>Key angle:</strong> '+p.key_angle+'</div>';
+      }
+      if(p.objection && p.counter) {
+        h += '<div class="pr-obj"><div class="pr-obj-q">Likely objection: &ldquo;'+p.objection+'&rdquo;</div><div class="pr-obj-a">'+p.counter+'</div></div>';
+      }
+      h += '</div>';
+    }
+  } else {
+    h += '<div class="pr-section"><div class="pr-p" style="color:#9a8fb8;font-style:italic;">No search brief generated yet. Run a search brief from the Start a Search tab to include full market intelligence in this report.</div></div>';
+  }
+
+  // ── Scorecard results ────────────────────────────────────────────────
+  var scResults = document.getElementById('sc-results');
+  if(scResults && scResults.innerHTML && scResults.innerHTML.trim().length > 50) {
+    h += '<div class="pr-section pr-page-break">';
+    h += '<div class="pr-section-title">Candidate Scorecard Results</div>';
+    // Strip scripts, just include the text content summary
+    var scText = scResults.innerText || scResults.textContent || '';
+    h += '<div class="pr-p" style="white-space:pre-wrap;font-size:12px;">' + scText.slice(0, 2000) + '</div>';
+    h += '</div>';
+  }
+
+  // ── Footer ──────────────────────────────────────────────────────────
+  h += '<div class="pr-footer">';
+  h += '<span>Talent Researcher Intelligence Hub &mdash; '+coName+'</span>';
+  h += '<span>'+today+'</span>';
+  h += '</div>';
+
+  // Inject and print
+  var reportEl = document.getElementById('print-report');
+  reportEl.innerHTML = h;
+  reportEl.style.display = 'block';
+
+  setTimeout(function(){
+    window.print();
+    setTimeout(function(){
+      reportEl.style.display = 'none';
+    }, 1000);
+  }, 200);
+}
+
 </script>
 
 <!-- AI Chat -->
@@ -5440,5 +5845,8 @@ function sendAIMessage() {
     <button class="ai-chat-send" onclick="sendAIMessage()" id="ai-chat-send-btn">Send</button>
   </div>
 </div>
+
+<!-- PDF Report (hidden, shown only when printing) -->
+<div id="print-report"></div>
 </body>
 </html>
