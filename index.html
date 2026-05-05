@@ -2684,7 +2684,436 @@ function updateStrategy(){
         {obj:'I work on Slack and that product is interesting', counter:'Slack is a strong product and the team has maintained quality. The question is what the trajectory looks like — is Slack getting investment and attention, or is it a managed asset? That distinction matters for your career.'},
         {obj:'My comp is lower but the company is well-known', counter:'The brand is real — but Salesforce technology on a resume opens fewer doors in tech than you might expect. A strong '+targetCoName+' tenure with clear impact would likely be more valuable for what comes next.'}
       ]
+    },
+    // ── Mid-size Tech ──────────────────────────────────────────────────────
+    uber:{
+      culture:'Uber has rebuilt its engineering culture post-2017. Strong marketplace and real-time systems depth. The company has been through significant leadership and cultural change and is more stable than its reputation suggests.',
+      pain:'Multiple reorgs and layoffs have created uncertainty. Equity is less compelling than it was pre-IPO. Engineers working on mature products (rideshare core) can feel the lack of greenfield opportunity.',
+      tc:'Senior IC TC: ~$350K–$400K. Post-IPO equity is meaningful but not as dramatic as pre-IPO promises suggested.',
+      retention:'Culture improvement has helped retention. Engineers who want marketplace and real-time systems challenges stay. Those who want greenfield product work are moveable.',
+      window:'Engineers who have been through multiple reorgs or who are on legacy rideshare teams are the most accessible. Uber Freight and newer product bets have more momentum.',
+      bar:'Strong on real-time marketplace systems, distributed systems at scale, and geospatial infrastructure. Alumni bring solid production engineering instincts.',
+      growth:'The career path has been disrupted by reorgs. Principal and Staff tracks are well-defined on paper but advancement has slowed.',
+      objections:[
+        {obj:'Uber has real scale and marketplace complexity', counter:'It does — and that expertise is exactly why '+targetCoName+' is interested. The question is whether the problem is still growing in interesting ways, or whether you are maintaining a mature system.'},
+        {obj:'The culture has improved a lot', counter:'It has — and that is worth acknowledging honestly. The question is whether improved culture plus this specific role beats a fresh start with strong culture at '+targetCoName+'.'},
+        {obj:'My equity position here is meaningful', counter:'After multiple reorgs and the post-IPO trajectory, it is worth calculating honestly. Would you be open to comparing the full picture side by side?'}
+      ]
+    },
+    airbnb:{
+      culture:'Airbnb has a design-led culture with strong product thinking. Engineering and design collaborate closely. The company has been more selective and focused since COVID, which has actually improved the engineering culture.',
+      pain:'Headcount has been deliberately constrained. Engineers often feel under-resourced. The product surface is relatively narrow — marketplace, search, and trust — which can limit scope for engineers who want to branch out.',
+      tc:'Senior IC TC: ~$400K–$460K. Equity has recovered with the post-COVID rebound but the growth story is less compelling than 2019.',
+      retention:'Culture, mission, and peer quality retain well. Engineers who feel under-resourced or who want broader product surface are moveable.',
+      window:'Engineers frustrated by resource constraints or the narrowing product scope are the most accessible. Ask what they are working on and whether they feel the team has what it needs.',
+      bar:'High on product thinking, design collaboration, and systems at consumer scale. Strong on search and trust/safety infrastructure. Alumni bring unusually strong user-empathy instincts.',
+      growth:'The deliberate headcount restraint has slowed promotion opportunities. Staff and Principal tracks can feel congested.',
+      objections:[
+        {obj:'Airbnb has a strong culture and mission', counter:'It does — and the mission is genuine. The question is whether the resource constraints and narrowing scope are limiting what you can actually build right now.'},
+        {obj:'The design-engineering collaboration here is rare', counter:'That culture is genuinely valuable. At '+targetCoName+', we have invested in that same collaboration model. The way to evaluate it is to talk to the team directly.'},
+        {obj:'Airbnb has recovered well post-COVID', counter:'The recovery is real. The question is what the next chapter looks like — is the growth story as compelling for the next 4 years as it was for the last 4?'}
+      ]
+    },
+    linkedin:{
+      culture:'LinkedIn is a Microsoft subsidiary with its own engineering culture. B2B social with strong product analytics and feed/recommendation systems depth. The Microsoft relationship provides stability but also corporate overhead.',
+      pain:'Microsoft ownership adds corporate overhead and limits some strategic autonomy. Engineers on mature products (core feed, connections) can feel the lack of 0-to-1 opportunity. The enterprise B2B angle limits consumer product instincts.',
+      tc:'Senior IC TC: ~$350K–$400K. Microsoft-aligned comp structure.',
+      retention:'Stability and interesting recommendation/social graph problems retain engineers. Those who want more greenfield or consumer-scale work are moveable.',
+      window:'Engineers working on mature LinkedIn products or frustrated by Microsoft corporate culture are the most accessible.',
+      bar:'Strong on recommendation systems, social graph infrastructure, and B2B product analytics. Alumni bring solid large-scale systems experience.',
+      growth:'Microsoft HRBP and leveling structure applies. Growth opportunities have been more limited since the Microsoft acquisition.',
+      objections:[
+        {obj:'LinkedIn has real scale and interesting graph problems', counter:'The graph problems are genuinely interesting. The question is whether those problems are still evolving in ways that challenge you, or whether you are in maintenance mode on a mature system.'},
+        {obj:'Microsoft ownership gives stability', counter:'It does — and stability has real value. The question is whether the Microsoft corporate overhead is worth the stability, or whether '+targetCoName+' can offer both stability and more autonomy.'}
+      ]
+    },
+    snap:{
+      culture:'Snap is camera-first and moves fast on consumer product. Strong on AR, camera infrastructure, and real-time media. The company has been through significant ups and downs tied to the ad market.',
+      pain:'Multiple rounds of layoffs and ad revenue volatility have created real uncertainty. The platform has struggled to grow DAUs against TikTok and Instagram competition. Engineers on advertising and monetization teams feel the pressure most acutely.',
+      tc:'Senior IC TC: ~$320K–$370K. Equity has been volatile with the stock price.',
+      retention:'Camera and AR engineers who believe in Snap\'s unique product vision stay. Engineers on ad infrastructure and monetization are more moveable.',
+      window:'Post-layoff Snap engineers are actively evaluating alternatives. AR and camera engineers are rare and worth pursuing. Ad engineers are more accessible.',
+      bar:'Strong on real-time media, AR/camera infrastructure, and mobile engineering. Ad systems engineers have solid B2B product and ML ranking experience.',
+      growth:'Career growth has been disrupted by multiple layoffs. Uncertainty about headcount makes promotion paths feel unstable.',
+      objections:[
+        {obj:'Snap has unique camera and AR technology', counter:'The AR depth is genuine and rare. At '+targetCoName+', that expertise would be applied to a platform with more certain long-term trajectory and better-resourced teams.'},
+        {obj:'I believe in Snap\'s vision', counter:'That belief is worth examining: what is the specific bet you are making, and what is the timeline? '+targetCoName+' offers a problem that is equally interesting without the platform uncertainty.'}
+      ]
+    },
+    twitter:{
+      culture:'Twitter/X has been fundamentally restructured since the Musk acquisition. Headcount was reduced by ~80%. Remaining engineers have significant ownership but also significant uncertainty. The pace is extreme.',
+      pain:'Mass layoffs, cultural disruption, brand uncertainty, and advertiser departures have created a volatile environment. Many strong engineers left. The remaining team is small and stretched. Long-term platform trajectory is unclear.',
+      tc:'Senior IC TC: ~$280K–$340K. Equity value is highly uncertain.',
+      retention:'Retention is low by historical standards. Engineers who stayed are often committed to specific technical challenges or to Musk\'s vision. Both groups have reasons to eventually move.',
+      window:'Now. Twitter/X engineers who are burning out or who have concerns about platform direction are actively looking. Strong technical engineers who survived the restructuring are rare and high quality.',
+      bar:'Survivors of the restructuring tend to be exceptionally strong — they were kept for a reason. Strong on distributed systems, real-time feeds, and ad infrastructure.',
+      growth:'Career structure is minimal under the current operating model. Growth is undefined.',
+      objections:[
+        {obj:'I have significant ownership and impact here', counter:'You do — the team is small enough that individual impact is very visible. The question is whether the platform trajectory supports that impact long-term, or whether you are investing in something with uncertain returns.'},
+        {obj:'The technical challenges are interesting', counter:'They are — running a global real-time platform at that scale with a small team is genuinely hard. At '+targetCoName+', we can offer a technically interesting problem with more organizational stability behind it.'}
+      ]
+    },
+    datadog:{
+      culture:'Datadog has a strong observability and monitoring engineering culture. The technical bar is high and the product is deeply embedded in enterprise infrastructure. Engineering and product are tightly aligned.',
+      pain:'Post-IPO growth has slowed from hypergrowth rates. Engineers on mature monitoring products can feel the shift from building to maintaining. B2B enterprise sales culture can feel disconnected from pure engineering.',
+      tc:'Senior IC TC: ~$380K–$430K. Equity has performed well but growth has moderated.',
+      retention:'Product-market fit and strong engineering culture retain well. Engineers frustrated by enterprise sales dynamics or slower growth are moveable.',
+      window:'Engineers on mature monitoring products or those who joined expecting hypergrowth and are experiencing normal-growth are the most accessible.',
+      bar:'Strong on distributed systems, metrics infrastructure, and observability at scale. Alumni understand enterprise infrastructure deeply and bring strong reliability engineering instincts.',
+      growth:'Principal and Staff tracks are well-defined. Growth has been solid but is slowing with the company\'s maturation.',
+      objections:[
+        {obj:'Datadog has strong PMF and a clear business', counter:'It does — and that clarity has real value. The question is whether you want to be at the observability platform or building the systems that need to be observed. At '+targetCoName+', you would be at the product layer.'},
+        {obj:'The engineering culture here is strong', counter:'It genuinely is. At '+targetCoName+', we have worked to build the same standard. The way to evaluate that is to talk to the team directly rather than take our word for it.'},
+        {obj:'My equity has performed well', counter:'It has — Datadog has been a strong performer. The question is what the next 4 years look like at the current growth rate vs. what '+targetCoName+' can offer.'}
+      ]
+    },
+    snowflake:{
+      culture:'Snowflake has a sales-driven culture with a strong data cloud vision. Engineering is well-resourced and the technical problems (distributed SQL, cloud data warehousing) are genuinely interesting.',
+      pain:'The post-IPO growth story has required delivering at an intense pace. Frank Slootman-era culture was intense; the transition to Sridhar Ramaswamy is creating uncertainty. Engineers on mature warehouse features can feel the pressure to deliver without the startup energy.',
+      tc:'Senior IC TC: ~$400K–$450K. Strong post-IPO equity performance.',
+      retention:'Interesting data infrastructure problems and strong comp retain engineers. Leadership transition uncertainty is creating some movement.',
+      window:'Engineers uncertain about the leadership transition or on mature warehouse features are the most accessible. Ask about the team and what they are building before pitching hard.',
+      bar:'Strong on distributed SQL, cloud infrastructure, and data warehouse systems. Alumni bring deep understanding of analytical workloads at scale.',
+      growth:'Growth has been strong during hypergrowth. Leadership transition may affect trajectory.',
+      objections:[
+        {obj:'Snowflake has strong data cloud vision and real traction', counter:'The PMF is real — the data cloud narrative has held up. The question is whether you want to build the warehouse or build on it. At '+targetCoName+', you would be creating products that run on infrastructure like Snowflake.'},
+        {obj:'My equity has done well here', counter:'It has — Snowflake was one of the strongest IPOs in recent history. The question for the next 4 years is where the growth is relative to current valuation. Worth looking at the risk-adjusted picture.'}
+      ]
+    },
+    cloudflare:{
+      culture:'Cloudflare is mission-driven (helping build a better internet) with strong engineering culture. The problems span networking, security, edge computing, and developer platforms. The technical bar is consistently high.',
+      pain:'The company is still proving its profitability trajectory. Some engineers feel the product surface is broad but thin — touching many areas without deep ownership in any one. Compensation is below FAANG.',
+      tc:'Senior IC TC: ~$380K–$420K. Equity has been solid but below top performers.',
+      retention:'Mission and genuinely interesting networking/security problems retain engineers. Those who want deeper product ownership or better comp are moveable.',
+      window:'Engineers who feel stretched thin across too many product areas or who are comp-sensitive are the most accessible.',
+      bar:'Strong on networking, edge computing, security, and developer tooling. Alumni understand internet infrastructure deeply and bring a systems-level perspective.',
+      growth:'Growth trajectory is strong but the career path in a rapidly expanding company can feel undefined.',
+      objections:[
+        {obj:'Cloudflare has an important mission and real technical depth', counter:'Both are true — and the engineering quality is genuine. At '+targetCoName+', you would apply that same systems-level thinking to a problem that is directly user-facing at consumer scale.'},
+        {obj:'The networking and security problems are unique', counter:'They are rare — and that expertise is valuable. The question is whether you want to keep working at the infrastructure layer or bring that depth to bear on a product problem.'}
+      ]
+    },
+    palo_alto:{
+      culture:'Palo Alto Networks is a security-first company with strong enterprise sales culture. Engineering culture has improved significantly with the Nikesh Arora era. Acquisitions have created both depth and integration complexity.',
+      pain:'Heavy acquisition pace has created integration complexity and cultural fragmentation. Engineers on acquired products can feel second-class relative to core firewall/NGFW teams. Enterprise sales culture can feel disconnected from pure engineering.',
+      tc:'Senior IC TC: ~$340K–$390K.',
+      retention:'Security mission and strong enterprise PMF retain core engineers. Acquired-company engineers and those frustrated by integration complexity are moveable.',
+      window:'Engineers from acquired companies who feel cultural disconnect are the most accessible. Also security engineers who want research depth over enterprise product work.',
+      bar:'Strong network security, SASE, and cloud security depth. Variable across acquired products. Alumni bring enterprise security domain expertise.',
+      growth:'Growth has been strong during the security industry expansion. Integration of acquisitions creates some career path confusion.',
+      objections:[
+        {obj:'Palo Alto has strong security PMF and market position', counter:'The market position is real. The question is whether you are building the future of security or defending an existing position. At '+targetCoName+', the security surface is different but the engineering rigor is the same.'}
+      ]
+    },
+    okta:{
+      culture:'Okta has a strong identity and access management culture. The Auth0 acquisition has created some integration complexity. Engineering is well-regarded in the identity space.',
+      pain:'Post-Auth0 integration has been complex. The security breach (2023) affected morale and customer trust. Engineers on identity and directory products can feel the weight of security incidents.',
+      tc:'Senior IC TC: ~$310K–$360K.',
+      retention:'Identity domain passion retains specialists. The security incident and Auth0 integration complexity have made some engineers more open to conversations.',
+      window:'Post-breach and during the Auth0 integration is a real sourcing window. Engineers who feel the organizational complexity is affecting their work are accessible.',
+      bar:'Strong on identity, OAuth/OIDC protocols, and enterprise security. Alumni bring rare identity domain expertise.',
+      growth:'Growth has been solid but the integration complexity has slowed some internal advancement.',
+      objections:[
+        {obj:'Okta owns the identity market', counter:'The market position is strong. The question is whether the integration complexity and the breach aftermath are creating headwinds that affect your day-to-day work and career trajectory.'}
+      ]
+    },
+    shopify:{
+      culture:'Shopify has a strong remote-first culture and merchant-obsessed product thinking. The engineering bar is high and the scale is genuine — millions of merchants, billions in GMV. Post-layoff Shopify is leaner and more focused.',
+      pain:'Multiple rounds of restructuring have created uncertainty. The "digital by default" and then hiring/then-layoff cycle has affected trust. Engineers on mature checkout and merchant tools can feel the product maturity.',
+      tc:'Senior IC TC: ~$340K–$390K. Canadian HQ affects some comp structures.',
+      retention:'Merchant mission and strong engineering culture retain well. Engineers who want more consumer-facing scale or who were affected by restructuring are moveable.',
+      window:'Post-restructuring Shopify engineers who are reflecting on the company direction are accessible. Engineers who want more consumer-scale product work are a good fit.',
+      bar:'Strong on e-commerce infrastructure, Rails engineering, and merchant product thinking. Alumni bring solid production engineering and product instincts.',
+      growth:'Growth has been strong during e-commerce expansion. Post-restructuring, the path is less clear.',
+      objections:[
+        {obj:'Shopify has real merchant impact and scale', counter:'The scale is genuine and the merchant mission is meaningful. At '+targetCoName+', you would have comparable or greater consumer scale — the question is what type of problem energizes you more.'}
+      ]
+    },
+    github:{
+      culture:'GitHub is a Microsoft subsidiary with strong developer community culture. The DevOps and developer tooling problems are genuinely interesting. Copilot has reinvigorated the product.',
+      pain:'Microsoft ownership adds corporate overhead. Pre-Copilot, many engineers felt GitHub was a managed asset rather than an invested product. Copilot has changed that narrative for some teams, but not all.',
+      tc:'Senior IC TC: ~$360K–$400K. Microsoft-aligned comp.',
+      retention:'Developer community mission and Copilot momentum retain engineers who are close to the AI work. Engineers on core GitHub features feel more uncertainty.',
+      window:'Engineers on core GitHub (issues, PRs, Actions) who are not close to Copilot are the most accessible. They feel the contrast between the AI excitement and their own work.',
+      bar:'Strong on distributed version control, developer tooling, and DevOps infrastructure. Alumni bring deep developer empathy and understanding of software development workflows.',
+      growth:'Microsoft HRBP structure. Copilot has created new growth opportunities for engineers close to that work.',
+      objections:[
+        {obj:'GitHub Copilot is the most exciting developer tool in years', counter:'If you are working on Copilot, we want to understand what specifically before making the case. If you are adjacent to it, the question is how close you are to the core decisions vs. watching it happen from a distance.'}
+      ]
+    },
+    twilio:{
+      culture:'Twilio has a strong developer-first culture and API obsession. The company has been through significant restructuring and is now more focused on core communications infrastructure.',
+      pain:'Multiple rounds of layoffs and a pivot away from hypergrowth have created uncertainty. The Segment acquisition integration has been complex. Engineers on mature SMS/voice products feel the market commoditization.',
+      tc:'Senior IC TC: ~$320K–$360K.',
+      retention:'Developer empathy and API design culture retain engineers who care about developer experience. Those frustrated by restructuring or commoditization pressure are moveable.',
+      window:'Post-restructuring Twilio engineers are actively evaluating. Engineers on mature communications products are the most accessible.',
+      bar:'Strong on API design, communications infrastructure, and developer experience. Alumni bring excellent understanding of developer needs and production API engineering.',
+      growth:'Growth has slowed significantly from hypergrowth. The career path has been affected by multiple reorgs.',
+      objections:[
+        {obj:'Twilio has real developer impact and API expertise', counter:'The developer empathy at Twilio is genuine and rare. At '+targetCoName+', that expertise would be applied to a platform with more certain growth trajectory.'}
+      ]
+    },
+    // Finance
+    jpmorgan:{
+      culture:'JPMorgan Chase is the largest US bank with a significant and growing technology organization. Engineering culture varies widely by team — some are genuinely modern; many still deal with legacy systems.',
+      pain:'Finance-tech pay gap is real at JPM. Legacy system weight is significant. The culture can feel slow and politically complex compared to tech companies. Career mobility outside finance is often perceived as difficult.',
+      tc:'Senior technology TC: ~$300K–$380K. Strong base salary but lower equity than tech.',
+      retention:'Prestige, stability, and strong base salary retain finance engineers. Those who want consumer product impact and better overall TC are moveable.',
+      window:'JPMorgan technology engineers who have been there 3+ years and are curious about tech are accessible. TC comparison is almost always a positive surprise.',
+      bar:'Strong on low-latency systems, risk infrastructure, and financial domain knowledge. Variable on modern cloud-native stack. Alumni bring valuable financial systems thinking.',
+      growth:'Well-defined finance career track that does not map cleanly to tech. VP and MD titles in banking ≠ equivalents in tech.',
+      objections:[
+        {obj:'JPMorgan has scale and financial domain depth', counter:'Both true — and the domain expertise is valuable. The TC comparison with tech is almost always a positive surprise. Would you be open to seeing the actual ranges?'},
+        {obj:'The stability and brand are important to me', counter:'Both are real. '+targetCoName+' also offers stability — just with a product that millions of consumers use daily, and comp that better reflects your market value.'}
+      ]
+    },
+    citadel:{
+      culture:'Citadel is elite and ruthless in a productive sense. The technical and quantitative bar is the highest in finance. Compensation is extraordinary. The culture is intensely performance-driven.',
+      pain:'The performance culture is not for everyone — it is high-stakes, high-pressure, and often brutal in feedback style. Work-life balance is limited. The problem domain is narrow (systematic trading). External career mobility after Citadel is often back to finance.',
+      tc:'Senior quant/tech TC: ~$600K–$1.5M+. Extremely high and hard to match.',
+      retention:'Compensation is the primary retention mechanism. Engineers and quants who leave typically do so for life balance or to start their own fund.',
+      window:'Very rare sourcing window. Citadel engineers who are burning out or who want to apply their skills to a problem beyond systematic trading are the exception. Take the long view.',
+      bar:'Elite. The highest quantitative and systems engineering bar in the industry. Alumni are exceptional and bring skills that apply far beyond finance.',
+      growth:'Advancement is performance-driven and rapid for top performers. Those who plateau are typically managed out.',
+      objections:[
+        {obj:'My compensation here is extraordinary', counter:'It is — and we are not going to pretend we can match it on a straight comparison. What we can offer is a problem with broader impact, a team with more collaborative culture, and a career that has more external optionality.'},
+        {obj:'The quantitative problems here are among the hardest anywhere', counter:'In systematic trading, yes. The question is whether those specific problems are the ones you want to spend the next decade on, or whether there is a class of problem that interests you more — at a place that still demands the same intellectual rigor.'}
+      ]
+    },
+    twosigma:{
+      culture:'Two Sigma has a more academic and collaborative culture than Citadel. Research and engineering are deeply integrated. The technical problems span statistics, ML, and high-performance computing.',
+      pain:'The problem domain is narrow (systematic investing). External career mobility is often limited to other quant funds. The academic culture can move slower than product companies.',
+      tc:'Senior TC: ~$600K–$1.2M+. Extraordinary comp similar to Citadel.',
+      retention:'Comp and intellectual culture retain top performers. Those who want broader impact or consumer product work are rare but exist.',
+      window:'Very rare. Two Sigma engineers are typically deeply committed to the quant domain. Those who want to apply ML to a broader problem space are the most accessible.',
+      bar:'Exceptional on statistics, ML research, and high-performance systems. Alumni are rare and extremely high quality.',
+      growth:'Academic-style progression. Strong for those committed to quant research.',
+      objections:[
+        {obj:'The intellectual depth here is hard to find elsewhere', counter:'The quant research depth is genuinely rare. At '+targetCoName+', we have a different class of hard problem — one where the outcomes are visible to millions of people rather than a portfolio P&L.'}
+      ]
+    },
+    bloomberg:{
+      culture:'Bloomberg has a unique internal culture built around the Terminal product. Engineering supports the financial data and analytics business. The culture is stable and conservative by tech standards.',
+      pain:'Bloomberg Terminal is a legacy product with a devoted but aging user base. The engineering stack is non-standard and not externally marketable in most cases. Career mobility outside Bloomberg is perceived as difficult.',
+      tc:'Senior engineering TC: ~$300K–$360K.',
+      retention:'Stability and unique domain knowledge retain Bloomberg engineers. Those who want externally marketable skills or consumer product work are moveable.',
+      window:'Bloomberg engineers who are aware of the stack\'s external marketability problem are accessible. TC comparison with tech is a positive surprise.',
+      bar:'Deep financial data domain knowledge. Engineering skills can be specific to Bloomberg\'s internal stack. Alumni need to be assessed for transferable fundamentals.',
+      growth:'Well-defined but Bloomberg-specific career track.',
+      objections:[
+        {obj:'Bloomberg is stable and the domain knowledge is valuable', counter:'The stability is real. The question worth asking honestly is: how transferable is what you are building here? At '+targetCoName+', you would build skills and a portfolio that are externally valuable regardless of where you go next.'}
+      ]
+    },
+    // Other Big Tech / AI
+    xai:{
+      culture:'xAI is Elon Musk\'s AI lab, small and moving at an extreme pace. Grok is the flagship product. Engineers have significant ownership but operate in an intense, fast-changing environment.',
+      pain:'The pace is extreme. The org is tiny relative to the ambition. Musk\'s operational style creates uncertainty. Long-term platform direction can shift with tweet-level velocity.',
+      tc:'Senior IC TC: ~$700K–$900K+. High and competitive with other frontier AI labs.',
+      retention:'Mission (understanding the universe), Musk association, and equity upside retain believers. Those who want more stability or collaborative culture are moveable.',
+      window:'Engineers who are burning out on the pace or who have concerns about organizational stability are the most accessible. Small team means individual experiences vary widely.',
+      bar:'Very high. xAI selects for exceptional engineers who can operate under extreme ambiguity and pace.',
+      growth:'No formal career structure — it is a startup. Growth comes from impact and Musk\'s direct recognition.',
+      objections:[
+        {obj:'The mission and pace are exciting', counter:'Both are real — and that energy is hard to find. The question is whether that pace is sustainable for you personally over the next few years, and whether the organizational structure gives you the support to do your best work.'}
+      ]
+    },
+    cohere:{
+      culture:'Cohere is an enterprise AI company with a strong research and commercial focus. More conservative than OpenAI or Anthropic in its approach — focused on enterprise deployment of LLMs.',
+      pain:'Cohere is competing against much larger companies (OpenAI, Anthropic, Google) for enterprise AI contracts. The enterprise sales cycle can feel slow relative to the pace of model development. Equity upside depends on competitive differentiation.',
+      tc:'Senior IC TC: ~$500K–$600K.',
+      retention:'Mission and interesting LLM research retain engineers. Those who want more consumer scale or clearer equity trajectory are moveable.',
+      window:'Engineers who see the competitive pressure from larger AI labs and are thinking about long-term equity trajectory are accessible.',
+      bar:'Strong on LLM fine-tuning, enterprise deployment, and RAG systems. Good NLP and production ML depth.',
+      growth:'Pre-IPO trajectory depends on ability to differentiate against better-funded competitors.',
+      objections:[
+        {obj:'Cohere is focused on enterprise AI which is the real market', counter:'The enterprise opportunity is real. The question is whether Cohere can differentiate against OpenAI and Anthropic with their scale advantages. At '+targetCoName+', you would deploy AI at consumer scale with a more certain competitive position.'}
+      ]
+    },
+    perplexity:{
+      culture:'Perplexity is a small, fast-moving AI search company with a focused mission (knowledge access) and a genuinely interesting product-market fit. The team is tiny and ownership is exceptional.',
+      pain:'Very small team means high individual load. The business model and long-term competitive position against Google are uncertain. Pre-IPO equity trajectory is unclear.',
+      tc:'Senior IC TC: ~$450K–$550K+ at small company scale.',
+      retention:'Product excitement and individual ownership retain engineers. Those concerned about competitive dynamics or long-term trajectory are moveable.',
+      window:'Engineers who are questioning the long-term competitive position against Google or who want more team support around them are accessible.',
+      bar:'High bar for ML and search engineering. Small team means generalist engineers who can move fast are valued.',
+      growth:'Pre-IPO startup trajectory. No formal career structure.',
+      objections:[
+        {obj:'Perplexity has a genuinely interesting product and mission', counter:'The product is interesting and the team quality is high. The question worth sitting with is the competitive dynamics — Google has invested billions in the same space. At '+targetCoName+', you would have a more certain long-term foundation.'}
+      ]
+    },
+    // Consulting
+    bcg:{
+      culture:'BCG has a similar structure to McKinsey — strategy consulting with top-tier clients, strong peer quality, and a structured career path to partner. Somewhat more collaborative culture than McKinsey.',
+      pain:'Same fundamental consulting pain: the gap between recommending and executing. Most BCG consultants at 2–3 years are asking whether they want to make partner or build something. Travel and client pressure are constant.',
+      tc:'Consultant TC: ~$190K–$240K. Below tech market.',
+      retention:'Partnership track and prestige retain committed consultants. Those questioning the partner path are moveable at the 2–3 year mark.',
+      window:'Same as McKinsey: 2–3 years in, at the transition inflection point.',
+      bar:'Exceptional structured thinking, communication, and client management. Variable technical depth. Validate engineering fundamentals carefully.',
+      growth:'Clear but competitive partnership track. The funnel is designed to have high attrition.',
+      objections:[
+        {obj:'I am building toward partner track', counter:'That track is real for some. The honest question is: what does making partner in 8–10 years actually look like day-to-day, and is that the life you want? '+targetCoName+' can offer a different kind of senior leadership earlier.'}
+      ]
+    },
+    bain:{
+      culture:'Bain has a reputation for the most collaborative and team-oriented culture in the MBB tier. Strong on private equity consulting and operational turnarounds. Engineers in tech practice have some product exposure.',
+      pain:'Same consulting fundamentals: advisory vs. execution gap. Travel. Client pressure. The partner track is the primary retention mechanism.',
+      tc:'Consultant TC: ~$185K–$230K.',
+      retention:'Strong team culture and PE-adjacent work retain Bain consultants. Those wanting execution and building are moveable.',
+      window:'2–3 years in, same as McKinsey and BCG.',
+      bar:'Strong analytical and client management skills. Bain is known for a particularly collaborative style that can be an asset in team-oriented roles.',
+      growth:'Clear partnership track with high attrition design.',
+      objections:[
+        {obj:'Bain has a great culture and I learn a lot here', counter:'The culture reputation is deserved — Bain is genuinely collaborative. The question is whether you want to keep advising on builds, or start doing one yourself at '+targetCoName+'.'}
+      ]
+    },
+    deloitte:{
+      culture:'Deloitte is the largest of the Big Four, with significant technology consulting and implementation work. The culture varies widely by practice — strategy is different from implementation, which is different from audit.',
+      pain:'The scale of the organization creates significant bureaucracy. Engineers in tech implementation roles can feel they are building for clients rather than building products. Comp is below tech market.',
+      tc:'Senior consultant TC: ~$140K–$180K. Well below tech market.',
+      retention:'Stability and broad client exposure retain consultants. Those who realize the tech market comparison are very moveable.',
+      window:'Deloitte tech consultants who are aware of the comp gap are accessible. TC comparison is a strong positive surprise.',
+      bar:'Variable. Some Deloitte tech consultants have strong engineering fundamentals; many are primarily implementation and project management focused. Validate technical depth.',
+      growth:'Well-defined partnership track but very different from tech career paths.',
+      objections:[
+        {obj:'Deloitte gives me broad exposure to many industries', counter:'The breadth is real. The question is whether breadth is what you want to optimize for at this stage, or whether you are ready to go deep on a specific problem that you own end-to-end at '+targetCoName+'.'}
+      ]
+    },
+    accenture:{
+      culture:'Accenture is the world\'s largest IT services company. Engineering culture varies enormously by practice and client. Some teams do genuinely innovative work; much of it is enterprise implementation.',
+      pain:'The scale creates bureaucracy. Implementation work is often client-directed. Comp is below tech market. Career progression can feel slow and political in a large organization.',
+      tc:'Senior TC: ~$130K–$170K. Well below tech market.',
+      retention:'Stability and brand retain engineers who value those. Those aware of the tech market comparison are very moveable.',
+      window:'Accenture engineers aware of the market comp gap are accessible. TC comparison is a strong positive.',
+      bar:'Highly variable. Assess fundamentals carefully — implementation experience does not always indicate strong independent engineering capability.',
+      growth:'Large organization with many paths, but tech-to-product transitions require proactive positioning.',
+      objections:[
+        {obj:'Accenture has good training and exposure', counter:'The training is structured and the exposure is broad. At '+targetCoName+', you would get equally broad exposure to a specific problem domain — and the compensation would reflect your market value.'}
+      ]
+    },
+    // Hardware
+    qualcomm:{
+      culture:'Qualcomm has deep mobile SoC and wireless expertise. The engineering culture is hardware-focused and careful — shipping mobile chips requires extraordinary quality and precision.',
+      pain:'Mobile growth has slowed. Qualcomm has been navigating the shift away from smartphone growth and toward automotive and IoT. Stock has been volatile. Engineers can feel the strategic uncertainty.',
+      tc:'Senior hardware TC: ~$320K–$370K.',
+      retention:'Domain expertise and unique hardware problems retain specialists. Those concerned about mobile slowdown or strategic uncertainty are moveable.',
+      window:'Engineers aware of the mobile market slowdown and the uncertain automotive bet are accessible. Ask about their belief in the next chapter.',
+      bar:'Deep mobile SoC, wireless (5G), and baseband modem expertise. Rare and valuable for AI edge computing and mobile ML roles.',
+      growth:'Well-defined hardware career track. Advancement can be slow in a large org.',
+      objections:[
+        {obj:'The wireless and SoC depth here is unmatched', counter:'In mobile wireless specifically, yes. The question is whether that is the specific domain you want to deepen, or whether you want to apply your hardware fundamentals to a new class of problem at '+targetCoName+'.'}
+      ]
+    },
+    amd:{
+      culture:'AMD has significantly strengthened its engineering culture since the Lisa Su turnaround. Strong CPU/GPU architecture depth. Engineers take pride in the comeback narrative.',
+      pain:'AMD is in a strong competitive position but still runs lean relative to Intel and NVIDIA. Engineers can feel the resource constraints of being the scrappy competitor.',
+      tc:'Senior hardware TC: ~$300K–$360K.',
+      retention:'The competitive momentum and comeback narrative retain engineers who believe in AMD. Those who want more resources or consumer product work are moveable.',
+      window:'AMD engineers who feel the resource constraints relative to NVIDIA are the most accessible. The NVIDIA equity comparison is also a factor.',
+      bar:'Strong CPU/GPU architecture and parallel computing depth. RDNA and CDNA GPU expertise is valuable in the AI compute space.',
+      growth:'Strong career trajectory during the turnaround period. The path is clear for engineers aligned with CPU/GPU architecture.',
+      objections:[
+        {obj:'AMD\'s competitive momentum is exciting', counter:'The turnaround story is real and Lisa Su\'s execution has been impressive. The question is whether you want to keep building the chip platform, or apply that hardware depth to a product that users interact with directly.'}
+      ]
+    },
+    // Startups (generic)
+    startup_late:{
+      culture:'Late-stage startups are typically post-product-market-fit and scaling aggressively. Culture varies but there is usually strong ownership, fast iteration, and high individual impact.',
+      pain:'Pre-IPO equity uncertainty is the primary tension. The gap between IPO promises and reality is a known phenomenon. Org structure can feel chaotic as the company scales.',
+      tc:'Senior IC TC: ~$280K–$350K+ depending on the company.',
+      retention:'Pre-IPO equity upside and mission retain believers. Those questioning equity trajectory or burned out on scaling chaos are moveable.',
+      window:'Late-stage startup engineers who have been there 2+ years and are starting to question IPO timing are accessible. Those frustrated by the growing pains of scaling are moveable.',
+      bar:'Variable by company. Assess carefully — startup experience at scale is different from startup experience at 10 people.',
+      growth:'Fast but often undefined. Structure often lags the company\'s growth.',
+      objections:[
+        {obj:'My pre-IPO equity could be very valuable', counter:'It might be — and that bet might pay off. The honest question is: what is your estimate of the timeline and outcome, and how does it compare to the alternative at '+targetCoName+' with more certain terms?'}
+      ]
+    },
+    startup_series_b:{
+      culture:'Series B startups are typically in aggressive growth mode. High individual ownership, fast decisions, and direct impact on the company\'s trajectory. Culture is often strong but fragile.',
+      pain:'Uncertainty about the next funding round and growth trajectory. The jump from Series B to C is not guaranteed. Engineers can feel the pressure of the runway.',
+      tc:'Senior IC TC: ~$200K–$280K+ depending on the company.',
+      retention:'Mission, equity upside, and individual ownership retain believers. Those with financial pressures or concerns about trajectory are moveable.',
+      window:'Series B engineers who are 18+ months in and starting to think about what happens at the next funding round are accessible.',
+      bar:'Assess carefully. Strong Series B engineers who built from 0-to-1 are valuable. Those in more established roles at a Series B are more variable.',
+      growth:'Fast but uncertain. Everything depends on the next round.',
+      objections:[
+        {obj:'I have significant equity upside here', counter:'The upside is real if the next round comes together. The question is how much of that upside you can estimate with confidence. '+targetCoName+' offers a more certain foundation to build on.'}
+      ]
+    },
+    // Data / Cloud others
+    confluent:{
+      culture:'Confluent was founded by the Kafka creators and has a strong streaming data and open source culture. The technical problems (event streaming at scale) are genuinely interesting.',
+      pain:'Competing against cloud providers (AWS MSK, GCP Pub/Sub) offering similar capabilities is a real strategic challenge. Engineers can feel the competitive pressure.',
+      tc:'Senior IC TC: ~$370K–$420K.',
+      retention:'Streaming data passion and open source culture retain core engineers. Those concerned about the competitive dynamic with cloud providers are moveable.',
+      window:'Engineers aware of the cloud provider competitive threat are accessible. The "are we differentiating enough?" question is a real one internally.',
+      bar:'Strong on distributed streaming systems, Kafka, and event-driven architecture. Alumni bring valuable real-time data infrastructure expertise.',
+      growth:'Strong during the data streaming wave. Cloud provider competition is the main strategic risk.',
+      objections:[
+        {obj:'Confluent created the streaming data category', counter:'They did — and that is a genuine achievement. The question is whether the category leadership holds against cloud providers with unlimited distribution advantages. At '+targetCoName+', you would work on problems where the competitive moat is different.'}
+      ]
+    },
+    figma:{
+      culture:'Figma has an exceptionally strong design-engineering collaboration culture. The product and the team ethos are tightly integrated. The Adobe acquisition attempt and its failure gave the company a second life as independent.',
+      pain:'The Adobe acquisition failure created uncertainty but also renewed independence. Some engineers joined expecting an acquisition exit; the shift to independent company status changed the equity calculus.',
+      tc:'Senior IC TC: ~$400K–$450K.',
+      retention:'Product pride, design culture, and the "second life" narrative retain engineers. Those who joined expecting an acquisition exit are more moveable.',
+      window:'Engineers who were expecting acquisition liquidity and are now on a longer independent trajectory are the most accessible.',
+      bar:'Strong on browser-based graphics, WebGL, and collaborative real-time systems. Unique expertise in building highly interactive web applications.',
+      growth:'Strong engineering culture with well-defined growth. The independent trajectory has reinvigorated the team.',
+      objections:[
+        {obj:'Figma has the best design-engineering culture in tech', counter:'The culture reputation is deserved. At '+targetCoName+', we have invested in that same collaboration standard. The way to evaluate it is to talk to designers and engineers together.'}
+      ]
+    },
+    notion:{
+      culture:'Notion has strong product craft and a clear mission (tools for thought). Small team with high individual impact. The product has genuine consumer and enterprise adoption.',
+      pain:'The team is intentionally small, which means high individual load. The competitive landscape (Confluence, Coda, Linear) is intense. Equity trajectory depends on the ability to convert user love into sustainable B2B revenue.',
+      tc:'Senior IC TC: ~$330K–$380K.',
+      retention:'Product passion and small team ownership retain engineers. Those concerned about competitive dynamics or long-term equity trajectory are moveable.',
+      window:'Engineers questioning the B2B conversion trajectory or who feel stretched by the intentionally small team are accessible.',
+      bar:'Strong on collaborative real-time systems and product-led growth. Good full-stack engineering depth.',
+      growth:'Intentionally small team means growth comes from impact rather than formal promotion.',
+      objections:[
+        {obj:'Notion has a great product and people love it', counter:'The product love is genuine — Notion has built something people actually care about. The question is how that translates to a business at the scale needed for a strong equity outcome.'}
+      ]
+    },
+    lyft:{
+      culture:'Lyft has been through significant financial and organizational pressure. The company has sold its autonomous vehicle division and gone through multiple rounds of layoffs. Engineering culture is more cautious than it once was.',
+      pain:'Multiple rounds of layoffs, financial pressure, and strategic uncertainty have affected morale. Engineers have seen the contrast with Uber\'s stronger financial position clearly.',
+      tc:'Senior IC TC: ~$300K–$350K.',
+      retention:'Retention is low relative to historical norms. Engineers who have navigated multiple rounds of uncertainty are actively evaluating alternatives.',
+      window:'Now. Lyft engineers have been through enough uncertainty that many are open to conversations. Move quickly.',
+      bar:'Strong on marketplace infrastructure and real-time systems. Similar to Uber alumni profile. Alumni are assessing their options given the company\'s trajectory.',
+      growth:'Career advancement has been disrupted by the financial pressure and headcount reductions.',
+      objections:[
+        {obj:'Lyft is still a major consumer platform', counter:'The platform is real — the question is the trajectory. The financial position and competitive dynamic with Uber are worth being honest about. At '+targetCoName+', we offer stability and momentum that the current situation at Lyft may not.'}
+      ]
+    },
+    discord:{
+      culture:'Discord has a strong gaming and community-first culture. Real-time messaging at scale with a passionate user base. Engineering culture is solid and the product is genuinely loved.',
+      pain:'Discord has been navigating the transition from gaming-first to broader community platform while maintaining the core user base. Monetization pressure is increasing. The IPO path is uncertain.',
+      tc:'Senior IC TC: ~$320K–$370K.',
+      retention:'Product love and community mission retain engineers. Those concerned about monetization pressure or IPO uncertainty are moveable.',
+      window:'Engineers questioning the monetization direction or IPO trajectory are accessible.',
+      bar:'Strong on real-time messaging, WebRTC, and community platform infrastructure. Engineers understand consumer-scale, latency-sensitive systems.',
+      growth:'Pre-IPO trajectory. Growth has been solid but the business model evolution creates some uncertainty.',
+      objections:[
+        {obj:'Discord has a product that people genuinely love', counter:'That user love is real and rare — it is one of the most loved consumer apps. The question is whether the monetization path and the equity trajectory behind that love are as strong as the product itself.'}
+      ]
+    },
+    reddit:{
+      culture:'Reddit has gone through significant change since the IPO. Strong community-driven product culture. Engineering works on recommendation, search, and community infrastructure at scale.',
+      pain:'The IPO created liquidity but also new scrutiny. The API changes and creator controversies created internal morale questions. Engineers on some teams feel the tension between community values and monetization.',
+      tc:'Senior IC TC: ~$330K–$380K. Post-IPO equity clarity.',
+      retention:'Community mission and post-IPO clarity retain engineers who were waiting for liquidity. Those questioning the monetization direction are moveable.',
+      window:'Engineers who are post-IPO and reflecting on the next chapter are accessible.',
+      bar:'Strong on recommendation systems, community infrastructure, and search. Alumni understand consumer social platform engineering well.',
+      growth:'Post-IPO structure with more defined career paths.',
+      objections:[
+        {obj:'Reddit is post-IPO now and the equity is liquid', counter:'The liquidity clarity is real — and that was important for many engineers. The question now is what the next 4 years look like at the current growth rate and product direction.'}
+      ]
     }
+  
   };
 
 
