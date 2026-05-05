@@ -887,7 +887,7 @@ tr:last-child td{border-bottom:none;}
                 </select>
               </div>
               <div class="field"><label>Source Company</label>
-                <select id="lev-company">
+                <select id="lev-company" onchange="onLevCompanyChange()">
                   <option value="">&#8212; Select company first &#8212;</option>
                 </select>
               </div>
@@ -2000,6 +2000,30 @@ if(_levCoEl) _levCoEl.addEventListener('change', function(){
     titleSel.appendChild(opt);
   }
 });
+
+
+function onLevCompanyChange(){
+  var fam = document.getElementById('lev-role-family').value;
+  var coId = document.getElementById('lev-company').value;
+  var titleSel = document.getElementById('lev-title');
+  titleSel.innerHTML = '<option value="">&#8212; Select level &#8212;</option>';
+  if(!coId || !fam) return;
+
+  var srcCo = COMPANIES.find(function(c){ return c.id === coId; });
+  if(!srcCo) return;
+
+  // Use static level data if available, otherwise use generic seniority levels
+  var titles = (srcCo.levels && srcCo.levels[fam]) ? srcCo.levels[fam] :
+    (srcCo.levels && srcCo.levels['swe']) ? srcCo.levels['swe'] :
+    ['Junior / Entry-level','Mid-level','Senior','Staff / Lead','Principal / Architect','Distinguished / Fellow'];
+
+  titles.forEach(function(title, i){
+    var opt = document.createElement('option');
+    opt.value = String(i);
+    opt.textContent = title;
+    titleSel.appendChild(opt);
+  });
+}
 
 function computeLevel(){
   var fam = document.getElementById('lev-role-family').value;
