@@ -452,30 +452,12 @@ tr:last-child td{border-bottom:none;}
 .ob-tip-signal-text{font-size:12px;color:#2d2640;line-height:1.55;font-weight:500;}
 
 /* ── AI Chat panel ── */
-.ai-chat-toggle{position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:50%;background:var(--primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(124,92,252,.4);z-index:100;transition:all .2s;}
-.ai-chat-toggle:hover{background:#5535e0;transform:scale(1.05);}
-.ai-chat-toggle svg{width:22px;height:22px;stroke:white;stroke-width:2;fill:none;}
-.ai-chat-panel{position:fixed;bottom:88px;right:24px;width:380px;max-height:520px;background:white;border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.15);z-index:99;display:flex;flex-direction:column;overflow:hidden;transition:opacity .2s,transform .2s;}
-.ai-chat-panel.hidden{opacity:0;pointer-events:none;transform:translateY(12px);}
-.ai-chat-header{padding:12px 15px;background:var(--primary);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.ai-chat-title{font-size:13px;font-weight:700;color:white;display:flex;align-items:center;gap:7px;}
-.ai-chat-subtitle{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px;}
-.ai-chat-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;padding:0;font-size:18px;line-height:1;flex-shrink:0;}
-.ai-chat-close:hover{color:white;}
-.ai-chat-starters{padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .ai-starter-chip{background:var(--primary-light);color:var(--primary);border:1px solid var(--border-2);border-radius:20px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s;}
 .ai-starter-chip:hover{background:var(--primary);color:white;}
-.ai-chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:80px;max-height:300px;}
 .ai-msg{padding:9px 12px;border-radius:12px;font-size:12px;line-height:1.6;max-width:90%;word-wrap:break-word;}
 .ai-msg.user{background:var(--primary);color:white;align-self:flex-end;border-radius:12px 12px 4px 12px;}
 .ai-msg.assistant{background:var(--bg);color:var(--text);align-self:flex-start;border-radius:12px 12px 12px 4px;border:1px solid var(--border);}
 .ai-msg.thinking{background:var(--bg);color:var(--text-3);align-self:flex-start;font-style:italic;border:1px solid var(--border);border-radius:12px 12px 12px 4px;}
-.ai-chat-input-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface);flex-shrink:0;}
-.ai-chat-input{flex:1;padding:8px 12px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;color:var(--text);resize:none;outline:none;max-height:80px;line-height:1.5;}
-.ai-chat-input:focus{border-color:var(--primary);}
-.ai-chat-send{padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;align-self:flex-end;}
-.ai-chat-send:hover{background:#5535e0;}
-.ai-chat-send:disabled{opacity:.5;cursor:not-allowed;}
 
 /* ── Field sync indicators ── */
 .field-synced{position:relative;}
@@ -532,6 +514,39 @@ tr:last-child td{border-bottom:none;}
 .pr-company-banner{ background:linear-gradient(135deg,#1a1523,#2d1f5e);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem;color:white; }
 .pr-company-name{ font-size:1.25rem;font-weight:700;margin-bottom:3px; }
 .pr-company-type{ font-size:11px;opacity:.6; }
+
+/* ── AI Chat panel ── */
+.ai-chat-toggle{position:fixed;bottom:20px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(124,92,252,.4);z-index:200;transition:all .2s;}
+.ai-chat-toggle:hover{background:#5535e0;transform:scale(1.05);}
+.ai-chat-toggle svg{width:20px;height:20px;stroke:white;stroke-width:2;fill:none;}
+.ai-chat-panel{position:fixed;bottom:0;right:0;left:0;top:0;background:white;z-index:199;display:flex;flex-direction:column;transition:opacity .2s,transform .2s;}
+.ai-chat-panel.hidden{opacity:0;pointer-events:none;transform:translateY(100%);}
+@media(min-width:600px){
+  .ai-chat-panel{top:auto;left:auto;bottom:80px;right:16px;width:360px;max-height:500px;border-radius:16px;border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,.15);}
+  .ai-chat-panel.hidden{transform:translateY(12px);}
+}
+.ai-chat-header{padding:12px 14px 10px;background:var(--primary);display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-shrink:0;}
+@media(min-width:600px){.ai-chat-header{border-radius:16px 16px 0 0;}}
+.ai-chat-header-text{min-width:0;}
+.ai-chat-title{font-size:14px;font-weight:700;color:white;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.ai-chat-subtitle{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;white-space:nowrap;}
+.ai-chat-close{background:rgba(255,255,255,.15);border:none;color:white;cursor:pointer;padding:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+.ai-chat-close:hover{background:rgba(255,255,255,.25);}
+.ai-chat-starters{padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.ai-starter-chip{background:var(--primary-light);color:var(--primary);border:1px solid var(--border-2);border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s;white-space:nowrap;}
+.ai-starter-chip:hover{background:var(--primary);color:white;}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
+.ai-msg{padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.6;max-width:85%;word-wrap:break-word;}
+.ai-msg.user{background:var(--primary);color:white;align-self:flex-end;border-radius:12px 12px 4px 12px;}
+.ai-msg.assistant{background:var(--bg);color:var(--text);align-self:flex-start;border-radius:12px 12px 12px 4px;border:1px solid var(--border);}
+.ai-msg.thinking{background:var(--bg);color:var(--text-3);align-self:flex-start;font-style:italic;border:1px solid var(--border);border-radius:12px 12px 12px 4px;}
+.ai-chat-input-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface);flex-shrink:0;align-items:flex-end;}
+@media(max-width:599px){.ai-chat-input-row{padding:10px 12px 20px;}}
+.ai-chat-input{flex:1;padding:9px 12px;background:white;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);resize:none;outline:none;line-height:1.5;max-height:100px;}
+.ai-chat-input:focus{border-color:var(--primary);}
+.ai-chat-send{padding:9px 16px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.ai-chat-send:hover{background:#5535e0;}
+.ai-chat-send:disabled{opacity:.5;cursor:not-allowed;}
 </style>
 </head>
 <body>
@@ -5961,14 +5976,14 @@ document.addEventListener('click', function(e){
 </button>
 <div class="ai-chat-panel hidden" id="ai-chat-panel">
   <div class="ai-chat-header">
-    <div>
+    <div class="ai-chat-header-text">
       <div class="ai-chat-title">
-        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:white;stroke-width:2;fill:none;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:white;stroke-width:2;fill:none;flex-shrink:0;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         AI Research Assistant
       </div>
       <div class="ai-chat-subtitle">Powered by Claude &middot; Ask anything about your search</div>
     </div>
-    <button class="ai-chat-close" onclick="toggleAIChat()">&#x2715;</button>
+    <button class="ai-chat-close" onclick="toggleAIChat()" aria-label="Close">&#x2715;</button>
   </div>
   <div class="ai-chat-starters" id="ai-chat-starters">
     <button class="ai-starter-chip" onclick="sendStarter(this)">Where should I look for this profile?</button>
