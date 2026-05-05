@@ -1758,34 +1758,193 @@ function buildIntakeCard(intake){
 }
 
 function parseJD(){
-  var text = document.getElementById('jd-input').value.trim().toLowerCase();
-  if(!text){ alert('Please paste a job description first.'); return; }
+  var rawText = document.getElementById('jd-input').value.trim();
+  if(!rawText){ alert('Please paste a job description first.'); return; }
+  var text = rawText.toLowerCase();
+
+  // ── Role detection ────────────────────────────────────────────────────
   var role = 'swe';
-  if(text.indexOf('product manager')!==-1||text.indexOf('senior pm')!==-1) role='pm';
-  else if(text.indexOf('engineering manager')!==-1||text.indexOf('manage engineers')!==-1||text.indexOf('direct reports')!==-1) role='em';
-  else if((text.indexOf('machine learning')!==-1||text.indexOf('research scientist')!==-1)&&text.indexOf('data engineer')===-1) role='ds';
-  else if(text.indexOf('data engineer')!==-1||text.indexOf('data pipeline')!==-1||text.indexOf('etl')!==-1) role='de';
-  else if(text.indexOf('site reliability')!==-1||text.indexOf('sre')!==-1||text.indexOf('devops')!==-1) role='sre';
-  else if(text.indexOf('security engineer')!==-1||text.indexOf('appsec')!==-1||text.indexOf('offensive')!==-1) role='sec';
-  else if(text.indexOf('solutions engineer')!==-1||text.indexOf('sales engineer')!==-1) role='se';
-  else if(text.indexOf('sdet')!==-1||text.indexOf('test engineer')!==-1||text.indexOf('quality engineer')!==-1) role='qa';
-  else if(text.indexOf('hardware engineer')!==-1||text.indexOf('silicon')!==-1||text.indexOf('fpga')!==-1||text.indexOf('asic')!==-1) role='hw';
+  if(text.indexOf('product manager')!==-1||text.indexOf('senior pm')!==-1||text.indexOf('group product')!==-1) role='pm';
+  else if(text.indexOf('engineering manager')!==-1||text.indexOf('manage engineers')!==-1||text.indexOf('direct reports')!==-1||text.indexOf('people manager')!==-1) role='em';
+  else if((text.indexOf('machine learning')!==-1||text.indexOf('research scientist')!==-1||text.indexOf('ml engineer')!==-1)&&text.indexOf('data engineer')===-1) role='ds';
+  else if(text.indexOf('data engineer')!==-1||text.indexOf('data pipeline')!==-1||text.indexOf('etl')!==-1||text.indexOf('airflow')!==-1||text.indexOf('dbt')!==-1) role='de';
+  else if(text.indexOf('site reliability')!==-1||text.indexOf('sre')!==-1||text.indexOf('devops')!==-1||text.indexOf('platform engineer')!==-1) role='sre';
+  else if(text.indexOf('security engineer')!==-1||text.indexOf('appsec')!==-1||text.indexOf('offensive')!==-1||text.indexOf('threat detection')!==-1) role='sec';
+  else if(text.indexOf('solutions engineer')!==-1||text.indexOf('sales engineer')!==-1||text.indexOf('solutions architect')!==-1) role='se';
+  else if(text.indexOf('sdet')!==-1||text.indexOf('test engineer')!==-1||text.indexOf('quality engineer')!==-1||text.indexOf('automation engineer')!==-1) role='qa';
+  else if(text.indexOf('hardware engineer')!==-1||text.indexOf('silicon')!==-1||text.indexOf('fpga')!==-1||text.indexOf('asic')!==-1||text.indexOf('vlsi')!==-1) role='hw';
 
+  // ── Level detection ───────────────────────────────────────────────────
   var level = 'senior';
-  if(text.indexOf('staff')!==-1||text.indexOf('8+ years')!==-1||text.indexOf('10+ years')!==-1) level='staff';
-  else if(text.indexOf('director')!==-1||text.indexOf('vp of')!==-1||text.indexOf('12+ years')!==-1) level='director';
-  else if(text.indexOf('junior')!==-1||text.indexOf('entry level')!==-1||text.indexOf('new grad')!==-1||text.indexOf('0-2 years')!==-1) level='junior';
-  else if(text.indexOf('senior')!==-1||text.indexOf('4+ years')!==-1||text.indexOf('5+ years')!==-1) level='senior';
+  var yoeMin = null;
+  var yoeMatch = rawText.match(/(\d+)\+?\s*years?\s*(of\s*)?(experience|exp)/i);
+  if(yoeMatch) yoeMin = parseInt(yoeMatch[1]);
+  if(text.indexOf('staff')!==-1||text.indexOf('principal')!==-1||yoeMin>=8||text.indexOf('10+ years')!==-1||text.indexOf('8+ years')!==-1) level='staff';
+  else if(text.indexOf('director')!==-1||text.indexOf('vp of')!==-1||yoeMin>=12||text.indexOf('12+ years')!==-1) level='director';
+  else if(text.indexOf('junior')!==-1||text.indexOf('entry level')!==-1||text.indexOf('new grad')!==-1||(yoeMin!==null&&yoeMin<=2)) level='junior';
+  else if(text.indexOf('senior')!==-1||yoeMin>=4||text.indexOf('4+ years')!==-1||text.indexOf('5+ years')!==-1) level='senior';
 
+  // ── Skills extraction ─────────────────────────────────────────────────
+  var techKeywords = [
+    'python','go','golang','java','javascript','typescript','rust','c++','scala','kotlin','swift','ruby','php','r ',
+    'kubernetes','docker','terraform','aws','gcp','azure','spark','kafka','airflow','dbt','airflow',
+    'postgresql','mysql','redis','elasticsearch','mongodb','cassandra','dynamodb','bigquery','snowflake',
+    'machine learning','deep learning','llm','pytorch','tensorflow','scikit','transformers',
+    'distributed systems','microservices','api design','rest api','graphql','grpc','protobuf',
+    'react','node.js','node','vue','angular','next.js',
+    'ci/cd','github actions','jenkins','linux','unix',
+    'data pipeline','etl','feature engineering','mlops','llmops',
+    'sql','nosql','vector database','embeddings',
+    'penetration testing','vulnerability','threat modeling','siem','soc',
+    'fpga','asic','rtl','verilog','systemverilog'
+  ];
+  var required = [];
+  var niceToHave = [];
+  var lines = rawText.split('
+');
+
+  // Classify lines as required vs nice-to-have
+  var inNice = false;
+  for(var i=0;i<lines.length;i++){
+    var line = lines[i].toLowerCase();
+    if(line.indexOf('nice to have')!==-1||line.indexOf('nice-to-have')!==-1||line.indexOf('preferred')!==-1||line.indexOf('bonus')!==-1||line.indexOf('plus')!==-1) inNice=true;
+    if(line.indexOf('required')!==-1||line.indexOf('must have')!==-1||line.indexOf('must-have')!==-1||line.indexOf('you will')!==-1||line.indexOf('you have')!==-1) inNice=false;
+    for(var k=0;k<techKeywords.length;k++){
+      var kw = techKeywords[k].trim();
+      if(line.indexOf(kw)!==-1){
+        if(inNice){ if(niceToHave.indexOf(kw)===-1) niceToHave.push(kw); }
+        else { if(required.indexOf(kw)===-1) required.push(kw); }
+      }
+    }
+  }
+  // Store for scorecard
+  window._scRequiredSkills = required;
+
+  // ── Seniority signals ─────────────────────────────────────────────────
+  var senioritySignals = [];
+  if(yoeMin) senioritySignals.push(yoeMin+'+ years experience required');
+  if(text.indexOf('lead')!==-1||text.indexOf('mentor')!==-1) senioritySignals.push('Leadership / mentoring expected');
+  if(text.indexOf('cross-functional')!==-1||text.indexOf('cross functional')!==-1) senioritySignals.push('Cross-functional stakeholder management');
+  if(text.indexOf('ambiguous')!==-1||text.indexOf('ambiguity')!==-1) senioritySignals.push('Comfort with ambiguity called out');
+  if(text.indexOf('drive')!==-1&&text.indexOf('roadmap')!==-1) senioritySignals.push('Roadmap ownership expected');
+  if(text.indexOf('architecture')!==-1||text.indexOf('design system')!==-1) senioritySignals.push('Architecture-level thinking required');
+  if(text.indexOf('oncall')!==-1||text.indexOf('on-call')!==-1) senioritySignals.push('On-call / incident ownership');
+  if(text.indexOf('phd')!==-1||text.indexOf('doctoral')!==-1) senioritySignals.push('PhD preferred or required');
+
+  // ── Red flag language ─────────────────────────────────────────────────
+  var redFlags = [];
+  if(text.indexOf('rockstar')!==-1||text.indexOf('rock star')!==-1||text.indexOf('ninja')!==-1||text.indexOf('wizard')!==-1) redFlags.push('"Rockstar/ninja/wizard" language — may signal unclear expectations or immature hiring process');
+  if(text.indexOf('fast-paced')!==-1&&text.indexOf('fast-paced environment')!==-1) redFlags.push('"Fast-paced environment" — overused; probe what pace actually means for this team');
+  if((text.match(/years/g)||[]).length > 4) redFlags.push('Heavy years-of-experience emphasis — may filter out strong candidates with non-linear paths');
+  if(text.indexOf('10x')!==-1) redFlags.push('"10x engineer" language — worth flagging to HM');
+  if(text.indexOf('wear many hats')!==-1||text.indexOf('generalist')!==-1) redFlags.push('"Wear many hats" — probe headcount and team structure; may signal under-resourced team');
+  if(text.indexOf('startup')!==-1&&text.indexOf('startup experience')!==-1) redFlags.push('Startup experience required — may unnecessarily narrow the pool');
+  if(rawText.length > 3000 && (text.match(/required/g)||[]).length > 8) redFlags.push('Very long requirements list — probe with HM which are truly non-negotiable vs. aspirational');
+
+  // ── Interview angle suggestions ───────────────────────────────────────
+  var interviewAngles = [];
+  if(required.indexOf('distributed systems')!==-1||required.indexOf('kubernetes')!==-1) interviewAngles.push('Systems design: distributed systems, fault tolerance, and scale');
+  if(required.indexOf('machine learning')!==-1||required.indexOf('pytorch')!==-1||required.indexOf('tensorflow')!==-1) interviewAngles.push('ML depth: model lifecycle, production systems, evaluation methodology');
+  if(required.indexOf('python')!==-1&&required.indexOf('sql')!==-1) interviewAngles.push('Coding: Python proficiency + SQL query optimization');
+  if(role==='em') interviewAngles.push('People management: underperformance handling, team building, cross-functional influence');
+  if(role==='pm') interviewAngles.push('Product sense: prioritization under constraint, user research methodology, metric definition');
+  if(senioritySignals.length&&(level==='staff'||level==='director')) interviewAngles.push('Leadership: technical decision-making, stakeholder alignment, org-level influence');
+  if(text.indexOf('oncall')!==-1||text.indexOf('on-call')!==-1) interviewAngles.push('Operational depth: incident command, SLO ownership, post-mortem culture');
+  if(!interviewAngles.length) interviewAngles.push('Coding fundamentals and system design appropriate for '+level+' level');
+
+  // ── Sourcing brief ────────────────────────────────────────────────────
+  var roleLabels = {"pm":"Product Management","swe":"Software Engineering","em":"Engineering Management","ds":"Data Science / ML","de":"Data Engineering","sre":"SRE / DevOps","sec":"Security Engineering","se":"Solutions Engineering","qa":"QA / SDET","hw":"Hardware Engineering"};
+  var levelLabels = {"junior":"Junior / Mid-level","senior":"Senior","staff":"Staff / Principal","director":"Director / VP"};
+  var coName = activeCompany ? activeCompany.name : 'your company';
+
+  var brief = levelLabels[level]+' '+roleLabels[role]+' for '+coName+'. ';
+  if(required.length) brief += 'Core technical requirements: '+required.slice(0,4).join(', ')+(required.length>4?' and '+(required.length-4)+' more':'')+'. ';
+  if(senioritySignals.length) brief += 'Seniority signals suggest '+senioritySignals[0].toLowerCase()+'. ';
+  if(yoeMin) brief += 'Minimum '+yoeMin+' years experience called out. ';
+  brief += 'Target talent clusters: ';
+  if(role==='swe'&&level==='senior') brief += 'L5/L6 engineers at Google and Amazon, Staff engineers at Stripe or Databricks ready for a scope increase.';
+  else if(role==='swe'&&level==='staff') brief += 'L6/L7 engineers at Google, Principal SWEs at Amazon or Microsoft, Staff engineers at Airbnb or Stripe.';
+  else if(role==='pm') brief += 'Senior PMs at Google, Amazon, or Microsoft with full product surface ownership; ex-startup founders or early PMs.';
+  else if(role==='em') brief += 'L7 EMs at Google, Amazon SDMs at the 18-month cliff, or startup CTOs at Series B companies that have plateaued.';
+  else if(role==='ds') brief += 'Research Scientists at Google DeepMind, Applied ML Engineers at OpenAI or Anthropic, or PhD graduates with relevant research focus.';
+  else brief += 'See sourcing output below for targeted clusters.';
+
+  // ── Set dropdowns ─────────────────────────────────────────────────────
   var roleSel = document.getElementById('sourcing-role');
   for(var i=0;i<roleSel.options.length;i++){ if(roleSel.options[i].value===role){ roleSel.value=role; break; } }
   var levelSel = document.getElementById('sourcing-level');
   for(var i=0;i<levelSel.options.length;i++){ if(levelSel.options[i].value===level){ levelSel.value=level; break; } }
-  var note = document.getElementById('jd-note');
-  note.style.display='block';
-  var roleLabel={"pm":"Product Management","swe":"Software Engineering","em":"Engineering Management","ds":"Data Science / ML","de":"Data Engineering","sre":"SRE / DevOps","sec":"Security Engineering","se":"Solutions Engineering","qa":"QA / SDET","hw":"Hardware Engineering"};
-  var levelLabel={"junior":"Junior / Mid","senior":"Senior","staff":"Staff / Principal","director":"Director / VP"};
-  note.textContent='Detected: '+roleLabel[role]+' · '+levelLabel[level]+'. Adjust the dropdowns below if needed — the sourcing output has already been generated.';
+
+  // ── Render JD analysis card ───────────────────────────────────────────
+  var noteEl = document.getElementById('jd-note');
+  noteEl.className = '';
+  noteEl.style.display = 'block';
+  noteEl.style.marginTop = '12px';
+
+  var h = '<div style="background:var(--surface);border:1.5px solid var(--primary);border-radius:14px;overflow:hidden;">';
+
+  // Header
+  h += '<div style="background:var(--primary-light);padding:11px 15px;border-bottom:1px solid var(--border-2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">';
+  h += '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary);">JD Analysis</div>';
+  h += '<div style="font-size:14px;font-weight:700;color:var(--text);margin-top:2px;">'+roleLabels[role]+' · '+levelLabels[level]+'</div></div>';
+  h += '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+  if(yoeMin) h += '<span style="background:var(--surface);border:1px solid var(--border-2);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:600;color:var(--primary);">'+yoeMin+'+ yrs</span>';
+  h += '<span style="background:var(--primary);color:white;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:600;">'+levelLabels[level]+'</span>';
+  h += '</div></div>';
+
+  h += '<div style="padding:13px 15px;">';
+
+  // Required skills
+  if(required.length){
+    h += '<div style="margin-bottom:12px;">';
+    h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2);margin-bottom:6px;">Required skills detected</div>';
+    h += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
+    for(var i=0;i<required.length;i++) h += '<span style="background:var(--primary-light);color:var(--primary);border:1px solid var(--border-2);border-radius:20px;padding:3px 9px;font-size:12px;font-weight:600;">'+required[i]+'</span>';
+    h += '</div></div>';
+  }
+
+  // Nice-to-have skills
+  if(niceToHave.length){
+    h += '<div style="margin-bottom:12px;">';
+    h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2);margin-bottom:6px;">Nice-to-have / preferred skills</div>';
+    h += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
+    for(var i=0;i<niceToHave.length;i++) h += '<span style="background:var(--bg);color:var(--text-2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-size:12px;">'+niceToHave[i]+'</span>';
+    h += '</div></div>';
+  }
+
+  // Seniority signals
+  if(senioritySignals.length){
+    h += '<div style="margin-bottom:12px;">';
+    h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2);margin-bottom:6px;">Seniority signals</div>';
+    h += '<div style="display:flex;flex-direction:column;gap:4px;">';
+    for(var i=0;i<senioritySignals.length;i++) h += '<div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text);"><span style="width:6px;height:6px;border-radius:50%;background:var(--primary);flex-shrink:0;"></span>'+senioritySignals[i]+'</div>';
+    h += '</div></div>';
+  }
+
+  // Interview angles
+  h += '<div style="margin-bottom:12px;">';
+  h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2);margin-bottom:6px;">Interview angles to prep</div>';
+  h += '<div style="display:flex;flex-direction:column;gap:4px;">';
+  for(var i=0;i<interviewAngles.length;i++) h += '<div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--text);line-height:1.5;"><span style="width:6px;height:6px;border-radius:50%;background:#0f766e;flex-shrink:0;margin-top:4px;"></span>'+interviewAngles[i]+'</div>';
+  h += '</div></div>';
+
+  // Red flags
+  if(redFlags.length){
+    h += '<div style="background:var(--warning-light);border:1px solid #fcd34d;border-radius:9px;padding:9px 11px;margin-bottom:12px;">';
+    h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#92400e;margin-bottom:5px;">JD flags to discuss with HM</div>';
+    for(var i=0;i<redFlags.length;i++) h += '<div style="font-size:12px;color:#854f0b;line-height:1.55;margin-bottom:'+(i<redFlags.length-1?'4':'0')+'px;padding-left:8px;border-left:2px solid #fcd34d;">'+redFlags[i]+'</div>';
+    h += '</div>';
+  }
+
+  // Sourcing brief
+  h += '<div style="background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;">';
+  h += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--primary);margin-bottom:5px;">Sourcing brief</div>';
+  h += '<p style="font-size:13px;color:var(--text);line-height:1.7;">'+brief+'</p>';
+  h += '</div>';
+
+  h += '</div></div>';
+  noteEl.innerHTML = h;
+
   runSourcing();
 }
 
